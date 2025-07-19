@@ -1,0 +1,13 @@
+{
+  "name": "vite-federation-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix shell-app\" \"npm run dev --prefix test-app\"",
+    "build": "npm run build --prefix shell-app && npm run build --prefix test-app",
+    "serve": "concurrently \"npm run serve --prefix shell-app\" \"npm run serve --prefix test-app\"",
+    "install-all": "npm install && npm install --prefix shell-app && npm install --prefix test-app"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

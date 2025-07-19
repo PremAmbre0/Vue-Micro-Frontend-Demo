@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "serve": "serve dist -p 3001 -s --cors",
+    "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.5.1",
@@ -30,6 +29,7 @@
     "prettier": "^3.0.3",
     "sass": "^1.69.1",
     "sass-loader": "^13.3.2",
+    "serve": "^14.2.4",
     "vite": "^4.4.9"
   }
 }

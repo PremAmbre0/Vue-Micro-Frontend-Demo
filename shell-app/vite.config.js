@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  base: "http://localhost:3000/",
   plugins: [
     federation({
       name: "shellApp",
@@ -21,6 +22,9 @@ export default defineConfig({
         "./commonStore": "./src/stores/common.store.js",
       },
       filename: "remoteEntry.js",
+      shared: {
+        vue: { singleton: true }
+      }
     }),
     vue(),
   ],
@@ -32,6 +36,18 @@ export default defineConfig({
   },
   build: {
     target: "chrome89",
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith('.css')) {
+            return 'style.css'
+          }
+          return assetInfo.name
+        }
+      }
+    }
   },
   server: {
     port: 3000,

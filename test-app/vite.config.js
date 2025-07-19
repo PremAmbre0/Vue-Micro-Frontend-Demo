@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  base: "http://localhost:3001/",
   plugins: [
     federation({
       filename: "remoteEntry.js",
@@ -21,6 +22,11 @@ export default defineConfig({
           shareScope: "default",
         },
       },
+      shared: {
+        vue: {
+          singleton: true,
+        }
+      }
     }),
     vue(),
   ],
@@ -44,8 +50,16 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: undefined,
-      }
-    }
+        // Ensure CSS is included in the main bundle
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'assets/[name].[hash].css'
+          }
+          return 'assets/[name].[hash].[ext]'
+        }
+      },
+      external: [],
+    },
   },
   server: {
     port: 3001,
@@ -53,5 +67,9 @@ export default defineConfig({
     fs: {
       allow: ["."]
     }
+  },
+  preview: {
+    port: 3001,
+    cors: true
   }
 });
