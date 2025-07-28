@@ -12,6 +12,7 @@ export default defineConfig({
       exposes: {
         "./App": "./src/FederatedApp.vue",
         "./Counter": "./src/components/Counter.vue",
+        "./styles": "./src/styles.js",
       },
       remotes: {
         shellApp: {
@@ -50,10 +51,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: undefined,
-        // Ensure CSS is included in the main bundle
+        // Ensure CSS is included in the main bundle with predictable name
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-            return 'assets/[name].[hash].css'
+            return 'assets/style.css'  // Use fixed name for easier loading
           }
           return 'assets/[name].[hash].[ext]'
         }

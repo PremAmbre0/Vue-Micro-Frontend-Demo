@@ -3,6 +3,22 @@ import './assets/main.scss';
 import { createApp, markRaw } from 'vue';
 import { createPinia } from 'pinia';
 
+// Import CSS from test-app via the exposed module
+// This is the most robust approach as it lets the remote app control how its styles are loaded
+import('testApp/styles').catch(err => {
+  console.error('Failed to load test-app styles module:', err)
+
+  // Fallback to direct CSS loading if module import fails
+  if (import.meta.env.PROD) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = 'http://localhost:3001/assets/style.css'
+    link.onload = () => console.log('✅ Test-app CSS loaded via fallback')
+    link.onerror = () => console.error('❌ Failed to load test-app CSS via fallback')
+    document.head.appendChild(link)
+  }
+})
+
 import Provider from './Provider.vue';
 import router from './router';
 import i18n from './i18n';
