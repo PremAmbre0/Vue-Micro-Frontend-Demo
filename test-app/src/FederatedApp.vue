@@ -8,7 +8,7 @@
       <p>Add your 3D components, UI features, business logic here</p>
 
       <!-- Test buttons for toast -->
-      <div class="toast-test-buttons">
+      <div v-if="toast" class="toast-test-buttons">
         <button @click="showSuccessToast">Success Toast</button>
         <button @click="showErrorToast">Error Toast</button>
         <button @click="showWarningToast">Warning Toast</button>
