@@ -12,7 +12,7 @@ import('testApp/styles').catch(err => {
   if (import.meta.env.PROD) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = 'http://localhost:3001/assets/style.css'
+    link.href = import.meta.env.VITE_TEST_APP_CSS_URL || 'http://localhost:3001/assets/style.css'
     link.onload = () => console.log('✅ Test-app CSS loaded via fallback')
     link.onerror = () => console.error('❌ Failed to load test-app CSS via fallback')
     document.head.appendChild(link)

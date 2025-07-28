@@ -10,7 +10,7 @@ export function loadStyles() {
   if (import.meta.env.PROD) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = 'http://localhost:3001/assets/style.css'
+    link.href = import.meta.env.VITE_TEST_APP_URL ? `${import.meta.env.VITE_TEST_APP_URL}/assets/style.css` : 'http://localhost:3001/assets/style.css'
     link.onload = () => console.log('✅ Test-app styles loaded via module')
     link.onerror = () => console.error('❌ Failed to load test-app styles via module')
     document.head.appendChild(link)

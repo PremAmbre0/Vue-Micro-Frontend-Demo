@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "http://localhost:3000/",
+  base: "/", // Use root path instead of full URL
   plugins: [
     federation({
       name: "shellApp",
@@ -12,7 +12,7 @@ export default defineConfig({
         testApp: {
           type: "module",
           name: "testApp",
-          entry: "http://localhost:3001/remoteEntry.js",
+          entry: process.env.VITE_TEST_REMOTE_ENTRY || "http://localhost:3001/remoteEntry.js",
           entryGlobalName: "testApp",
           shareScope: "default",
         },
