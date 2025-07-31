@@ -1,47 +1,47 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import DemoTwoCanvas from './components/DemoTwoCanvas.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div id="app">
+    <header>
+      <h1>📝 Demo Two App - Text & Image Editor</h1>
+      <p>Standalone Fabric.js demo for text and image manipulation</p>
+    </header>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <main>
+      <DemoTwoCanvas />
+    </main>
+  </div>
 </template>
 
 <style scoped>
+#app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
 header {
-  line-height: 1.5;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  margin-bottom: 2rem;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5em;
+  font-weight: 600;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+header p {
+  margin: 0;
+  font-size: 1.1em;
+  opacity: 0.9;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+main {
+  padding: 0 1rem 2rem 1rem;
 }
 </style>

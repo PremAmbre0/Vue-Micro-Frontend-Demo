@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@module-federation/vite": "^1.6.0",
-    "fabric": "^6.5.0",
+    "fabric": "^5.3.0",
     "vue": "^3.5.18"
   },
   "devDependencies": {

@@ -89,14 +89,22 @@ export function addTriangle(canvas, options = {}) {
 }
 
 /**
- * Change the fill color of the selected object
+ * Change the fill color of the selected object(s)
  * @param {fabric.Canvas} canvas - The fabric canvas
  * @param {string} color - The new color
  */
 export function changeSelectedColor(canvas, color) {
   const activeObject = canvas.getActiveObject();
   if (activeObject) {
-    activeObject.set('fill', color);
+    if (activeObject.type === 'activeSelection') {
+      // Handle multiple selected objects
+      activeObject.forEachObject((obj) => {
+        obj.set('fill', color);
+      });
+    } else {
+      // Handle single selected object
+      activeObject.set('fill', color);
+    }
     canvas.renderAll();
   }
 }
@@ -112,13 +120,18 @@ export function clearCanvas(canvas) {
 }
 
 /**
- * Delete the selected object
+ * Delete the selected object(s)
  * @param {fabric.Canvas} canvas - The fabric canvas
  */
 export function deleteSelected(canvas) {
-  const activeObject = canvas.getActiveObject();
-  if (activeObject) {
-    canvas.remove(activeObject);
+  const activeObjects = canvas.getActiveObjects();
+  if (activeObjects && activeObjects.length > 0) {
+    // Remove all selected objects
+    activeObjects.forEach(obj => {
+      canvas.remove(obj);
+    });
+    // Clear the selection
+    canvas.discardActiveObject();
     canvas.renderAll();
   }
 }

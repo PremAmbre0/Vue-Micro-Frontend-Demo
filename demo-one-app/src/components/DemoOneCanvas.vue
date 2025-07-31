@@ -2,7 +2,7 @@
   <div class="demo-one-container">
     <h2>🎨 Demo One: Basic Shapes & Drawing</h2>
     <p>Create and manipulate basic shapes with Fabric.js</p>
-    
+
     <div class="controls">
       <div class="shape-controls">
         <h3>Add Shapes</h3>
@@ -10,30 +10,34 @@
         <button @click="addCirc" class="btn btn-success">Add Circle</button>
         <button @click="addTri" class="btn btn-danger">Add Triangle</button>
       </div>
-      
+
       <div class="color-controls">
         <h3>Colors</h3>
         <label for="colorPicker">Change Selected Color:</label>
-        <input 
-          id="colorPicker" 
-          type="color" 
-          v-model="selectedColor" 
-          @change="changeColor"
+        <input
+          id="colorPicker"
+          type="color"
+          v-model="selectedColor"
+          @input="changeColor"
           class="color-picker"
         />
       </div>
-      
+
       <div class="action-controls">
         <h3>Actions</h3>
-        <button @click="deleteSelected" class="btn btn-warning">Delete Selected</button>
-        <button @click="clearCanvas" class="btn btn-secondary">Clear Canvas</button>
+        <button @click="deleteSelected" class="btn btn-warning">
+          Delete Selected
+        </button>
+        <button @click="clearCanvas" class="btn btn-secondary">
+          Clear Canvas
+        </button>
       </div>
     </div>
-    
+
     <div class="canvas-container">
       <canvas id="demo-one-canvas"></canvas>
     </div>
-    
+
     <div class="info">
       <p><strong>Instructions:</strong></p>
       <ul>
@@ -48,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from "vue";
 import {
   initDemoOneCanvas,
   addRectangle,
@@ -56,29 +60,29 @@ import {
   addTriangle,
   changeSelectedColor,
   clearCanvas as clearCanvasLogic,
-  deleteSelected as deleteSelectedLogic
-} from '../fabric/demoOne.js'
+  deleteSelected as deleteSelectedLogic,
+} from "../fabric/demoOne.js";
 
-const selectedColor = ref('#42b883')
-let canvas = null
+const selectedColor = ref("#42b883");
+let canvas = null;
 
 onMounted(() => {
   // Initialize the canvas
-  canvas = initDemoOneCanvas('demo-one-canvas')
-  
+  canvas = initDemoOneCanvas("demo-one-canvas");
+
   // Add some default shapes for demonstration
   setTimeout(() => {
-    addRectangle(canvas, { left: 50, top: 50, fill: '#42b883' })
-    addCircle(canvas, { left: 200, top: 100, fill: '#3b82f6' })
-    addTriangle(canvas, { left: 350, top: 80, fill: '#ef4444' })
-  }, 100)
-})
+    addRectangle(canvas, { left: 50, top: 50, fill: "#42b883" });
+    addCircle(canvas, { left: 200, top: 100, fill: "#3b82f6" });
+    addTriangle(canvas, { left: 350, top: 80, fill: "#ef4444" });
+  }, 100);
+});
 
 onUnmounted(() => {
   if (canvas) {
-    canvas.dispose()
+    canvas.dispose();
   }
-})
+});
 
 // Methods
 const addRect = () => {
@@ -86,48 +90,48 @@ const addRect = () => {
     addRectangle(canvas, {
       left: Math.random() * 600,
       top: Math.random() * 400,
-      fill: selectedColor.value
-    })
+      fill: selectedColor.value,
+    });
   }
-}
+};
 
 const addCirc = () => {
   if (canvas) {
     addCircle(canvas, {
       left: Math.random() * 600,
       top: Math.random() * 400,
-      fill: selectedColor.value
-    })
+      fill: selectedColor.value,
+    });
   }
-}
+};
 
 const addTri = () => {
   if (canvas) {
     addTriangle(canvas, {
       left: Math.random() * 600,
       top: Math.random() * 400,
-      fill: selectedColor.value
-    })
+      fill: selectedColor.value,
+    });
   }
-}
+};
 
 const changeColor = () => {
   if (canvas) {
-    changeSelectedColor(canvas, selectedColor.value)
+    changeSelectedColor(canvas, selectedColor.value);
   }
-}
+};
 
 const deleteSelected = () => {
   if (canvas) {
-    deleteSelectedLogic(canvas)
+    deleteSelectedLogic(canvas);
   }
-}
+};
 
 const clearCanvas = () => {
   if (canvas) {
-    clearCanvasLogic(canvas)
+    clearCanvasLogic(canvas);
   }
-}
+};
 </script>
 
 <style scoped>
@@ -152,6 +156,7 @@ const clearCanvas = () => {
 .shape-controls,
 .color-controls,
 .action-controls {
+  color: black;
   background: #f8f9fa;
   padding: 15px;
   border-radius: 8px;
@@ -246,6 +251,7 @@ const clearCanvas = () => {
 
 .info {
   background: #e3f2fd;
+  color: black;
   padding: 15px;
   border-radius: 8px;
   border-left: 4px solid #2196f3;

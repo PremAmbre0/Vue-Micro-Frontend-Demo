@@ -8,9 +8,19 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/test-app/:pathMatch(.*)*',
-    name: 'test-app',
-    component: () => import('testApp/App')
+    path: '/demo-one',
+    name: 'demo-one',
+    component: () => import('demoOneApp/DemoOneCanvas')
+  },
+  {
+    path: '/demo-two',
+    name: 'demo-two',
+    component: () => import('demoTwoApp/DemoTwoCanvas')
+  },
+  {
+    path: '/demo-three',
+    name: 'demo-three',
+    component: () => import('demoThreeApp/DemoThreeCanvas')
   }
 ]
 
