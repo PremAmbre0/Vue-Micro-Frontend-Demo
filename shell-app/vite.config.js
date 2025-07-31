@@ -9,11 +9,25 @@ export default defineConfig({
     federation({
       name: "shellApp",
       remotes: {
-        testApp: {
+        demoOneApp: {
           type: "module",
-          name: "testApp",
-          entry: process.env.VITE_TEST_REMOTE_ENTRY || "http://localhost:3001/remoteEntry.js",
-          entryGlobalName: "testApp",
+          name: "demoOneApp",
+          entry: process.env.VITE_DEMO_ONE_REMOTE_ENTRY || "http://localhost:3001/remoteEntry.js",
+          entryGlobalName: "demoOneApp",
+          shareScope: "default",
+        },
+        demoTwoApp: {
+          type: "module",
+          name: "demoTwoApp",
+          entry: process.env.VITE_DEMO_TWO_REMOTE_ENTRY || "http://localhost:3002/remoteEntry.js",
+          entryGlobalName: "demoTwoApp",
+          shareScope: "default",
+        },
+        demoThreeApp: {
+          type: "module",
+          name: "demoThreeApp",
+          entry: process.env.VITE_DEMO_THREE_REMOTE_ENTRY || "http://localhost:3003/remoteEntry.js",
+          entryGlobalName: "demoThreeApp",
           shareScope: "default",
         },
       },

@@ -3,21 +3,23 @@ import './assets/main.scss';
 import { createApp, markRaw } from 'vue';
 import { createPinia } from 'pinia';
 
-// Import CSS from test-app via the exposed module
-// This is the most robust approach as it lets the remote app control how its styles are loaded
-import('testApp/styles').catch(err => {
-  console.error('Failed to load test-app styles module:', err)
+// Load CSS from demo apps in production
+if (import.meta.env.PROD) {
+  const demoApps = [
+    { name: 'demo-one', url: import.meta.env.VITE_DEMO_ONE_CSS_URL || 'http://localhost:3001/assets/style.css' },
+    { name: 'demo-two', url: import.meta.env.VITE_DEMO_TWO_CSS_URL || 'http://localhost:3002/assets/style.css' },
+    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL || 'http://localhost:3003/assets/style.css' }
+  ];
 
-  // Fallback to direct CSS loading if module import fails
-  if (import.meta.env.PROD) {
+  demoApps.forEach(app => {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = import.meta.env.VITE_TEST_APP_CSS_URL || 'http://localhost:3001/assets/style.css'
-    link.onload = () => console.log('✅ Test-app CSS loaded via fallback')
-    link.onerror = () => console.error('❌ Failed to load test-app CSS via fallback')
+    link.href = app.url
+    link.onload = () => console.log(`✅ ${app.name} CSS loaded successfully`)
+    link.onerror = () => console.error(`❌ Failed to load ${app.name} CSS`)
     document.head.appendChild(link)
-  }
-})
+  });
+}
 
 import Provider from './Provider.vue';
 import router from './router';

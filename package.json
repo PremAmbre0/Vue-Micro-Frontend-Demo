@@ -2,16 +2,19 @@
   "name": "vite-federation-workspace",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix shell-app\" \"npm run dev --prefix test-app\"",
-    "build": "npm run build --prefix shell-app && npm run build --prefix test-app",
-    "serve": "concurrently \"npm run serve --prefix shell-app\" \"npm run serve --prefix test-app\"",
-    "install-all": "npm install && npm install --prefix shell-app && npm install --prefix test-app",
+    "dev": "concurrently \"npm run dev --prefix shell-app\" \"npm run dev --prefix demo-one-app\" \"npm run dev --prefix demo-two-app\" \"npm run dev --prefix demo-three-app\"",
+    "build": "npm run build --prefix shell-app && npm run build --prefix demo-one-app && npm run build --prefix demo-two-app && npm run build --prefix demo-three-app",
+    "serve": "concurrently \"npm run serve --prefix shell-app\" \"npm run serve --prefix demo-one-app\" \"npm run serve --prefix demo-two-app\" \"npm run serve --prefix demo-three-app\"",
+    "install-all": "npm install && npm install --prefix shell-app && npm install --prefix demo-one-app && npm install --prefix demo-two-app && npm install --prefix demo-three-app",
     "update-env": "node scripts/update-env.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "dependencies": {
-    "all": "0.0.0"
+    "@module-federation/vite": "^1.7.1",
+    "all": "0.0.0",
+    "fabric": "^6.7.1",
+    "serve": "^14.2.4"
   }
 }

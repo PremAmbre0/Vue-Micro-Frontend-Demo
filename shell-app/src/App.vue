@@ -3,7 +3,9 @@
     <OToast />
     <nav>
       <router-link to="/">Shell Home</router-link>
-      <router-link to="/test-app">Test App</router-link>
+      <router-link to="/demo-one">Demo One</router-link>
+      <router-link to="/demo-two">Demo Two</router-link>
+      <router-link to="/demo-three">Demo Three</router-link>
     </nav>
 
     <main>
@@ -20,15 +22,15 @@
         </div>
       </div>
 
-      <!-- Counter component from test-app using Suspense -->
+      <!-- Demo One Canvas component using Suspense -->
       <Suspense>
         <template #default>
-          <Counter />
+          <DemoOneCanvas />
         </template>
         <template #fallback>
           <div class="loading">
             <div class="spinner"></div>
-            <div>Loading counter component from test-app...</div>
+            <div>Loading Demo One Canvas...</div>
           </div>
         </template>
       </Suspense>
@@ -45,13 +47,13 @@ import OToast from './components/demoComponents/OToast.vue';
 import { useCommonStore } from './stores/common.store.js';
 
 // Define async component with error handling
-const Counter = defineAsyncComponent({
-  loader: () => import('testApp/Counter'),
+const DemoOneCanvas = defineAsyncComponent({
+  loader: () => import('demoOneApp/DemoOneCanvas'),
   errorComponent: {
     template: `
       <div class="error-component">
-        <h3>❌ Failed to load Counter component</h3>
-        <p>Make sure test-app is running on port 3001</p>
+        <h3>❌ Failed to load Demo One Canvas</h3>
+        <p>Make sure demo-one-app is running on port 3001</p>
       </div>
     `,
   },
@@ -59,7 +61,7 @@ const Counter = defineAsyncComponent({
     template: `
       <div class="loading-component">
         <div class="spinner"></div>
-        <div>Loading federated component...</div>
+        <div>Loading Demo One Canvas...</div>
       </div>
     `,
   },
