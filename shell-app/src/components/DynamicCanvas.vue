@@ -1,8 +1,8 @@
 <template>
   <div class="dynamic-canvas-container">
     <header class="canvas-header">
-      <h1>🎯 Shell App - Dynamic Micro Frontend Canvas</h1>
-      <p>Demonstrate dynamic loading and control of federated micro frontend modules</p>
+      <h1>🎯 Welcome to Micro Frontend Showcase</h1>
+      <p>Interactive landing page - Load and control federated micro frontend modules dynamically</p>
     </header>
 
     <!-- Dynamic Demo Loading Controls -->
@@ -88,6 +88,14 @@
       <button @click="clearCanvas" class="btn btn-secondary">Clear Canvas</button>
     </div>
 
+    <!-- Navigation to All Demos -->
+    <div v-if="!loadedDemos.demoOne && !loadedDemos.demoTwo && !loadedDemos.demoThree" class="quick-nav">
+      <h3>Quick Navigation</h3>
+      <router-link to="/all-demos" class="btn btn-info">
+        🎨 View All Demos Together
+      </router-link>
+    </div>
+
     <!-- Info Section -->
     <div class="info">
       <p><strong>Dynamic Module Loading Demo:</strong></p>
@@ -96,6 +104,7 @@
         <li>Each module loads its own Fabric.js logic and controls</li>
         <li>All demos share the same canvas but maintain separate functionality</li>
         <li>This demonstrates on-demand loading of micro frontend bundles</li>
+        <li><strong>Visit <router-link to="/all-demos">All Demos</router-link> to see all three demos running together</strong></li>
       </ul>
     </div>
   </div>
@@ -127,7 +136,7 @@ const isLoading = ref({
 let canvas = null;
 
 // Demo One state
-const selectedColor = ref('#42b883');
+const selectedColor = ref('#0054C9');
 
 // Demo Two state
 const textInput = ref('Hello World!');
@@ -409,7 +418,7 @@ const clearCanvas = () => {
 }
 
 .canvas-header h1 {
-  color: #667eea;
+  color: #0054C9;
   margin-bottom: 10px;
 }
 
@@ -445,12 +454,12 @@ const clearCanvas = () => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #0054C9;
   color: white;
 }
 
 .btn-info {
-  background: #3b82f6;
+  background: #6AAAEB;
   color: white;
 }
 
@@ -470,7 +479,7 @@ const clearCanvas = () => {
 }
 
 .btn-secondary {
-  background: #6b7280;
+  background: #031F3C;
   color: white;
 }
 
@@ -523,11 +532,11 @@ const clearCanvas = () => {
 }
 
 .demo-one-controls {
-  border-left-color: #42b883;
+  border-left-color: #0054C9;
 }
 
 .demo-two-controls {
-  border-left-color: #3b82f6;
+  border-left-color: #6AAAEB;
 }
 
 .demo-three-controls {
@@ -575,11 +584,30 @@ const clearCanvas = () => {
   margin: 20px 0;
 }
 
+.quick-nav {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #6AAAEB;
+}
+
+.quick-nav h3 {
+  color: #0054C9;
+  margin-bottom: 15px;
+}
+
+.quick-nav .btn {
+  font-size: 1.1em;
+  padding: 12px 24px;
+}
+
 .info {
   background: #e3f2fd;
   padding: 15px;
   border-radius: 8px;
-  border-left: 4px solid #2196f3;
+  border-left: 4px solid #0054C9;
   margin-top: 20px;
 }
 

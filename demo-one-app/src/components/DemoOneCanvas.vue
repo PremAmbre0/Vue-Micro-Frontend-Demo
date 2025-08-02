@@ -63,7 +63,7 @@ import {
   deleteSelected as deleteSelectedLogic,
 } from "../fabric/demoOne.js";
 
-const selectedColor = ref("#42b883");
+const selectedColor = ref("#0054C9");
 let canvas = null;
 
 onMounted(() => {
@@ -142,7 +142,7 @@ const clearCanvas = () => {
 }
 
 .demo-one-container h2 {
-  color: #42b883;
+  color: #0054C9;
   margin-bottom: 10px;
 }
 
@@ -182,12 +182,12 @@ const clearCanvas = () => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #0054C9;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #369970;
+  background: #003d96;
 }
 
 .btn-success {
@@ -218,12 +218,12 @@ const clearCanvas = () => {
 }
 
 .btn-secondary {
-  background: #6b7280;
+  background: #031F3C;
   color: white;
 }
 
 .btn-secondary:hover {
-  background: #4b5563;
+  background: #021529;
 }
 
 .color-picker {

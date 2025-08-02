@@ -1,6 +1,17 @@
 // Demo Two: Text & Image Editor Logic
 import { fabric } from 'fabric';
 
+// Configure Fabric.js defaults (safer approach)
+if (fabric.Object) {
+  // Set default object properties without using prototype.set
+  const originalObjectDefaults = fabric.Object.prototype;
+  originalObjectDefaults.transparentCorners = false;
+  originalObjectDefaults.cornerColor = '#0054C9';
+  originalObjectDefaults.cornerStyle = 'circle';
+  originalObjectDefaults.borderColor = '#0054C9';
+  originalObjectDefaults.cornerSize = 10;
+}
+
 /**
  * Initialize Fabric.js canvas for Demo Two
  * @param {string} canvasId - The canvas element ID
@@ -14,8 +25,8 @@ export function initDemoTwoCanvas(canvasId) {
   });
 
   // Add some default styling
-  canvas.selectionColor = 'rgba(59, 130, 246, 0.3)';
-  canvas.selectionBorderColor = '#3b82f6';
+  canvas.selectionColor = 'rgba(0, 84, 201, 0.3)';
+  canvas.selectionBorderColor = '#0054C9';
   canvas.selectionLineWidth = 2;
 
   return canvas;
@@ -35,6 +46,7 @@ export function addText(canvas, options = {}) {
     fill: options.fill || '#333333',
     fontWeight: options.fontWeight || 'normal',
     fontStyle: options.fontStyle || 'normal',
+    // Remove textBaseline to let Fabric.js handle it automatically
   });
 
   canvas.add(text);
@@ -52,28 +64,40 @@ export function addText(canvas, options = {}) {
  * @param {Function} onError - Error callback
  */
 export function addImage(canvas, imageUrl, options = {}, onSuccess = null, onError = null) {
-  fabric.Image.fromURL(
-    imageUrl,
-    (img) => {
-      img.set({
-        left: options.left || 200,
-        top: options.top || 200,
-        scaleX: options.scaleX || 0.5,
-        scaleY: options.scaleY || 0.5,
-      });
+  return new Promise((resolve, reject) => {
+    fabric.Image.fromURL(
+      imageUrl,
+      (img) => {
+        try {
+          img.set({
+            left: options.left || 200,
+            top: options.top || 200,
+            scaleX: options.scaleX || 0.5,
+            scaleY: options.scaleY || 0.5,
+          });
 
-      canvas.add(img);
-      canvas.setActiveObject(img);
-      canvas.renderAll();
+          canvas.add(img);
+          canvas.setActiveObject(img);
+          canvas.renderAll();
 
-      if (onSuccess) onSuccess();
-    },
-    {
-      crossOrigin: 'anonymous'
-    }
-  ).catch((error) => {
-    console.error('Failed to load image:', error);
-    if (onError) onError();
+          if (onSuccess) onSuccess();
+          resolve(img);
+        } catch (error) {
+          console.error('Error adding image to canvas:', error);
+          if (onError) onError(error);
+          reject(error);
+        }
+      },
+      {
+        crossOrigin: 'anonymous',
+        // Add error handling in options
+        onError: (error) => {
+          console.error('Failed to load image:', error);
+          if (onError) onError(error);
+          reject(error);
+        }
+      }
+    );
   });
 }
 

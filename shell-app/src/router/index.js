@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DynamicCanvas from '../components/DynamicCanvas.vue'
+import AllDemos from '../components/AllDemos.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: DynamicCanvas
+  },
+  {
+    path: '/all-demos',
+    name: 'all-demos',
+    component: AllDemos
   },
   {
     path: '/demo-one',

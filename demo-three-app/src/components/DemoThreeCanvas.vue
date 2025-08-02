@@ -136,7 +136,7 @@ const clearCanvas = () => {
 }
 
 .demo-three-container h2 {
-  color: #ef4444;
+  color: #f59e0b;
   margin-bottom: 10px;
 }
 
@@ -245,12 +245,12 @@ const clearCanvas = () => {
 }
 
 .btn-info {
-  background: #3b82f6;
+  background: #6AAAEB;
   color: white;
 }
 
 .btn-info:hover {
-  background: #2563eb;
+  background: #4a90d9;
 }
 
 .btn-warning {
@@ -272,12 +272,12 @@ const clearCanvas = () => {
 }
 
 .btn-secondary {
-  background: #6b7280;
+  background: #031F3C;
   color: white;
 }
 
 .btn-secondary:hover {
-  background: #4b5563;
+  background: #021529;
 }
 
 .canvas-container {

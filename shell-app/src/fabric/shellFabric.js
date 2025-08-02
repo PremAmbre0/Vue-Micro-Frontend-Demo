@@ -26,6 +26,9 @@ export async function initializeFabricCanvas(canvasId, options = {}) {
       width: options.width || 800,
       height: options.height || 600,
       backgroundColor: options.backgroundColor || '#ffffff',
+      selectionColor: 'rgba(0, 84, 201, 0.3)',
+      selectionBorderColor: '#0054C9',
+      selectionLineWidth: 2,
       ...options
     });
     
