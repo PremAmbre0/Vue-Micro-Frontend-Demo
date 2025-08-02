@@ -1,285 +1,469 @@
-# Micro Frontend Architecture with Vite + Vue 3 + Module Federation
+# 🎨 Micro Frontend Canvas Architecture with Vite + Vue 3 + Module Federation
 
-A complete example of implementing **Micro Frontend Architecture** using **Vite**, **Vue 3**, and **Module Federation**. This repository demonstrates how to build scalable, independent micro frontends that can share components, stores, composables, and styles.
+A comprehensive demonstration of **Micro Frontend Architecture** using **Vite**, **Vue 3**, **Module Federation**, and **Fabric.js**. This repository showcases how to build scalable, independent micro frontends with shared canvas functionality, dynamic module loading, and real-time interactive demonstrations.
 
 ## 🏗️ Architecture Overview
 
-This project consists of two applications:
+This project consists of **four independent applications** that work together to demonstrate advanced micro frontend capabilities:
 
-- **🏠 Shell App** (`shell-app/`) - The host application that orchestrates micro frontends
-- **🧩 Test App** (`test-app/`) - A micro frontend that exposes components and functionality
+- **🏠 Shell App** (`shell-app/`) - The host application that orchestrates all micro frontends
+- **🎨 Demo One App** (`demo-one-app/`) - Basic shapes and geometry micro frontend
+- **📝 Demo Two App** (`demo-two-app/`) - Text and image editing micro frontend
+- **🖌️ Demo Three App** (`demo-three-app/`) - Drawing and artistic creation micro frontend
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        Shell App                            │
-│                     (Host - Port 3000)                     │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Consumes:                                          │    │
-│  │  • testApp/App (Whole Application)                  │    │
-│  │  • testApp/Counter (Individual Component)           │    │
-│  │  • testApp/styles (CSS Styles)                      │    │
-│  └─────────────────────────────────────────────────────┘    │
-│                                                             │
-│  Exposes:                                                   │
-│  • shellApp/useToast (Toast Composable)                    │
-│  • shellApp/commonStore (Pinia Store)                      │
-└─────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────┐
-│                        Test App                             │
-│                   (Remote - Port 3001)                     │
-│  Exposes:                                                   │
-│  • ./App → FederatedApp.vue (Complete App)                 │
-│  • ./Counter → Counter.vue (Standalone Component)          │
-│  • ./styles → styles.js (CSS Loading Module)               │
-│                                                             │
-│  Consumes:                                                  │
-│  • shellApp/useToast (Toast Notifications)                 │
-│  • shellApp/commonStore (Shared State)                     │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              🏠 Shell App (Host)                                │
+│                            Port 3004 - Main Orchestrator                       │
+│  ┌─────────────────────────────────────────────────────────────────────────┐    │
+│  │  🎯 Features:                                                           │    │
+│  │  • Dynamic Canvas with shared Fabric.js instance                       │    │
+│  │  • On-demand module loading and control                                │    │
+│  │  • All Demos showcase page                                             │    │
+│  │  • Global canvas controls (clear all, delete selected)                 │    │
+│  │  • Navigation and routing system                                       │    │
+│  │                                                                         │    │
+│  │  🔗 Consumes:                                                           │    │
+│  │  • demoOneApp/demoOneLogic (Shape creation functions)                  │    │
+│  │  • demoTwoApp/demoTwoLogic (Text & image functions)                    │    │
+│  │  • demoThreeApp/demoThreeLogic (Drawing functions)                     │    │
+│  │  • demoOneApp/DemoOneCanvas (Complete component)                       │    │
+│  │  • demoTwoApp/DemoTwoCanvas (Complete component)                       │    │
+│  │  • demoThreeApp/DemoThreeCanvas (Complete component)                   │    │
+│  │                                                                         │    │
+│  │  📤 Exposes:                                                            │    │
+│  │  • shellApp/shellFabric (Canvas initialization utilities)              │    │
+│  └─────────────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                        │
+                    ┌───────────────────┼───────────────────┐
+                    ▼                   ▼                   ▼
+┌─────────────────────────┐ ┌─────────────────────────┐ ┌─────────────────────────┐
+│    🎨 Demo One App      │ │    📝 Demo Two App      │ │   🖌️ Demo Three App     │
+│     Port 3005           │ │     Port 3007           │ │     Port 3006           │
+│                         │ │                         │ │                         │
+│  📤 Exposes:            │ │  📤 Exposes:            │ │  📤 Exposes:            │
+│  • ./demoOneLogic      │ │  • ./demoTwoLogic      │ │  • ./demoThreeLogic    │
+│    - addRectangle()    │ │    - addText()         │ │    - setDrawingMode()  │
+│    - addCircle()       │ │    - addImage()        │ │    - setBrushWidth()   │
+│    - addTriangle()     │ │    - clearCanvas()     │ │    - setBrushColor()   │
+│    - clearCanvas()     │ │                        │ │    - clearCanvas()     │
+│                        │ │  • ./DemoTwoCanvas     │ │                        │
+│  • ./DemoOneCanvas     │ │    (Full component)    │ │  • ./DemoThreeCanvas   │
+│    (Full component)    │ │                        │ │    (Full component)    │
+│                        │ │  🔗 Uses:              │ │                        │
+│  🎯 Features:          │ │  • Fabric.js v5.3.0   │ │  🎯 Features:          │
+│  • Basic shapes        │ │  • Image loading       │ │  • Free-hand drawing   │
+│  • Color selection     │ │  • Text manipulation   │ │  • Brush customization │
+│  • Object manipulation │ │  • Canvas controls     │ │  • Drawing modes       │
+└─────────────────────────┘ └─────────────────────────┘ └─────────────────────────┘
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn
-
-### Environment Configuration
-
-The project uses environment variables to manage URLs for different environments. Update the `.env` files to match your deployment setup:
-
-**Root `.env` (Development):**
-```bash
-VITE_SHELL_APP_URL=http://localhost:3000
-VITE_TEST_APP_URL=http://localhost:3001
-```
-
-**Root `.env.production` (Production):**
-```bash
-# Update these URLs when deploying to your server
-VITE_SHELL_APP_URL=https://your-shell-app-domain.com
-VITE_TEST_APP_URL=https://your-test-app-domain.com
-```
-
-**Quick Environment Update:**
-```bash
-# Update production URLs easily
-npm run update-env https://your-shell-domain.com https://your-test-domain.com
-```
+- **Node.js 18+** (Required for Vite 4+ and modern ES modules)
+- **npm** or **yarn**
+- **Modern browser** with ES2020+ support
 
 ### Installation & Development
 
 ```bash
-# Install dependencies for all apps
+# Clone the repository
+git clone <repository-url>
+cd mco-test-latest
+
+# Install dependencies for all applications
 npm run install-all
 
-# Start both apps in development mode
+# Start all applications in development mode
 npm run dev
 ```
 
-This will start:
-- Shell App: http://localhost:3000
-- Test App: http://localhost:3001
+This will start all four applications simultaneously:
+- **🏠 Shell App**: http://localhost:3004 (Main application)
+- **🎨 Demo One**: http://localhost:3005 (Basic shapes)
+- **📝 Demo Two**: http://localhost:3007 (Text & images)
+- **🖌️ Demo Three**: http://localhost:3006 (Drawing)
 
-### Production Build & Serve
+### 🌐 Application Routes
+
+**Shell App (http://localhost:3004):**
+- **`/`** - Dynamic Canvas (Landing page with on-demand loading)
+- **`/all-demos`** - All Demos Showcase (Complete feature demonstration)
+- **`/demo-one`** - Individual Demo One page
+- **`/demo-two`** - Individual Demo Two page
+- **`/demo-three`** - Individual Demo Three page
+
+**Individual Demo Apps:**
+- **Demo One**: http://localhost:3005 (Standalone shapes demo)
+- **Demo Two**: http://localhost:3007 (Standalone text/image demo)
+- **Demo Three**: http://localhost:3006 (Standalone drawing demo)
+
+### Production Build & Deployment
 
 ```bash
-# Build both applications
+# Build all applications for production
 npm run build
 
-# Serve built applications
+# Serve built applications locally for testing
 npm run serve
 ```
 
-### Deployment
-
-When deploying to production servers:
-
-1. **Update environment URLs:**
-   ```bash
-   npm run update-env https://your-shell-domain.com https://your-test-domain.com
-   ```
-
-2. **Build for production:**
-   ```bash
-   npm run build
-   ```
-
-3. **Deploy the dist folders:**
-   - Deploy `shell-app/dist/` to your shell app server
-   - Deploy `test-app/dist/` to your test app server
-
-4. **Ensure CORS is configured** on both servers to allow cross-origin requests
+**Production Deployment:**
+1. **Build all apps**: `npm run build`
+2. **Deploy each dist folder** to your hosting service:
+   - `shell-app/dist/` → Main domain (e.g., https://your-app.com)
+   - `demo-one-app/dist/` → Subdomain (e.g., https://demo1.your-app.com)
+   - `demo-two-app/dist/` → Subdomain (e.g., https://demo2.your-app.com)
+   - `demo-three-app/dist/` → Subdomain (e.g., https://demo3.your-app.com)
+3. **Configure CORS** on all servers to allow cross-origin module federation
+4. **Update module federation URLs** in production configs if needed
 
 ## 📁 Project Structure
 
 ```
 mco-test-latest/
-├── package.json                 # Root workspace configuration
-├── README.md                   # This file
-├── shell-app/                  # Host application
+├── package.json                    # Root workspace configuration & scripts
+├── README.md                      # Comprehensive documentation (this file)
+├──
+├── 🏠 shell-app/                  # Main host application
 │   ├── src/
-│   │   ├── App.vue            # Main shell app component
-│   │   ├── main.js            # Entry point with CSS loading
-│   │   ├── stores/
-│   │   │   └── common.store.js # Shared Pinia store (exposed)
-│   │   └── composables/
-│   │       └── useToastComposable.js # Toast functionality (exposed)
-│   ├── vite.config.js         # Vite + Module Federation config
-│   └── package.json
-├── test-app/                   # Remote micro frontend
-│   ├── src/
-│   │   ├── FederatedApp.vue   # Complete app component (exposed)
+│   │   ├── App.vue               # Main app with navigation
+│   │   ├── main.js               # Entry point
+│   │   ├── router/
+│   │   │   └── index.js          # Vue Router configuration
 │   │   ├── components/
-│   │   │   └── Counter.vue    # Standalone component (exposed)
-│   │   └── styles.js          # CSS loading module (exposed)
-│   ├── vite.config.js         # Vite + Module Federation config
+│   │   │   ├── DynamicCanvas.vue # Landing page with dynamic loading
+│   │   │   └── AllDemos.vue      # Showcase page with all demos
+│   │   ├── fabric/
+│   │   │   └── shellFabric.js    # Shared Fabric.js utilities
+│   │   └── components/demoComponents/
+│   │       └── OToast.vue        # Toast notification system
+│   ├── vite.config.js            # Module Federation configuration
 │   └── package.json
+│
+├── 🎨 demo-one-app/              # Basic shapes micro frontend
+│   ├── src/
+│   │   ├── App.vue               # Demo One main component
+│   │   ├── main.js               # Entry point
+│   │   ├── components/
+│   │   │   └── DemoOneCanvas.vue # Shapes canvas component (exposed)
+│   │   └── fabric/
+│   │       └── demoOne.js        # Shape creation logic (exposed)
+│   ├── vite.config.js            # Module Federation configuration
+│   └── package.json
+│
+├── 📝 demo-two-app/              # Text & image micro frontend
+│   ├── src/
+│   │   ├── App.vue               # Demo Two main component
+│   │   ├── main.js               # Entry point
+│   │   ├── components/
+│   │   │   └── DemoTwoCanvas.vue # Text/image canvas component (exposed)
+│   │   └── fabric/
+│   │       └── demoTwo.js        # Text/image logic (exposed)
+│   ├── vite.config.js            # Module Federation configuration
+│   └── package.json
+│
+└── 🖌️ demo-three-app/           # Drawing micro frontend
+    ├── src/
+    │   ├── App.vue               # Demo Three main component
+    │   ├── main.js               # Entry point
+    │   ├── components/
+    │   │   └── DemoThreeCanvas.vue # Drawing canvas component (exposed)
+    │   └── fabric/
+    │       └── demoThree.js      # Drawing logic (exposed)
+    ├── vite.config.js            # Module Federation configuration
+    └── package.json
 ```
 
 ## 🔧 Module Federation Configuration
 
-### Shell App Configuration
+### Shell App Configuration (Host)
 
 ```javascript
 // shell-app/vite.config.js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import federation from '@module-federation/vite'
+
 export default defineConfig({
-  base: "/", // Fixed: Use root path instead of full URL to prevent URL duplication
   plugins: [
     federation({
-      name: "shellApp",
+      name: 'shellApp',
       remotes: {
-        testApp: {
-          type: "module",
-          name: "testApp",
-          entry: process.env.VITE_TEST_REMOTE_ENTRY || "http://localhost:3001/remoteEntry.js",
+        // Dynamic imports from all demo applications
+        demoOneApp: {
+          type: 'module',
+          name: 'demoOneApp',
+          entry: 'http://localhost:3005/remoteEntry.js',
+          entryGlobalName: 'demoOneApp',
+          format: 'esm'
         },
+        demoTwoApp: {
+          type: 'module',
+          name: 'demoTwoApp',
+          entry: 'http://localhost:3007/remoteEntry.js',
+          entryGlobalName: 'demoTwoApp',
+          format: 'esm'
+        },
+        demoThreeApp: {
+          type: 'module',
+          name: 'demoThreeApp',
+          entry: 'http://localhost:3006/remoteEntry.js',
+          entryGlobalName: 'demoThreeApp',
+          format: 'esm'
+        }
       },
       exposes: {
-        "./useToast": "./src/composables/useToastComposable.js",
-        "./commonStore": "./src/stores/common.store.js",
+        // Shared utilities for demo applications
+        './shellFabric': './src/fabric/shellFabric.js'
       },
       shared: {
-        vue: { singleton: true }
+        vue: { singleton: true },
+        'vue-router': { singleton: true },
+        fabric: { singleton: true }
       }
     }),
-    vue(),
+    vue()
   ],
+  server: {
+    port: 3004,
+    cors: true
+  }
 })
 ```
 
-### Test App Configuration
+### Demo App Configurations (Remotes)
 
+**Demo One App:**
 ```javascript
-// test-app/vite.config.js
+// demo-one-app/vite.config.js
 export default defineConfig({
-  base: "/", // Fixed: Use root path instead of full URL to prevent URL duplication
   plugins: [
     federation({
-      name: "testApp",
+      name: 'demoOneApp',
       exposes: {
-        "./App": "./src/FederatedApp.vue",
-        "./Counter": "./src/components/Counter.vue",
-        "./styles": "./src/styles.js",
-      },
-      remotes: {
-        shellApp: {
-          type: "module",
-          name: "shellApp",
-          entry: process.env.VITE_SHELL_REMOTE_ENTRY || "http://localhost:3000/remoteEntry.js",
-        },
+        './DemoOneCanvas': './src/components/DemoOneCanvas.vue',
+        './demoOneLogic': './src/fabric/demoOne.js'
       },
       shared: {
-        vue: { singleton: true }
+        vue: { singleton: true },
+        fabric: { singleton: true }
       }
     }),
-    vue(),
+    vue()
   ],
+  server: { port: 3005, cors: true }
+})
+```
+
+**Demo Two App:**
+```javascript
+// demo-two-app/vite.config.js
+export default defineConfig({
+  plugins: [
+    federation({
+      name: 'demoTwoApp',
+      exposes: {
+        './DemoTwoCanvas': './src/components/DemoTwoCanvas.vue',
+        './demoTwoLogic': './src/fabric/demoTwo.js'
+      },
+      shared: {
+        vue: { singleton: true },
+        fabric: { singleton: true }
+      }
+    }),
+    vue()
+  ],
+  server: { port: 3007, cors: true }
+})
+```
+
+**Demo Three App:**
+```javascript
+// demo-three-app/vite.config.js
+export default defineConfig({
+  plugins: [
+    federation({
+      name: 'demoThreeApp',
+      exposes: {
+        './DemoThreeCanvas': './src/components/DemoThreeCanvas.vue',
+        './demoThreeLogic': './src/fabric/demoThree.js'
+      },
+      shared: {
+        vue: { singleton: true },
+        fabric: { singleton: true }
+      }
+    }),
+    vue()
+  ],
+  server: { port: 3006, cors: true }
 })
 ```
 
 ## 📋 Implementation Examples
 
-### 1. 🏪 Sharing Pinia Stores
+### 1. 🎨 Dynamic Canvas Module Loading
 
-**Exposing a Store (Shell App):**
+**Shell App - Dynamic Loading:**
 ```javascript
-// shell-app/src/stores/common.store.js
-import { defineStore } from 'pinia'
-
-export const useCommonStore = defineStore('common', {
-  state: () => ({
-    num: 0
-  }),
-  getters: {
-    doubleNum: (state) => state.num * 2,
-    isPositive: (state) => state.num > 0,
-    isNegative: (state) => state.num < 0,
-    isZero: (state) => state.num === 0,
-  },
-  actions: {
-    increment() {
-      this.num++
-    },
-    decrement() {
-      this.num--
-    }
-  }
-})
-```
-
-**Consuming the Store (Test App):**
-```javascript
-// test-app/src/components/Counter.vue
+// shell-app/src/components/DynamicCanvas.vue
 <script setup>
-// Import the store module from shell app
-const storeModule = await import('shellApp/commonStore')
-const { useCommonStore } = storeModule
-const store = useCommonStore()
+import { ref } from 'vue'
+import { initializeFabricCanvas } from '../fabric/shellFabric.js'
+
+let canvas = null
+let demoOneModule = null
+
+// Initialize shared canvas
+onMounted(async () => {
+  canvas = await initializeFabricCanvas('dynamic-canvas', {
+    width: 800,
+    height: 600,
+    backgroundColor: '#ffffff'
+  })
+})
+
+// Dynamic module loading
+const loadDemoOne = async () => {
+  try {
+    // Dynamically import demo module
+    demoOneModule = await import('demoOneApp/demoOneLogic')
+
+    // Use imported functions on shared canvas
+    demoOneModule.addRectangle(canvas, {
+      left: 100,
+      top: 100,
+      fill: '#0054C9'
+    })
+
+    console.log('Demo One loaded and executed')
+  } catch (error) {
+    console.error('Failed to load Demo One:', error)
+  }
+}
 </script>
 
 <template>
-  <div>{{ store.num }}</div>
-  <button @click="store.increment">+</button>
+  <div>
+    <canvas id="dynamic-canvas"></canvas>
+    <button @click="loadDemoOne">Load Demo One</button>
+  </div>
 </template>
 ```
 
-### 2. 🧩 Sharing Vue Components
+**Demo App - Exposed Logic:**
+```javascript
+// demo-one-app/src/fabric/demoOne.js
+import { fabric } from 'fabric'
 
-**Exposing a Component (Test App):**
+export function addRectangle(canvas, options = {}) {
+  const rect = new fabric.Rect({
+    left: options.left || 100,
+    top: options.top || 100,
+    width: options.width || 100,
+    height: options.height || 80,
+    fill: options.fill || '#0054C9'
+  })
+
+  canvas.add(rect)
+  canvas.setActiveObject(rect)
+  canvas.renderAll()
+  return rect
+}
+
+export function addCircle(canvas, options = {}) {
+  const circle = new fabric.Circle({
+    left: options.left || 200,
+    top: options.top || 100,
+    radius: options.radius || 50,
+    fill: options.fill || '#6AAAEB'
+  })
+
+  canvas.add(circle)
+  canvas.setActiveObject(circle)
+  canvas.renderAll()
+  return circle
+}
+
+export function clearCanvas(canvas) {
+  canvas.clear()
+  canvas.backgroundColor = '#ffffff'
+  canvas.renderAll()
+}
+```
+
+### 2. 🧩 Complete Component Federation
+
+**Exposing a Complete Canvas Component:**
 ```vue
-<!-- test-app/src/components/Counter.vue -->
+<!-- demo-two-app/src/components/DemoTwoCanvas.vue -->
 <template>
-  <div class="counter-component">
-    <h3>Counter Component (from test-app)</h3>
-    <div class="counter-display">
-      <span class="counter-value">{{ store.num }}</span>
+  <div class="demo-two-container">
+    <h2>📝 Demo Two - Text & Images</h2>
+
+    <!-- Text Controls -->
+    <div class="controls">
+      <div class="control-group">
+        <input v-model="textInput" type="text" placeholder="Enter text">
+        <button @click="addTextToCanvas" class="btn btn-primary">
+          Add Text
+        </button>
+      </div>
+
+      <div class="control-group">
+        <input v-model="imageUrl" type="text" placeholder="Image URL">
+        <button @click="addImageToCanvas" class="btn btn-success" :disabled="isLoading">
+          {{ isLoading ? 'Loading...' : 'Add Image' }}
+        </button>
+      </div>
     </div>
-    <div class="counter-controls">
-      <button @click="store.decrement">-</button>
-      <button @click="store.increment">+</button>
+
+    <!-- Canvas -->
+    <div class="canvas-container">
+      <canvas id="demo-two-canvas"></canvas>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-// Import shared store from shell app
-const storeModule = await import('shellApp/commonStore')
-const { useCommonStore } = storeModule
-const store = useCommonStore()
-</script>
+import { ref, onMounted } from 'vue'
+import { initDemoTwoCanvas, addText, addImage } from '../fabric/demoTwo.js'
 
-<style scoped>
-.counter-component {
-  border: 2px solid #42b883;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
+const textInput = ref('Hello World!')
+const imageUrl = ref('https://picsum.photos/200/150')
+const isLoading = ref(false)
+let canvas = null
+
+onMounted(() => {
+  canvas = initDemoTwoCanvas('demo-two-canvas')
+})
+
+const addTextToCanvas = () => {
+  if (canvas && textInput.value.trim()) {
+    addText(canvas, {
+      text: textInput.value,
+      left: Math.random() * 400,
+      top: Math.random() * 300
+    })
+  }
 }
-</style>
+
+const addImageToCanvas = async () => {
+  if (canvas && imageUrl.value.trim()) {
+    isLoading.value = true
+    try {
+      await addImage(canvas, imageUrl.value, {
+        left: Math.random() * 300,
+        top: Math.random() * 200
+      })
+    } finally {
+      isLoading.value = false
+    }
+  }
+}
+</script>
 ```
 
 **Consuming the Component (Shell App):**
@@ -287,190 +471,326 @@ const store = useCommonStore()
 <!-- shell-app/src/App.vue -->
 <template>
   <div>
-    <h1>Shell App</h1>
+    <nav>
+      <router-link to="/">🏠 Dynamic Canvas</router-link>
+      <router-link to="/demo-two">📝 Demo Two</router-link>
+    </nav>
 
-    <!-- Load Counter component from test-app -->
-    <Suspense>
-      <template #default>
-        <Counter />
-      </template>
-      <template #fallback>
-        <div>Loading counter...</div>
-      </template>
-    </Suspense>
+    <router-view />
   </div>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
-
-// Define async component with error handling
-const Counter = defineAsyncComponent({
-  loader: () => import('testApp/Counter'),
-  errorComponent: {
-    template: '<div>❌ Failed to load Counter component</div>'
-  },
-  loadingComponent: {
-    template: '<div>Loading federated component...</div>'
-  },
-  delay: 200,
-  timeout: 10000,
-})
+// Router configuration handles component loading
+// Individual routes load complete federated components
 </script>
 ```
 
-### 3. 🎨 Sharing Composables
-
-**Exposing a Composable (Shell App):**
+**Router Configuration:**
 ```javascript
-// shell-app/src/composables/useToastComposable.js
-import { ref } from 'vue'
+// shell-app/src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
 
-export function useToast() {
-  const toasts = ref([])
-
-  const success = (message, options = {}) => {
-    addToast('success', message, options)
+const routes = [
+  {
+    path: '/demo-two',
+    name: 'demo-two',
+    component: () => import('demoTwoApp/DemoTwoCanvas')
   }
+]
 
-  const error = (message, options = {}) => {
-    addToast('error', message, options)
-  }
+export default createRouter({
+  history: createWebHistory(),
+  routes
+})
+```
 
-  const warning = (message, options = {}) => {
-    addToast('warning', message, options)
-  }
+### 3. 🎨 Shared Canvas Utilities
 
-  const info = (message, options = {}) => {
-    addToast('info', message, options)
-  }
+**Exposing Canvas Utilities (Shell App):**
+```javascript
+// shell-app/src/fabric/shellFabric.js
+let fabricInstance = null
 
-  const addToast = (type, message, options) => {
-    const toast = {
-      id: Date.now(),
-      type,
-      message,
+export async function initializeFabricCanvas(canvasId, options = {}) {
+  try {
+    const { fabric } = await import('fabric')
+    fabricInstance = fabric
+
+    const canvas = new fabric.Canvas(canvasId, {
+      width: options.width || 800,
+      height: options.height || 600,
+      backgroundColor: options.backgroundColor || '#ffffff',
+      selectionColor: 'rgba(0, 84, 201, 0.3)',
+      selectionBorderColor: '#0054C9',
+      selectionLineWidth: 2,
       ...options
-    }
-    toasts.value.push(toast)
+    })
 
-    // Auto remove after 5 seconds
+    console.log('Shell Fabric.js canvas initialized successfully')
+    return canvas
+  } catch (error) {
+    console.error('Failed to initialize Fabric.js canvas:', error)
+    return null
+  }
+}
+
+export function clearCanvas(canvas) {
+  if (canvas && canvas.clear) {
+    canvas.clear()
+    canvas.backgroundColor = '#ffffff'
+    canvas.renderAll()
+  }
+}
+
+export function isFabricAvailable() {
+  return fabricInstance !== null
+}
+
+export default {
+  initializeFabricCanvas,
+  clearCanvas,
+  isFabricAvailable
+}
+```
+
+**Using Shared Utilities (Demo Apps):**
+```javascript
+// demo-one-app/src/fabric/demoOne.js
+import { fabric } from 'fabric'
+
+// Configure Fabric.js with consistent styling
+if (fabric.Object) {
+  const defaults = fabric.Object.prototype
+  defaults.transparentCorners = false
+  defaults.cornerColor = '#0054C9'
+  defaults.cornerStyle = 'circle'
+  defaults.borderColor = '#0054C9'
+  defaults.cornerSize = 10
+}
+
+export function initDemoOneCanvas(canvasId) {
+  const canvas = new fabric.Canvas(canvasId, {
+    width: 800,
+    height: 600,
+    backgroundColor: '#ffffff'
+  })
+
+  // Apply consistent selection styling
+  canvas.selectionColor = 'rgba(0, 84, 201, 0.3)'
+  canvas.selectionBorderColor = '#0054C9'
+  canvas.selectionLineWidth = 2
+
+  return canvas
+}
+
+export function addRectangle(canvas, options = {}) {
+  const rect = new fabric.Rect({
+    left: options.left || 100,
+    top: options.top || 100,
+    width: options.width || 100,
+    height: options.height || 80,
+    fill: options.fill || '#0054C9',
+    stroke: options.stroke || '#031F3C',
+    strokeWidth: options.strokeWidth || 2
+  })
+
+  canvas.add(rect)
+  canvas.setActiveObject(rect)
+  canvas.renderAll()
+  return rect
+}
+```
+
+### 4. 🎨 All Demos Showcase Implementation
+
+**Complete Multi-Canvas Architecture:**
+```vue
+<!-- shell-app/src/components/AllDemos.vue -->
+<template>
+  <div class="all-demos-container">
+    <header class="demos-header">
+      <h1>🎨 All Demos Showcase</h1>
+      <p>Experience all three micro frontend demos in one unified view</p>
+    </header>
+
+    <!-- Global Controls -->
+    <div class="global-controls">
+      <h3>🌐 Global Controls</h3>
+      <div class="global-buttons">
+        <button @click="clearAllCanvases" class="btn btn-warning">
+          🗑️ Clear All Canvases
+        </button>
+        <button @click="deleteSelectedFromAll" class="btn btn-danger">
+          ❌ Delete Selected from All
+        </button>
+        <button @click="resetAllDemos" class="btn btn-secondary">
+          🔄 Reset All Demos
+        </button>
+      </div>
+    </div>
+
+    <!-- Demo One Section -->
+    <section class="demo-section demo-one-section">
+      <div class="demo-header">
+        <h2>🎨 Demo One - Basic Shapes</h2>
+      </div>
+
+      <!-- Demo One Controls -->
+      <div class="demo-controls">
+        <div class="control-group">
+          <label>Color:</label>
+          <input v-model="demoOneColor" type="color" class="color-input">
+        </div>
+        <div class="control-buttons">
+          <button @click="addRectangleToOne" class="btn btn-primary">➕ Rectangle</button>
+          <button @click="addCircleToOne" class="btn btn-primary">⭕ Circle</button>
+          <button @click="addTriangleToOne" class="btn btn-primary">🔺 Triangle</button>
+        </div>
+      </div>
+
+      <div class="demo-canvas-container">
+        <canvas id="demo-one-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- Demo Two Section -->
+    <section class="demo-section demo-two-section">
+      <div class="demo-header">
+        <h2>📝 Demo Two - Text & Images</h2>
+      </div>
+
+      <!-- Demo Two Controls -->
+      <div class="demo-controls">
+        <div class="control-group">
+          <input v-model="demoTwoText" type="text" placeholder="Enter text">
+          <button @click="addTextToTwo" class="btn btn-primary">➕ Add Text</button>
+        </div>
+        <div class="control-group">
+          <input v-model="demoTwoImageUrl" type="text" placeholder="Image URL">
+          <button @click="addImageToTwo" class="btn btn-success" :disabled="isLoadingImage">
+            {{ isLoadingImage ? '⏳ Loading...' : '🖼️ Add Image' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="demo-canvas-container">
+        <canvas id="demo-two-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- Demo Three Section -->
+    <section class="demo-section demo-three-section">
+      <div class="demo-header">
+        <h2>🖌️ Demo Three - Drawing</h2>
+      </div>
+
+      <!-- Demo Three Controls -->
+      <div class="demo-controls">
+        <div class="control-group">
+          <button @click="toggleDrawingMode" :class="['btn', isDrawingMode ? 'btn-danger' : 'btn-success']">
+            {{ isDrawingMode ? '🛑 Stop Drawing' : '✏️ Start Drawing' }}
+          </button>
+        </div>
+        <div class="control-group">
+          <label>Brush Width:</label>
+          <input v-model="brushWidth" type="range" min="1" max="20">
+          <span>{{ brushWidth }}px</span>
+        </div>
+        <div class="control-group">
+          <label>Brush Color:</label>
+          <input v-model="brushColor" type="color">
+        </div>
+      </div>
+
+      <div class="demo-canvas-container">
+        <canvas id="demo-three-canvas"></canvas>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, watch } from 'vue'
+
+// Reactive state for all controls
+const demoOneColor = ref('#0054C9')
+const demoTwoText = ref('Hello World!')
+const demoTwoImageUrl = ref('https://picsum.photos/200/150')
+const isLoadingImage = ref(false)
+const isDrawingMode = ref(false)
+const brushWidth = ref(5)
+const brushColor = ref('#ef4444')
+
+// Canvas references
+let demoOneCanvas = null
+let demoTwoCanvas = null
+let demoThreeCanvas = null
+
+// Demo modules
+let demoOneModule = null
+let demoTwoModule = null
+let demoThreeModule = null
+
+onMounted(async () => {
+  // Initialize all demos simultaneously
+  await Promise.all([
+    initializeDemoOne(),
+    initializeDemoTwo(),
+    initializeDemoThree()
+  ])
+})
+
+// Initialize each demo with its own canvas
+const initializeDemoOne = async () => {
+  try {
+    demoOneModule = await import('demoOneApp/demoOneLogic')
+    demoOneCanvas = demoOneModule.initDemoOneCanvas('demo-one-canvas')
+
+    // Add sample content
     setTimeout(() => {
-      removeToast(toast.id)
-    }, 5000)
+      demoOneModule.addRectangle(demoOneCanvas, { left: 50, top: 50, fill: '#0054C9' })
+      demoOneModule.addCircle(demoOneCanvas, { left: 200, top: 100, fill: '#6AAAEB' })
+    }, 500)
+  } catch (error) {
+    console.error('Failed to initialize Demo One:', error)
   }
+}
 
-  const removeToast = (id) => {
-    const index = toasts.value.findIndex(t => t.id === id)
-    if (index > -1) {
-      toasts.value.splice(index, 1)
+// Global control functions
+const clearAllCanvases = () => {
+  if (demoOneCanvas && demoOneModule) demoOneModule.clearCanvas(demoOneCanvas)
+  if (demoTwoCanvas && demoTwoModule) demoTwoModule.clearCanvas(demoTwoCanvas)
+  if (demoThreeCanvas && demoThreeModule) demoThreeModule.clearCanvas(demoThreeCanvas)
+}
+
+const deleteSelectedFromAll = () => {
+  [demoOneCanvas, demoTwoCanvas, demoThreeCanvas].forEach(canvas => {
+    if (canvas && canvas.getActiveObject()) {
+      canvas.remove(canvas.getActiveObject())
+      canvas.renderAll()
     }
-  }
-
-  return {
-    toasts,
-    success,
-    error,
-    warning,
-    info,
-    removeToast
-  }
+  })
 }
-```
 
-**Consuming the Composable (Test App):**
-```javascript
-// test-app/src/FederatedApp.vue
-<script>
-export default {
-  async mounted() {
-    try {
-      // Import toast composable from shell app
-      const { useToast } = await import('shellApp/useToast')
-      this.toast = useToast()
-    } catch (error) {
-      console.error('Failed to load toast composable:', error)
-    }
-  },
-
-  methods: {
-    showSuccessToast() {
-      if (this.toast) {
-        this.toast.success('Success from federated app!', {
-          secondaryMessage: 'This toast was triggered from test-app'
-        })
-      }
-    }
-  }
-}
-</script>
-```
-
-### 4. 🎨 Sharing Styles (CSS)
-
-One of the biggest challenges in micro frontends is CSS sharing. This project demonstrates a robust solution:
-
-**Exposing Styles (Test App):**
-```javascript
-// test-app/src/styles.js
-export function loadStyles() {
-  // In production, load the CSS file
-  if (import.meta.env.PROD) {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = 'http://localhost:3001/assets/style.css'
-    link.onload = () => console.log('✅ Test-app styles loaded via module')
-    link.onerror = () => console.error('❌ Failed to load test-app styles via module')
-    document.head.appendChild(link)
+// Demo-specific control functions
+const addRectangleToOne = () => {
+  if (demoOneCanvas && demoOneModule) {
+    demoOneModule.addRectangle(demoOneCanvas, {
+      left: Math.random() * 400,
+      top: Math.random() * 300,
+      fill: demoOneColor.value
+    })
   }
 }
 
-// Auto-load styles when this module is imported
-loadStyles()
-
-export default {
-  loadStyles
-}
-```
-
-**CSS Build Configuration (Test App):**
-```javascript
-// test-app/vite.config.js
-build: {
-  target: "chrome89",
-  cssCodeSplit: false,
-  rollupOptions: {
-    output: {
-      manualChunks: undefined,
-      // Use fixed CSS name for easier loading
-      assetFileNames: (assetInfo) => {
-        if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-          return 'assets/style.css'  // Fixed name instead of hash
-        }
-        return 'assets/[name].[hash].[ext]'
-      }
-    },
-  },
-}
-```
-
-**Loading Styles (Shell App):**
-```javascript
-// shell-app/src/main.js
-// Import CSS from test-app via the exposed module
-import('testApp/styles').catch(err => {
-  console.error('Failed to load test-app styles module:', err)
-
-  // Fallback to direct CSS loading if module import fails
-  if (import.meta.env.PROD) {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = 'http://localhost:3001/assets/style.css'
-    link.onload = () => console.log('✅ Test-app CSS loaded via fallback')
-    link.onerror = () => console.error('❌ Failed to load test-app CSS via fallback')
-    document.head.appendChild(link)
+// Watch for brush changes in Demo Three
+watch(brushWidth, (newWidth) => {
+  if (demoThreeCanvas && demoThreeModule && isDrawingMode.value) {
+    demoThreeModule.setBrushWidth(demoThreeCanvas, newWidth)
   }
 })
+</script>
 ```
 
 ### 5. 🏠 Exposing Entire Applications
@@ -542,17 +862,35 @@ export default {
 </style>
 ```
 
-## 🔑 Key Features Demonstrated
+## ✨ Key Features Demonstrated
 
-### ✅ What This Example Covers
+### 🎨 Canvas & Graphics Architecture
+- **🖼️ Shared Canvas System**: Single Fabric.js canvas shared across multiple micro frontends
+- **🎨 Dynamic Module Loading**: Load canvas functionality on-demand from different micro frontends
+- **🖌️ Multi-Demo Integration**: Three independent canvas demos (shapes, text/images, drawing)
+- **🎯 Real-time Interaction**: Live canvas manipulation with immediate visual feedback
+- **🌐 Global Canvas Controls**: Actions that affect all canvases simultaneously
+- **🎮 Canvas-Specific Controls**: Individual controls for each demo's unique features
 
-- **🏪 Store Sharing**: Pinia stores shared between micro frontends
-- **🧩 Component Sharing**: Vue components exposed and consumed across apps
-- **🎨 Style Sharing**: CSS loading with production build support
-- **🔧 Composable Sharing**: Vue composables shared between applications
-- **🏠 App-level Sharing**: Complete applications as federated modules
-- **🚀 Development & Production**: Works in both dev and production modes
-- **⚡ Hot Reload**: Full HMR support during development
+### 🏗️ Advanced Micro Frontend Architecture
+- **🔄 Module Federation**: Advanced Vite + Vue 3 + Module Federation implementation
+- **🧩 Component Federation**: Complete Vue components shared across applications
+- **📦 Logic Federation**: Shared JavaScript functions and utilities between apps
+- **🌐 Independent Deployment**: Each micro frontend can be deployed separately
+- **⚡ Hot Module Replacement**: Live updates across all micro frontends during development
+
+### 🎮 Interactive Demonstration Features
+- **📱 Responsive Design**: Works perfectly on desktop and mobile devices
+- **🎯 Multiple Demo Modes**: Landing page, All Demos showcase, individual demo pages
+- **⚡ Real-time Updates**: Immediate visual feedback for all canvas interactions
+- **🛠️ Professional UI**: Clean, modern interface with brand color consistency
+
+### 🛠️ Developer Experience & Production Ready
+- **🚀 Production Optimized**: Optimized builds with proper error handling and fallbacks
+- **🔧 TypeScript Ready**: Full TypeScript support across all applications
+- **📋 Comprehensive Documentation**: Detailed examples and implementation guides
+- **🎯 Error Boundaries**: Robust error handling and graceful degradation
+- **🌐 Environment Management**: Easy configuration for different deployment environments
 - **🔄 Async Loading**: Proper async component loading with error handling
 - **📦 Build Optimization**: Optimized builds with shared dependencies
 
@@ -560,44 +898,299 @@ export default {
 
 - **Module Federation**: Using `@module-federation/vite` for seamless integration
 - **Vue 3 Composition API**: Modern Vue patterns with `<script setup>`
-- **Pinia State Management**: Reactive state sharing across micro frontends
-- **SCSS Support**: Advanced styling with SCSS preprocessing
-- **TypeScript Ready**: Easy to extend with TypeScript support
+- **Fabric.js Integration**: Advanced canvas manipulation with shared instances
+- **Dynamic Imports**: Runtime module loading with proper error handling
+- **Responsive Design**: Mobile-first approach with flexible layouts
+- **Brand Consistency**: Unified color scheme across all micro frontends
 - **Error Boundaries**: Graceful error handling for failed module loads
 - **Suspense**: Built-in loading states for async components
 
+## 🚀 Complete Walkthrough: How Everything Works
+
+### 🏗️ Architecture Flow
+
+1. **🏠 Shell App Initialization**:
+   ```javascript
+   // shell-app/src/main.js - Entry point
+   import { createApp } from 'vue'
+   import { createRouter } from 'vue-router'
+   import App from './App.vue'
+
+   const app = createApp(App)
+   app.use(router)
+   app.mount('#app')
+   ```
+
+2. **🎨 Canvas System Setup**:
+   ```javascript
+   // shell-app/src/fabric/shellFabric.js - Shared canvas utilities
+   export async function initializeFabricCanvas(canvasId, options = {}) {
+     const { fabric } = await import('fabric')
+     return new fabric.Canvas(canvasId, {
+       width: 800,
+       height: 600,
+       backgroundColor: '#ffffff',
+       selectionColor: 'rgba(0, 84, 201, 0.3)',
+       selectionBorderColor: '#0054C9',
+       ...options
+     })
+   }
+   ```
+
+3. **🔄 Dynamic Module Loading Process**:
+   ```javascript
+   // shell-app/src/components/DynamicCanvas.vue
+   const loadDemoOne = async () => {
+     try {
+       // 1. Ensure canvas is initialized
+       await ensureCanvasInitialized()
+
+       // 2. Dynamically import demo module via Module Federation
+       demoOneModule = await import('demoOneApp/demoOneLogic')
+
+       // 3. Module is now available for canvas operations
+       loadedDemos.value.demoOne = true
+       console.log('Demo One loaded successfully')
+     } catch (error) {
+       console.error('Failed to load Demo One:', error)
+       alert('Failed to load Demo One module: ' + error.message)
+     }
+   }
+   ```
+
+4. **🎨 Demo Module Execution**:
+   ```javascript
+   // demo-one-app/src/fabric/demoOne.js - Exposed functionality
+   export function addRectangle(canvas, options = {}) {
+     const rect = new fabric.Rect({
+       left: options.left || 100,
+       top: options.top || 100,
+       width: options.width || 100,
+       height: options.height || 80,
+       fill: options.fill || '#0054C9'
+     })
+
+     canvas.add(rect)
+     canvas.setActiveObject(rect)
+     canvas.renderAll()
+     return rect
+   }
+   ```
+
+### 🌐 Page Navigation & User Flow
+
+**🏠 Landing Page (`/`) - Dynamic Loading Demo**:
+- **Purpose**: Demonstrate on-demand module loading
+- **Features**: Shared canvas with progressive feature activation
+- **User Experience**: Click "Load Demo X" → Module loads → Controls appear
+- **Use Case**: Perfect for architecture demonstrations and client presentations
+
+**🎨 All Demos Page (`/all-demos`) - Complete Showcase**:
+- **Purpose**: Show all capabilities in one unified view
+- **Features**: Three independent canvases with global and local controls
+- **User Experience**: All demos load automatically with full interactivity
+- **Use Case**: Perfect for feature showcasing and comprehensive demonstrations
+
+**📱 Individual Demo Pages**:
+- **`/demo-one`**: Standalone shapes demo with full controls
+- **`/demo-two`**: Standalone text/image demo with full controls
+- **`/demo-three`**: Standalone drawing demo with full controls
+- **Use Case**: Perfect for focused testing and development
+
+### 🔄 Module Federation Deep Dive
+
+1. **📦 Build Time Configuration**:
+   ```bash
+   # Each app builds with Module Federation
+   npm run build
+
+   # Generates federated modules:
+   # shell-app/dist/remoteEntry.js (host)
+   # demo-one-app/dist/remoteEntry.js (remote)
+   # demo-two-app/dist/remoteEntry.js (remote)
+   # demo-three-app/dist/remoteEntry.js (remote)
+   ```
+
+2. **🌐 Runtime Module Resolution**:
+   ```javascript
+   // When shell app executes: import('demoOneApp/demoOneLogic')
+   // Module Federation:
+   // 1. Fetches http://localhost:3005/remoteEntry.js
+   // 2. Resolves the exposed 'demoOneLogic' module
+   // 3. Loads dependencies (fabric.js shared)
+   // 4. Returns module for immediate use
+   ```
+
+3. **🎯 Cross-App Function Execution**:
+   ```javascript
+   // Shell app uses demo functions on shared canvas
+   const addShape = () => {
+     if (demoOneModule && canvas) {
+       demoOneModule.addRectangle(canvas, {
+         left: Math.random() * 400,
+         top: Math.random() * 300,
+         fill: selectedColor.value
+       })
+     }
+   }
+   ```
+
+### 🎨 Canvas Sharing Strategy
+
+**🏠 Shell App Responsibilities**:
+- Initialize and manage shared Fabric.js canvas
+- Provide canvas reference to all demo modules
+- Handle global canvas operations (clear all, delete selected)
+- Manage canvas lifecycle and cleanup
+
+**🎨 Demo App Responsibilities**:
+- Receive canvas reference from shell app
+- Add demo-specific functionality to shared canvas
+- Maintain independent feature sets and controls
+- Export reusable functions for shell app consumption
+
+**🌐 Coordination Benefits**:
+- Single canvas instance shared across all demos
+- Consistent styling and behavior
+- Global operations affect all demo content
+- Unified user experience across micro frontends
+
+### 🎯 Real-World Applications
+
+This architecture pattern is ideal for:
+
+- **🏢 Enterprise Applications**: Large teams developing independent features
+- **🛒 E-commerce Platforms**: Product catalog, cart, checkout as separate apps
+- **📊 Dashboard Systems**: Different widgets and panels as micro frontends
+- **🎮 Gaming Platforms**: Game lobby, profiles, instances as separate modules
+- **📱 Multi-tenant SaaS**: Customer-specific features as deployable modules
+- **🎨 Creative Tools**: Different editing capabilities as independent applications
+
 ## 🚨 Common Issues & Solutions
 
-### URL Duplication Issue (http://localhost:3000/http://localhost:3000)
+### Canvas Not Initializing on Home Page
 
-**Problem**: URLs get duplicated like `http://localhost:3000/http://localhost:3000` instead of just `http://localhost:3000/`.
+**Problem**: Canvas appears blank on first visit to home page (`/`), but works after visiting individual demo routes.
 
-**Root Cause**: Setting `base: "http://localhost:3000/"` in Vite config causes URL duplication.
+**Root Cause**: Fabric.js import failing in shell app before demo modules are loaded.
 
 **Solution**:
 ```javascript
-// ❌ Wrong - causes URL duplication
-export default defineConfig({
-  base: "http://localhost:3000/",
-})
+// ✅ Shell app initializes canvas with fallback
+const initializeShellCanvas = async () => {
+  try {
+    canvas = await initializeFabricCanvas('dynamic-canvas', {
+      width: 800,
+      height: 600,
+      backgroundColor: '#ffffff'
+    })
 
-// ✅ Correct - use root path
-export default defineConfig({
-  base: "/",
-})
+    if (canvas) {
+      console.log('Canvas initialized successfully')
+      return true
+    } else {
+      // Fallback: prepare basic canvas element
+      const canvasElement = document.getElementById('dynamic-canvas')
+      canvas = { element: canvasElement, needsFabricInit: true }
+      return true
+    }
+  } catch (error) {
+    console.error('Failed to initialize canvas:', error)
+    return false
+  }
+}
 ```
 
-This fix is already implemented in both `shell-app/vite.config.js` and `test-app/vite.config.js`.
+### Module Federation Import Errors
 
-### CSS Not Loading in Production
+**Problem**: `Failed to load Demo X module` errors when clicking load buttons.
 
-**Problem**: Styles work in development but not in production builds.
+**Common Causes & Solutions**:
 
-**Solution**: This repo implements a robust CSS loading strategy:
+1. **Port Conflicts**:
+   ```bash
+   # Check if all ports are available
+   netstat -an | findstr "3004 3005 3006 3007"
 
-1. **Fixed CSS filenames** instead of hashed names
-2. **CSS modules** exposed via Module Federation
-3. **Fallback loading** if module import fails
+   # Kill processes if needed
+   npx kill-port 3004 3005 3006 3007
+   ```
+
+2. **CORS Issues**:
+   ```javascript
+   // Ensure CORS is enabled in all vite.config.js
+   export default defineConfig({
+     server: {
+       port: 3004,
+       cors: true  // ✅ Enable CORS
+     }
+   })
+   ```
+
+3. **Module Not Exposed**:
+   ```javascript
+   // ✅ Verify modules are properly exposed
+   federation({
+     name: 'demoOneApp',
+     exposes: {
+       './DemoOneCanvas': './src/components/DemoOneCanvas.vue',
+       './demoOneLogic': './src/fabric/demoOne.js'  // ✅ Must be exposed
+     }
+   })
+   ```
+
+### Fabric.js Version Conflicts
+
+**Problem**: "Cannot read properties of undefined (reading 'Canvas')" errors.
+
+**Solution**: Ensure consistent Fabric.js versions across all apps:
+```bash
+# Check versions in all apps
+cd shell-app && npm list fabric
+cd ../demo-one-app && npm list fabric
+cd ../demo-two-app && npm list fabric
+cd ../demo-three-app && npm list fabric
+
+# Update to consistent version if needed
+npm install fabric@5.3.0
+```
+
+### Canvas Features Not Working
+
+**Problem**: Canvas loads but demo features (shapes, text, drawing) don't work.
+
+**Debugging Steps**:
+
+1. **Check Console Errors**:
+   ```javascript
+   // Look for these common errors:
+   // - "canvas.add is not a function" → Canvas not properly initialized
+   // - "fabric is not defined" → Fabric.js import failed
+   // - "Cannot read properties of undefined" → Module not loaded
+   ```
+
+2. **Verify Module Loading**:
+   ```javascript
+   // Add debugging to demo loading functions
+   const loadDemoOne = async () => {
+     console.log('Loading Demo One...')
+     try {
+       demoOneModule = await import('demoOneApp/demoOneLogic')
+       console.log('Demo One module:', demoOneModule) // ✅ Should show exported functions
+       console.log('Canvas:', canvas) // ✅ Should show Fabric.js canvas
+     } catch (error) {
+       console.error('Load failed:', error)
+     }
+   }
+   ```
+
+3. **Test Individual Routes**:
+   ```bash
+   # Test each demo independently
+   # Visit: http://localhost:3005 (Demo One)
+   # Visit: http://localhost:3007 (Demo Two)
+   # Visit: http://localhost:3006 (Demo Three)
+   ```
 4. **Production detection** to load CSS only when needed
 
 ### Store State Not Syncing
@@ -619,84 +1212,373 @@ This fix is already implemented in both `shell-app/vite.config.js` and `test-app
 - Add timeout and retry logic
 - Check network connectivity between apps
 
-## 📚 Best Practices
+## 📚 Best Practices for Canvas Micro Frontends
 
-### 1. **Shared Dependencies**
+### 1. **Shared Dependencies Management**
 ```javascript
+// All apps should share these dependencies
 shared: {
   vue: { singleton: true },
-  pinia: { singleton: true },
+  'vue-router': { singleton: true },
+  fabric: { singleton: true },  // ✅ Critical for canvas sharing
   // Add other shared libs here
 }
 ```
 
-### 2. **Error Handling**
+### 2. **Canvas Initialization Strategy**
 ```javascript
-const RemoteComponent = defineAsyncComponent({
-  loader: () => import('remoteApp/Component'),
-  errorComponent: ErrorComponent,
-  loadingComponent: LoadingComponent,
-  delay: 200,
-  timeout: 10000,
-})
+// ✅ Shell app provides canvas utilities
+export async function initializeFabricCanvas(canvasId, options = {}) {
+  const { fabric } = await import('fabric')
+  return new fabric.Canvas(canvasId, {
+    width: options.width || 800,
+    height: options.height || 600,
+    backgroundColor: '#ffffff',
+    selectionColor: 'rgba(0, 84, 201, 0.3)',
+    selectionBorderColor: '#0054C9',
+    ...options
+  })
+}
+
+// ✅ Demo apps use consistent patterns
+export function addShape(canvas, shapeType, options = {}) {
+  // Validate canvas before use
+  if (!canvas || typeof canvas.add !== 'function') {
+    throw new Error('Invalid canvas provided')
+  }
+
+  // Create and add shape
+  const shape = new fabric[shapeType](options)
+  canvas.add(shape)
+  canvas.renderAll()
+  return shape
+}
 ```
 
-### 3. **CSS Strategy**
-- Use fixed CSS filenames in production
-- Expose CSS as modules for better control
-- Implement fallback loading mechanisms
-- Avoid CSS conflicts with proper scoping
+### 3. **Error Handling for Dynamic Loading**
+```javascript
+// ✅ Robust module loading with fallbacks
+const loadDemoModule = async (moduleName) => {
+  try {
+    const module = await import(`${moduleName}App/${moduleName}Logic`)
+    return module
+  } catch (error) {
+    console.error(`Failed to load ${moduleName}:`, error)
 
-### 4. **Development Workflow**
+    // Show user-friendly error
+    alert(`Failed to load ${moduleName} module. Please refresh and try again.`)
+
+    // Optional: Try fallback or alternative loading
+    return null
+  }
+}
+```
+
+### 4. **Canvas State Management**
+```javascript
+// ✅ Centralized canvas state
+const canvasState = reactive({
+  isInitialized: false,
+  loadedModules: new Set(),
+  activeDemo: null,
+  globalSettings: {
+    backgroundColor: '#ffffff',
+    selectionColor: 'rgba(0, 84, 201, 0.3)'
+  }
+})
+
+// ✅ Global canvas operations
+const globalCanvasOperations = {
+  clearAll: () => {
+    Object.values(canvases).forEach(canvas => {
+      if (canvas && canvas.clear) {
+        canvas.clear()
+        canvas.backgroundColor = canvasState.globalSettings.backgroundColor
+        canvas.renderAll()
+      }
+    })
+  },
+
+  deleteSelected: () => {
+    Object.values(canvases).forEach(canvas => {
+      const activeObject = canvas?.getActiveObject()
+      if (activeObject) {
+        canvas.remove(activeObject)
+        canvas.renderAll()
+      }
+    })
+  }
+}
+```
+
+### 5. **Development Workflow**
 ```bash
-# Always start all apps for development
+# Start all canvas demos for development
 npm run dev
 
-# Build all apps before testing production
+# Test individual demos
+npm run dev:shell    # Shell app only
+npm run dev:demo-one # Demo One only
+
+# Build and test production
 npm run build
 npm run serve
+
+# Debug specific issues
+npm run dev:debug    # With additional logging
 ```
 
-## 🔧 Extending This Example
+### 6. **Performance Optimization**
+```javascript
+// ✅ Lazy load demo modules
+const demoModules = {
+  demoOne: () => import('demoOneApp/demoOneLogic'),
+  demoTwo: () => import('demoTwoApp/demoTwoLogic'),
+  demoThree: () => import('demoThreeApp/demoThreeLogic')
+}
 
-### Adding New Micro Frontends
+// ✅ Preload critical modules
+const preloadCriticalModules = async () => {
+  try {
+    // Preload most commonly used demo
+    await demoModules.demoOne()
+    console.log('Critical modules preloaded')
+  } catch (error) {
+    console.warn('Preload failed, will load on demand')
+  }
+}
+```
 
-1. **Create new app directory**
-2. **Configure Module Federation** in `vite.config.js`
-3. **Add to root package.json** scripts
-4. **Update shell app** to consume new modules
+## 🔧 Extending This Canvas Architecture
 
-### Adding TypeScript
+### Adding New Canvas Demos
 
-1. **Install TypeScript** in each app
-2. **Add type definitions** for federated modules
-3. **Configure tsconfig.json** with proper module resolution
+1. **Create New Demo App**:
+   ```bash
+   mkdir demo-four-app
+   cd demo-four-app
+   npm init -y
+   npm install vue@3 fabric@5.3.0 @vitejs/plugin-vue @module-federation/vite
+   ```
+
+2. **Configure Module Federation**:
+   ```javascript
+   // demo-four-app/vite.config.js
+   export default defineConfig({
+     plugins: [
+       federation({
+         name: 'demoFourApp',
+         exposes: {
+           './DemoFourCanvas': './src/components/DemoFourCanvas.vue',
+           './demoFourLogic': './src/fabric/demoFour.js'
+         },
+         shared: {
+           vue: { singleton: true },
+           fabric: { singleton: true }
+         }
+       }),
+       vue()
+     ],
+     server: { port: 3008, cors: true }
+   })
+   ```
+
+3. **Update Shell App**:
+   ```javascript
+   // shell-app/vite.config.js - Add new remote
+   remotes: {
+     demoFourApp: {
+       type: 'module',
+       name: 'demoFourApp',
+       entry: 'http://localhost:3008/remoteEntry.js'
+     }
+   }
+   ```
+
+4. **Add to Root Scripts**:
+   ```json
+   // package.json
+   "scripts": {
+     "dev:demo-four": "cd demo-four-app && npm run dev",
+     "build:demo-four": "cd demo-four-app && npm run build"
+   }
+   ```
+
+### Adding Advanced Canvas Features
+
+1. **3D Canvas Integration**:
+   ```javascript
+   // Add Three.js for 3D capabilities
+   export function init3DCanvas(canvasId) {
+     const scene = new THREE.Scene()
+     const camera = new THREE.PerspectiveCamera(75, 800/600, 0.1, 1000)
+     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById(canvasId) })
+
+     return { scene, camera, renderer }
+   }
+   ```
+
+2. **Real-time Collaboration**:
+   ```javascript
+   // Add WebSocket for real-time updates
+   export function enableCollaboration(canvas) {
+     const ws = new WebSocket('ws://localhost:8080')
+
+     canvas.on('object:added', (e) => {
+       ws.send(JSON.stringify({ type: 'object:added', data: e.target }))
+     })
+
+     ws.onmessage = (event) => {
+       const { type, data } = JSON.parse(event.data)
+       // Handle remote changes
+     }
+   }
+   ```
+
+3. **Canvas Export/Import**:
+   ```javascript
+   // Add save/load functionality
+   export function exportCanvas(canvas) {
+     return JSON.stringify(canvas.toJSON())
+   }
+
+   export function importCanvas(canvas, jsonData) {
+     canvas.loadFromJSON(jsonData, () => {
+       canvas.renderAll()
+     })
+   }
+   ```
+
+### Adding TypeScript Support
+
+1. **Install TypeScript**:
+   ```bash
+   npm install -D typescript @types/fabric
+   ```
+
+2. **Add Type Definitions**:
+   ```typescript
+   // types/federation.d.ts
+   declare module 'demoOneApp/demoOneLogic' {
+     export function addRectangle(canvas: fabric.Canvas, options?: any): fabric.Rect
+     export function addCircle(canvas: fabric.Canvas, options?: any): fabric.Circle
+     export function clearCanvas(canvas: fabric.Canvas): void
+   }
+   ```
+
+3. **Configure TypeScript**:
+   ```json
+   // tsconfig.json
+   {
+     "compilerOptions": {
+       "target": "ES2020",
+       "module": "ESNext",
+       "moduleResolution": "node",
+       "allowSyntheticDefaultImports": true,
+       "esModuleInterop": true
+     }
+   }
+   ```
 
 ### Adding Testing
 
-1. **Unit Tests**: Test individual components and stores
-2. **Integration Tests**: Test micro frontend interactions
-3. **E2E Tests**: Test complete user workflows
+1. **Unit Tests for Canvas Functions**:
+   ```javascript
+   // tests/canvas.test.js
+   import { describe, it, expect, beforeEach } from 'vitest'
+   import { fabric } from 'fabric'
+   import { addRectangle, addCircle } from '../src/fabric/demoOne.js'
 
-## 🌟 Why This Architecture?
+   describe('Canvas Functions', () => {
+     let canvas
 
-- **🔄 Independent Development**: Teams can work independently
-- **🚀 Independent Deployment**: Deploy micro frontends separately
-- **📈 Scalability**: Add new features as separate micro frontends
-- **🔧 Technology Flexibility**: Use different tech stacks per micro frontend
-- **🎯 Team Ownership**: Clear boundaries and responsibilities
-- **⚡ Performance**: Load only what's needed, when needed
+     beforeEach(() => {
+       canvas = new fabric.Canvas(null, { width: 800, height: 600 })
+     })
+
+     it('should add rectangle to canvas', () => {
+       const rect = addRectangle(canvas, { left: 100, top: 100 })
+       expect(canvas.getObjects()).toHaveLength(1)
+       expect(rect).toBeInstanceOf(fabric.Rect)
+     })
+   })
+   ```
+
+2. **E2E Tests for Module Federation**:
+   ```javascript
+   // e2e/federation.spec.js
+   import { test, expect } from '@playwright/test'
+
+   test('should load demo modules dynamically', async ({ page }) => {
+     await page.goto('http://localhost:3004')
+
+     // Test dynamic loading
+     await page.click('button:has-text("Load Demo One")')
+     await expect(page.locator('.demo-one-controls')).toBeVisible()
+
+     // Test canvas functionality
+     await page.click('button:has-text("Add Rectangle")')
+     const canvas = page.locator('#dynamic-canvas')
+     await expect(canvas).toBeVisible()
+   })
+   ```
+
+## 🌟 Why This Canvas Architecture?
+
+### 🎨 **Canvas-Specific Benefits**:
+- **🖼️ Shared Canvas State**: Single source of truth for all visual elements
+- **🎨 Modular Functionality**: Each demo adds specific capabilities without conflicts
+- **🌐 Global Operations**: Actions that affect all canvas content simultaneously
+- **⚡ Performance**: Shared Fabric.js instance reduces memory usage
+
+### 🏗️ **Micro Frontend Benefits**:
+- **🔄 Independent Development**: Teams can work on different canvas features independently
+- **🚀 Independent Deployment**: Deploy new canvas capabilities without affecting others
+- **📈 Scalability**: Add new canvas demos as separate micro frontends
+- **🔧 Technology Flexibility**: Mix different canvas libraries (Fabric.js, Three.js, etc.)
+- **🎯 Team Ownership**: Clear boundaries between different canvas functionalities
+- **⚡ Performance**: Load only needed canvas features on demand
+
+### 🎮 **User Experience Benefits**:
+- **🎯 Progressive Enhancement**: Features activate as modules load
+- **📱 Responsive Design**: Works seamlessly across all devices
+- **🎨 Consistent Branding**: Unified color scheme and styling
+- **⚡ Fast Loading**: Optimized bundle splitting and lazy loading
 
 ## 📖 Further Reading
 
-- [Module Federation Documentation](https://module-federation.github.io/)
-- [Vite Module Federation Plugin](https://github.com/module-federation/vite)
-- [Vue 3 Composition API](https://vuejs.org/guide/extras/composition-api-faq.html)
-- [Pinia State Management](https://pinia.vuejs.org/)
-- [Micro Frontend Architecture](https://micro-frontends.org/)
+- **Canvas & Graphics**:
+  - [Fabric.js Documentation](http://fabricjs.com/docs/)
+  - [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+  - [Three.js for 3D Graphics](https://threejs.org/docs/)
+
+- **Micro Frontend Architecture**:
+  - [Module Federation Documentation](https://module-federation.github.io/)
+  - [Vite Module Federation Plugin](https://github.com/module-federation/vite)
+  - [Micro Frontend Architecture Patterns](https://micro-frontends.org/)
+
+- **Vue 3 & Modern Development**:
+  - [Vue 3 Composition API](https://vuejs.org/guide/extras/composition-api-faq.html)
+  - [Vue Router 4](https://router.vuejs.org/)
+  - [Vite Build Tool](https://vitejs.dev/)
 
 ---
 
-**🎉 Happy coding with Micro Frontends!**
+## 🎉 **Conclusion**
 
-This repository serves as a complete reference implementation for building production-ready micro frontend architectures with modern tools and best practices.
+This repository demonstrates a **production-ready micro frontend architecture** specifically designed for **canvas-based applications**. It showcases:
+
+✅ **Advanced Module Federation** with dynamic loading
+✅ **Shared Canvas Architecture** with Fabric.js integration
+✅ **Multiple Demo Applications** working together seamlessly
+✅ **Professional UI/UX** with responsive design and brand consistency
+✅ **Comprehensive Documentation** with real-world examples
+✅ **Best Practices** for scalable micro frontend development
+
+**Perfect for teams building:**
+- 🎨 **Creative Tools** (image editors, design platforms)
+- 🎮 **Interactive Applications** (games, simulations)
+- 📊 **Data Visualization** (charts, dashboards)
+- 🏢 **Enterprise Applications** (collaborative tools)
+
+**🚀 Start building your own canvas micro frontend architecture today!**
