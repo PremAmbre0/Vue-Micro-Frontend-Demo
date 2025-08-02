@@ -10,23 +10,42 @@
           v-model="textInput"
           placeholder="Enter text"
           class="text-input"
+          :disabled="isLoading"
         />
-        <button @click="addTextToCanvas" class="btn btn-primary">
+        <button
+          @click="addTextToCanvas"
+          class="btn btn-primary"
+          :disabled="isLoading"
+        >
           Add Text
         </button>
       </div>
 
       <div class="image-controls">
         <h3>Add Image</h3>
-        <input v-model="imageUrl" placeholder="Image URL" class="text-input" />
-        <button @click="addImageToCanvas" class="btn btn-success">
-          Add Image
+        <input
+          v-model="imageUrl"
+          placeholder="Image URL"
+          class="text-input"
+          :disabled="isLoading"
+        />
+        <button
+          @click="addImageToCanvas"
+          class="btn btn-success"
+          :disabled="isLoading"
+        >
+          <span v-if="isLoading" class="loading-spinner"></span>
+          {{ isLoading ? "Loading..." : "Add Image" }}
         </button>
       </div>
 
       <div class="action-controls">
         <h3>Actions</h3>
-        <button @click="clearCanvas" class="btn btn-secondary">
+        <button
+          @click="clearCanvas"
+          class="btn btn-secondary"
+          :disabled="isLoading"
+        >
           Clear Canvas
         </button>
       </div>
@@ -59,9 +78,8 @@ import {
 } from "../fabric/demoTwo.js";
 
 const textInput = ref("Hello World!");
-const imageUrl = ref(
-  "https://via.placeholder.com/200x150/42b883/ffffff?text=Sample+Image"
-);
+const imageUrl = ref("https://picsum.photos/200/300");
+const isLoading = ref(false);
 let canvas = null;
 
 onMounted(() => {
@@ -77,16 +95,12 @@ onMounted(() => {
       fontSize: 28,
       fill: "#3b82f6",
     });
-    addImage(
-      canvas,
-      "https://via.placeholder.com/150x100/42b883/ffffff?text=Demo+Image",
-      {
-        left: 300,
-        top: 150,
-        scaleX: 0.8,
-        scaleY: 0.8,
-      }
-    );
+    addImage(canvas, "https://picsum.photos/150/100", {
+      left: 300,
+      top: 150,
+      scaleX: 0.8,
+      scaleY: 0.8,
+    });
   }, 100);
 });
 
@@ -110,13 +124,27 @@ const addTextToCanvas = () => {
 };
 
 const addImageToCanvas = () => {
-  if (canvas && imageUrl.value.trim()) {
-    addImage(canvas, imageUrl.value, {
-      left: Math.random() * 500,
-      top: Math.random() * 300,
-      scaleX: 0.5,
-      scaleY: 0.5,
-    });
+  if (canvas && imageUrl.value.trim() && !isLoading.value) {
+    isLoading.value = true;
+    addImage(
+      canvas,
+      imageUrl.value,
+      {
+        left: Math.random() * 500,
+        top: Math.random() * 300,
+        scaleX: 0.5,
+        scaleY: 0.5,
+      },
+      () => {
+        // Success callback
+        isLoading.value = false;
+      },
+      () => {
+        // Error callback
+        isLoading.value = false;
+        alert("Failed to load image. Please check the URL.");
+      }
+    );
   }
 };
 
@@ -127,7 +155,7 @@ const clearCanvas = () => {
 };
 </script>
 
-<style scoped>
+<style>
 .demo-two-container {
   padding: 20px;
   max-width: 1200px;
@@ -207,6 +235,32 @@ const clearCanvas = () => {
 
 .btn-secondary:hover {
   background: #4b5563;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  background: inherit;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .canvas-container {

@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeWrapper.vue'
+import DynamicCanvas from '../components/DynamicCanvas.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: DynamicCanvas
   },
   {
     path: '/demo-one',

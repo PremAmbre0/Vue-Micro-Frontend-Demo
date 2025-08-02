@@ -134,7 +134,7 @@ const clearCanvas = () => {
 };
 </script>
 
-<style scoped>
+<style>
 .demo-one-container {
   padding: 20px;
   max-width: 1200px;

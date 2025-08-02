@@ -1,8 +1,8 @@
-// Demo Three: Interactive Canvas Logic
+// Demo Three: Drawing Canvas Logic
 import { fabric } from 'fabric';
 
 /**
- * Initialize Fabric.js canvas for Demo Three
+ * Initialize Fabric.js canvas for Demo Three (Drawing Mode)
  * @param {string} canvasId - The canvas element ID
  * @returns {fabric.Canvas} - The initialized canvas
  */
@@ -10,88 +10,51 @@ export function initDemoThreeCanvas(canvasId) {
   const canvas = new fabric.Canvas(canvasId, {
     width: 800,
     height: 600,
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#ffffff'
   });
 
-  // Add some default styling
-  canvas.selectionColor = 'rgba(239, 68, 68, 0.3)';
-  canvas.selectionBorderColor = '#ef4444';
-  canvas.selectionLineWidth = 2;
-
-  // Enable object controls
-  canvas.selection = true;
+  // Set up drawing brush defaults
+  canvas.freeDrawingBrush.width = 5;
+  canvas.freeDrawingBrush.color = '#ef4444';
+  canvas.isDrawingMode = false; // Start with drawing mode off
 
   return canvas;
 }
 
 /**
- * Add interactive rectangle
- * @param {fabric.Canvas} canvas - The fabric canvas
- * @param {Object} options - Rectangle options
- */
-export function addInteractiveRect(canvas, options = {}) {
-  const rect = new fabric.Rect({
-    left: options.left || 100,
-    top: options.top || 100,
-    width: options.width || 100,
-    height: options.height || 80,
-    fill: options.fill || '#ef4444',
-    stroke: options.stroke || '#dc2626',
-    strokeWidth: options.strokeWidth || 2,
-    rx: options.rx || 5,
-    ry: options.ry || 5,
-    // Enable interactions
-    selectable: true,
-    evented: true,
-    hasControls: true,
-    hasBorders: true,
-  });
-
-  canvas.add(rect);
-  canvas.setActiveObject(rect);
-  canvas.renderAll();
-  return rect;
-}
-
-/**
- * Group selected objects
- * @param {fabric.Canvas} canvas - The fabric canvas
- */
-export function groupSelected(canvas) {
-  const activeSelection = canvas.getActiveSelection();
-  if (activeSelection && activeSelection.type === 'activeSelection') {
-    const group = activeSelection.toGroup();
-    canvas.requestRenderAll();
-    return group;
-  }
-  return null;
-}
-
-/**
- * Ungroup selected group
- * @param {fabric.Canvas} canvas - The fabric canvas
- */
-export function ungroupSelected(canvas) {
-  const activeObject = canvas.getActiveObject();
-  if (activeObject && activeObject.type === 'group') {
-    activeObject.toActiveSelection();
-    canvas.requestRenderAll();
-    return true;
-  }
-  return false;
-}
-
-/**
- * Enable drawing mode
+ * Toggle drawing mode on/off
  * @param {fabric.Canvas} canvas - The fabric canvas
  * @param {boolean} enabled - Enable/disable drawing
  */
 export function setDrawingMode(canvas, enabled) {
   canvas.isDrawingMode = enabled;
-  if (enabled) {
-    canvas.freeDrawingBrush.width = 5;
-    canvas.freeDrawingBrush.color = '#ef4444';
-  }
+}
+
+/**
+ * Set brush width
+ * @param {fabric.Canvas} canvas - The fabric canvas
+ * @param {number} width - Brush width (1-50)
+ */
+export function setBrushWidth(canvas, width) {
+  canvas.freeDrawingBrush.width = Math.max(1, Math.min(50, width));
+}
+
+/**
+ * Set brush color
+ * @param {fabric.Canvas} canvas - The fabric canvas
+ * @param {string} color - Brush color
+ */
+export function setBrushColor(canvas, color) {
+  canvas.freeDrawingBrush.color = color;
+}
+
+/**
+ * Get current drawing mode status
+ * @param {fabric.Canvas} canvas - The fabric canvas
+ * @returns {boolean} - Whether drawing mode is enabled
+ */
+export function isDrawingMode(canvas) {
+  return canvas.isDrawingMode;
 }
 
 /**
@@ -100,19 +63,18 @@ export function setDrawingMode(canvas, enabled) {
  */
 export function clearCanvas(canvas) {
   canvas.clear();
-  canvas.backgroundColor = '#f0f0f0';
+  canvas.backgroundColor = '#ffffff';
   canvas.renderAll();
 }
 
 /**
- * Delete selected object
+ * Undo last drawing stroke (if possible)
  * @param {fabric.Canvas} canvas - The fabric canvas
  */
-export function deleteSelected(canvas) {
-  const activeObjects = canvas.getActiveObjects();
-  if (activeObjects.length) {
-    activeObjects.forEach(obj => canvas.remove(obj));
-    canvas.discardActiveObject();
+export function undoLastStroke(canvas) {
+  const objects = canvas.getObjects();
+  if (objects.length > 0) {
+    canvas.remove(objects[objects.length - 1]);
     canvas.renderAll();
   }
 }
@@ -120,10 +82,10 @@ export function deleteSelected(canvas) {
 // Export all functions as default object
 export default {
   initDemoThreeCanvas,
-  addInteractiveRect,
-  groupSelected,
-  ungroupSelected,
   setDrawingMode,
+  setBrushWidth,
+  setBrushColor,
+  isDrawingMode,
   clearCanvas,
-  deleteSelected
+  undoLastStroke
 };

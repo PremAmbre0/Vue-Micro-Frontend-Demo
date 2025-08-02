@@ -2,7 +2,7 @@
   <div id="app">
     <OToast />
     <nav>
-      <router-link to="/">Shell Home</router-link>
+      <router-link to="/">🏠 Dynamic Canvas</router-link>
       <router-link to="/demo-one">Demo One</router-link>
       <router-link to="/demo-two">Demo Two</router-link>
       <router-link to="/demo-three">Demo Three</router-link>

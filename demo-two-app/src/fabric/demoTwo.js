@@ -48,19 +48,32 @@ export function addText(canvas, options = {}) {
  * @param {fabric.Canvas} canvas - The fabric canvas
  * @param {string} imageUrl - Image URL
  * @param {Object} options - Image options
+ * @param {Function} onSuccess - Success callback
+ * @param {Function} onError - Error callback
  */
-export function addImage(canvas, imageUrl, options = {}) {
-  fabric.Image.fromURL(imageUrl, (img) => {
-    img.set({
-      left: options.left || 200,
-      top: options.top || 200,
-      scaleX: options.scaleX || 0.5,
-      scaleY: options.scaleY || 0.5,
-    });
-    
-    canvas.add(img);
-    canvas.setActiveObject(img);
-    canvas.renderAll();
+export function addImage(canvas, imageUrl, options = {}, onSuccess = null, onError = null) {
+  fabric.Image.fromURL(
+    imageUrl,
+    (img) => {
+      img.set({
+        left: options.left || 200,
+        top: options.top || 200,
+        scaleX: options.scaleX || 0.5,
+        scaleY: options.scaleY || 0.5,
+      });
+
+      canvas.add(img);
+      canvas.setActiveObject(img);
+      canvas.renderAll();
+
+      if (onSuccess) onSuccess();
+    },
+    {
+      crossOrigin: 'anonymous'
+    }
+  ).catch((error) => {
+    console.error('Failed to load image:', error);
+    if (onError) onError();
   });
 }
 
