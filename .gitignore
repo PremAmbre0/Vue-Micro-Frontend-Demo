@@ -79,3 +79,6 @@ temp/
 # Runtime files
 *.pid
 *.seed
+
+# turbo files
+*.turbo

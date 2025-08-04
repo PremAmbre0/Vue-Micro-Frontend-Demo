@@ -1,6 +1,13 @@
 {
   "name": "vite-federation-workspace",
   "private": true,
+  "packageManager": "npm@11.4.1",
+  "workspaces": [
+    "shell-app",
+    "demo-one-app",
+    "demo-two-app",
+    "demo-three-app"
+  ],
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix shell-app\" \"npm run dev --prefix demo-one-app\" \"npm run dev --prefix demo-two-app\" \"npm run dev --prefix demo-three-app\"",
     "build": "npm run build --prefix shell-app && npm run build --prefix demo-one-app && npm run build --prefix demo-two-app && npm run build --prefix demo-three-app",
@@ -9,7 +16,7 @@
     "update-env": "node scripts/update-env.js"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "turbo": "^2.5.5"
   },
   "dependencies": {
     "@module-federation/vite": "^1.7.1",
