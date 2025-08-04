@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "serve dist -p 3002 -s --cors",
+    "serve": "vite preview --port 3002",
     "preview": "vite preview"
   },
   "dependencies": {

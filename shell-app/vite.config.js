@@ -2,9 +2,10 @@ import { federation } from "@module-federation/vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from "vite";
+import path from 'path';
 
 export default defineConfig({
-  base: "/", // Use root path instead of full URL
+  base: "/",
   plugins: [
     federation({
       name: "shellApp",
@@ -45,7 +46,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      vue: fileURLToPath(new URL('./node_modules/vue/dist/vue.runtime.esm-bundler.js', import.meta.url))
+      // Fix: Use relative path to root node_modules for workspaces
+      vue: path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.esm-bundler.js')
     }
   },
   build: {
@@ -67,7 +69,7 @@ export default defineConfig({
     port: 3000,
     cors: true,
     fs: {
-      allow: ["."]
+      allow: ["..", "."] // Allow access to parent directory (root)
     }
   }
 });

@@ -30,8 +30,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      vue: fileURLToPath(new URL('./node_modules/vue/dist/vue.runtime.esm-bundler.js', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+      // Removed vue alias - let Vite resolve from workspace root
     }
   },
   build: {
@@ -52,7 +52,9 @@ export default defineConfig({
   server: {
     port: 3003,
     cors: true,
-    fs: { allow: ["."] }
+    fs: { 
+      allow: ["..", "."] // Allow access to parent directory for workspaces
+    }
   },
   preview: {
     port: 3003,

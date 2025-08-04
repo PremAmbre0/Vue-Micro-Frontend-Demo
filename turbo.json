@@ -14,7 +14,27 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "NODE_ENV",
+        "VITE_SHELL_REMOTE_ENTRY",
+        "VITE_DEMO_ONE_REMOTE_ENTRY",
+        "VITE_DEMO_TWO_REMOTE_ENTRY",
+        "VITE_DEMO_THREE_REMOTE_ENTRY"
+      ]
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"]
+    },
+    "serve": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "cache": false
     }
   }
 }
