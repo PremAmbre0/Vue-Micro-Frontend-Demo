@@ -43,6 +43,7 @@ window.Constants = Constants;
 app.use(i18n);
 app.use(pinia);
 app.use(router);
+//test
 
 app.mount('#shell-app');
 
