@@ -1,66 +1,72 @@
 import { federation } from "@module-federation/vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
-export default defineConfig({
-  base: "/",
-  plugins: [
-    federation({
-      filename: "remoteEntry.js",
-      name: "demoOneApp",
-      exposes: {
-        "./DemoOneCanvas": "./src/components/DemoOneCanvas.vue",
-        "./demoOneLogic": "./src/fabric/demoOne.js",
-      },
-      remotes: {
-        shellApp: {
-          type: "module",
-          name: "shellApp",
-          entry: process.env.VITE_SHELL_REMOTE_ENTRY || "http://localhost:3000/remoteEntry.js",
-          entryGlobalName: "shellApp",
-          shareScope: "default",
+export default defineConfig(({ mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
+    base: "/",
+    plugins: [
+      federation({
+        filename: "remoteEntry.js",
+        name: "demoOneApp",
+        exposes: {
+          "./DemoOneCanvas": "./src/components/DemoOneCanvas.vue",
+          "./demoOneLogic": "./src/fabric/demoOne.js",
         },
-      },
-      shared: {
-        vue: {
-          singleton: true,
+        remotes: {
+          shellApp: {
+            type: "module",
+            name: "shellApp",
+            entry: env.VITE_SHELL_REMOTE_ENTRY || "http://localhost:3000/remoteEntry.js",
+            entryGlobalName: "shellApp",
+            shareScope: "default",
+          },
+        },
+        shared: {
+          vue: { singleton: true },
+          fabric: { singleton: true }
         }
+      }),
+      vue(),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
       }
-    }),
-    vue(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-      // Removed vue alias - let Vite resolve from workspace root
-    }
-  },
-  build: {
-    target: "chrome89",
-    cssCodeSplit: false,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-            return 'assets/style.css'
-          }
-          return 'assets/[name].[hash].[ext]'
-        }
-      },
-      external: [],
     },
-  },
-  server: {
-    port: 3001,
-    cors: true,
-    fs: {
-      allow: ["..", "."] 
+    optimizeDeps: {
+      include: ['fabric']
+    },
+    build: {
+      target: "chrome89",
+      cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+              return 'assets/style.css'
+            }
+            return 'assets/[name].[hash].[ext]'
+          }
+        },
+        external: [],
+      },
+    },
+    server: {
+      port: parseInt(env.VITE_DEMO_ONE_PORT) || 3001,
+      cors: true,
+      fs: {
+        allow: ["..", "."]
+      }
+    },
+    preview: {
+      port: parseInt(env.VITE_DEMO_ONE_PORT) || 3001,
+      cors: true
     }
-  },
-  preview: {
-    port: 3001,
-    cors: true
   }
 });

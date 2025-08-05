@@ -9,16 +9,16 @@
     "demo-three-app"
   ],
   "scripts": {
-    "dev": "turbo run dev --parallel",
-    "build": "turbo run build",
-    "build:changed": "turbo run build --filter=\"...[HEAD~1]\"",
-    "preview": "turbo run preview --parallel",
-    "update-env": "node scripts/update-env.js",
-    "clean": "turbo run clean"
+    "dev": "dotenv -e .env.local -- turbo run dev --parallel",
+    "build": "dotenv -e .env.prod -- turbo run build",
+    "build:dev": "dotenv -e .env.local -- turbo run build",
+    "build:changed": "dotenv -e .env.prod -- turbo run build --filter=\"...[HEAD~1]\"",
+    "preview": "dotenv -e .env.local -- turbo run preview --parallel",
+    "update-env": "node scripts/update-env.js"
   },
   "devDependencies": {
     "turbo": "^2.5.5",
-    "concurrently": "^8.2.2"
+    "dotenv-cli": "^7.3.0"
   },
   "dependencies": {
     "@module-federation/vite": "^1.7.1",
