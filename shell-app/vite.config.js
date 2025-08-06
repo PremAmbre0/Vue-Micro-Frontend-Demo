@@ -4,7 +4,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
@@ -37,13 +36,25 @@ export default defineConfig(({ mode }) => {
           },
         },
         exposes: {
-          "./useToast": "./src/composables/useToastComposable.js",
-          "./commonStore": "./src/stores/common.store.js",
         },
         filename: "remoteEntry.js",
         shared: {
-          // vue: { singleton: true },
-          // fabric: { singleton: true }
+          vue: {
+            singleton: true,
+            requiredVersion: "^3.5.18"
+          },
+          "vue-router": {
+            singleton: true,
+            requiredVersion: "^4.2.4"
+          },
+          pinia: {
+            singleton: true,
+            requiredVersion: "^2.1.7"
+          },
+          fabric: {
+            singleton: true,
+            requiredVersion: "^5.3.0"
+          }
         }
       }),
     ],
@@ -53,7 +64,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ['fabric']
+      include: ['fabric', 'vue', 'vue-router', 'pinia']
     },
     build: {
       target: "chrome89",

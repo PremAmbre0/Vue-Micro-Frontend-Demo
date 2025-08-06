@@ -10,9 +10,11 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview --port 3002",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite"
   },
   "dependencies": {
+    "@module-federation/vite": "^1.7.1",
     "fabric": "^5.3.0",
     "vue": "^3.5.18"
   },
