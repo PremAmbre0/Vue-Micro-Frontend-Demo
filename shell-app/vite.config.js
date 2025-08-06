@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: "/",
     plugins: [
+      vue(),
       federation({
         name: "shellApp",
         remotes: {
@@ -41,11 +42,10 @@ export default defineConfig(({ mode }) => {
         },
         filename: "remoteEntry.js",
         shared: {
-          vue: { singleton: true },
-          fabric: { singleton: true }
+          // vue: { singleton: true },
+          // fabric: { singleton: true }
         }
       }),
-      vue(),
     ],
     resolve: {
       alias: {

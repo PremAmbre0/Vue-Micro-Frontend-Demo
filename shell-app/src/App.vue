@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <OToast />
     <nav>
       <router-link to="/">🏠 Dynamic Canvas</router-link>
       <router-link to="/all-demos">🎨 All Demos</router-link>
@@ -17,7 +16,6 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import OToast from './components/demoComponents/OToast.vue';
 </script>
 
 <style>

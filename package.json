@@ -21,8 +21,6 @@
     "turbo": "^2.5.5"
   },
   "dependencies": {
-    "all": "0.0.0",
-    "fabric": "^6.7.1",
-    "serve": "^14.2.4"
+    "fabric": "^6.7.1"
   }
 }
