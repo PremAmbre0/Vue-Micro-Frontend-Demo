@@ -1,17 +1,25 @@
 {
   "name": "vite-federation-workspace",
   "private": true,
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "shell-app",
+    "demo-one-app",
+    "demo-two-app",
+    "demo-three-app"
+  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix shell-app\" \"npm run dev --prefix test-app\"",
-    "build": "npm run build --prefix shell-app && npm run build --prefix test-app",
-    "serve": "concurrently \"npm run serve --prefix shell-app\" \"npm run serve --prefix test-app\"",
-    "install-all": "npm install && npm install --prefix shell-app && npm install --prefix test-app",
-    "update-env": "node scripts/update-env.js"
+    "dev": "dotenv -e .env.local -- turbo run dev --parallel",
+    "build": "dotenv -e .env.prod -- turbo run build",
+    "build:dev": "dotenv -e .env.local -- turbo run build",
+    "build:changed": "dotenv -e .env.prod -- turbo run build --filter=\"...[HEAD~1]\"",
+    "preview": "dotenv -e .env.local -- turbo run preview --parallel",
+    "update-env": "node scripts/update-env.js",
+    "clean": "turbo run clean",
+    "install:clean": "npm run clean && rm -rf node_modules package-lock.json && npm install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "all": "0.0.0"
+    "dotenv-cli": "^7.3.0",
+    "turbo": "^2.5.5"
   }
 }

@@ -1,16 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeWrapper.vue'
+import DynamicCanvas from '../components/DynamicCanvas.vue'
+import AllDemos from '../components/AllDemos.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: DynamicCanvas
   },
   {
-    path: '/test-app/:pathMatch(.*)*',
-    name: 'test-app',
-    component: () => import('testApp/App')
+    path: '/all-demos',
+    name: 'all-demos',
+    component: AllDemos
+  },
+  {
+    path: '/demo-one',
+    name: 'demo-one',
+    component: () => import('demoOneApp/DemoOneCanvas')
+  },
+  {
+    path: '/demo-two',
+    name: 'demo-two',
+    component: () => import('demoTwoApp/DemoTwoCanvas')
+  },
+  {
+    path: '/demo-three',
+    name: 'demo-three',
+    component: () => import('demoThreeApp/DemoThreeCanvas')
   }
 ]
 
