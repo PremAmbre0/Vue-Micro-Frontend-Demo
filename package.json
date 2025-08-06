@@ -17,11 +17,10 @@
     "update-env": "node scripts/update-env.js"
   },
   "devDependencies": {
-    "turbo": "^2.5.5",
-    "dotenv-cli": "^7.3.0"
+    "dotenv-cli": "^7.3.0",
+    "turbo": "^2.5.5"
   },
   "dependencies": {
-    "@module-federation/vite": "^1.7.1",
     "all": "0.0.0",
     "fabric": "^6.7.1",
     "serve": "^14.2.4"

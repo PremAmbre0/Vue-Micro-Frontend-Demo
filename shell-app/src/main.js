@@ -21,7 +21,7 @@ if (import.meta.env.PROD) {
   });
 }
 
-import Provider from './Provider.vue';
+import App from './App.vue';
 import router from './router';
 import i18n from './i18n';
 
@@ -34,7 +34,7 @@ pinia.use(({ store }) => {
   store.$router = markRaw(router); // This is added so that $router is available on this in pinia store
 });
 
-const app = createApp(Provider);
+const app = createApp(App);
 app.provide('appImages', images);
 app.provide('Constants', Constants);
 app.provide('convertRemToPixels', remToPixels);
@@ -43,8 +43,8 @@ window.Constants = Constants;
 app.use(i18n);
 app.use(pinia);
 app.use(router);
-
-app.mount('#shell-app');
+console.log("mounting")
+app.mount('#app');
 
 function getQueryParams(query) {
   var params = new URL(document.location).searchParams;
