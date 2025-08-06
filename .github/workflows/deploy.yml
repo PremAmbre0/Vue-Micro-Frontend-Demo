@@ -1,0 +1,61 @@
+name: Deploy with Turbo
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+      
+      - name: Deploy changed apps
+        run: |
+          echo "Using Turbo to detect and deploy changes..."
+          
+          # Get list of changed apps using Turbo
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual trigger - build all
+            CHANGED="shell-app demo-one-app demo-two-app demo-three-app"
+          else
+            # Auto detect with Turbo
+            CHANGED=$(npx turbo run build --filter='...[HEAD^1]' --dry=json | jq -r '.tasks[].package' | grep -v "vite-federation-workspace" | tr '\n' ' ')
+          fi
+          
+          if [ -z "$CHANGED" ]; then
+            echo "No changes detected"
+            echo "## ✅ No changes detected" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          echo "Deploying: $CHANGED"
+          echo "## 🚀 Deploying Changed Apps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Deploy each changed app
+          for app in $CHANGED; do
+            if [ -d "$app" ]; then
+              echo "Deploying $app..."
+              cd $app
+              vercel --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes
+              cd ..
+              echo "- ✅ $app deployed" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
