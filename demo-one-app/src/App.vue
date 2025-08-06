@@ -5,7 +5,7 @@ import DemoOneCanvas from './components/DemoOneCanvas.vue'
 <template>
   <div id="app">
     <header>
-      <h1>🎨 Demo One App - Basic Shapes & Drawing</h1>
+      <h1>🎨 Demo One App - Basic Shapes & Drawings</h1>
       <p>Standalone Fabric.js demo for basic shape creation and manipulation</p>
     </header>
 
