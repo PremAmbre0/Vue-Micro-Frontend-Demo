@@ -2,7 +2,7 @@
   <div id="app">
     <nav>
       <router-link to="/">🏠 Dynamic Canvas</router-link>
-      <router-link to="/all-demos">🎨 All Dem s</router-link>
+      <router-link to="/all-demos">🎨 All Demos</router-link>
       <router-link to="/demo-one">Demo One</router-link>
       <router-link to="/demo-two">Demo Two</router-link>
       <router-link to="/demo-three">Demo Three</router-link>
