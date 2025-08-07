@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "🚀 Deploying demo-one-app..."
           cd demo-one-app
-          vercel --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
           echo "✅ demo-one-app deployed to production"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
