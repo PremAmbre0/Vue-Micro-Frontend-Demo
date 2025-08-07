@@ -28,7 +28,8 @@ jobs:
         run: |
           echo "🚀 Deploying demo-one-app..."
           cd demo-one-app
-          vercel --prod --yes
+          DEPLOYMENT_URL=$(vercel --prod --yes --token=$VERCEL_TOKEN)
+          echo "Deployment URL: $DEPLOYMENT_URL"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -37,4 +38,4 @@ jobs:
       - name: Summary
         run: |
           echo "## ✅ Demo One App Deployed" >> $GITHUB_STEP_SUMMARY
-          echo "URL: https://demo-one-app.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "URL: $DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY
