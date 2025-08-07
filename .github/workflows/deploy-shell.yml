@@ -28,10 +28,11 @@ jobs:
         run: |
           echo "🚀 Deploying shell-app..."
           cd shell-app
-          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-          echo "✅ shell-app deployed to production"
+          vercel --prod --yes
         env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SHELL }}
 
       - name: Summary
         run: |

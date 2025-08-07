@@ -1,4 +1,4 @@
-name: Deploy Demo Two App
+name: Deploy Demo One App
 
 on:
   workflow_dispatch:
@@ -24,16 +24,17 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Deploy Demo Two App
+      - name: Deploy Demo One App
         run: |
-          echo "🚀 Deploying demo-two-app..."
-          cd demo-two-app
-          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-          echo "✅ demo-two-app deployed to production"
+          echo "🚀 Deploying demo-one-app..."
+          cd demo-one-app
+          vercel --prod --yes
         env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DEMO_ONE }}
 
       - name: Summary
         run: |
-          echo "## ✅ Demo Two App Deployed" >> $GITHUB_STEP_SUMMARY
-          echo "URL: https://demo-two-app.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Demo One App Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "URL: https://demo-one-app.vercel.app" >> $GITHUB_STEP_SUMMARY
