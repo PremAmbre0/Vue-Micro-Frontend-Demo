@@ -1,0 +1,48 @@
+name: Deploy All Apps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-demo-one:
+    name: Deploy Demo One
+    uses: ./.github/workflows/deploy-demo-one.yml
+    secrets: inherit
+
+  deploy-demo-two:
+    name: Deploy Demo Two
+    uses: ./.github/workflows/deploy-demo-two.yml
+    secrets: inherit
+
+  deploy-demo-three:
+    name: Deploy Demo Three
+    uses: ./.github/workflows/deploy-demo-three.yml
+    secrets: inherit
+
+  deploy-shell:
+    name: Deploy Shell
+    needs: [deploy-demo-one, deploy-demo-two, deploy-demo-three]
+    uses: ./.github/workflows/deploy-shell.yml
+    secrets: inherit
+
+  summary:
+    name: Deployment Summary
+    needs: [deploy-demo-one, deploy-demo-two, deploy-demo-three, deploy-shell]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Create Summary
+        run: |
+          echo "## 🚀 All Apps Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Status:" >> $GITHUB_STEP_SUMMARY
+          echo "- Demo One: ${{ needs.deploy-demo-one.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Demo Two: ${{ needs.deploy-demo-two.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Demo Three: ${{ needs.deploy-demo-three.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Shell App: ${{ needs.deploy-shell.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Production URLs:" >> $GITHUB_STEP_SUMMARY
+          echo "- [Shell App](https://shell-app-bice.vercel.app)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Demo One](https://demo-one-app.vercel.app)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Demo Two](https://demo-two-app.vercel.app)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Demo Three](https://demo-three-app.vercel.app)" >> $GITHUB_STEP_SUMMARY

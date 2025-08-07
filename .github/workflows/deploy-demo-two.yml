@@ -1,0 +1,38 @@
+name: Deploy Demo Two App
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Deploy Demo Two App
+        run: |
+          echo "🚀 Deploying demo-two-app..."
+          cd demo-two-app
+          vercel --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes
+          echo "✅ demo-two-app deployed to production"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Summary
+        run: |
+          echo "## ✅ Demo Two App Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "URL: https://demo-two-app.vercel.app" >> $GITHUB_STEP_SUMMARY
