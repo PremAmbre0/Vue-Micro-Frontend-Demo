@@ -10,6 +10,7 @@ jobs:
   detect-changes:
     name: Detect Changes with Turbo
     runs-on: ubuntu-latest
+    environment: production
     outputs:
       shell: ${{ steps.detect.outputs.shell }}
       demo-one: ${{ steps.detect.outputs.demo-one }}
