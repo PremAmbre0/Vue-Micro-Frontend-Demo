@@ -26,10 +26,10 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Deploy Demo One App
+      - name: Deploy Demo Two App
         run: |
-          echo "🚀 Deploying demo-one-app..."
-          cd demo-one-app
+          echo "🚀 Deploying demo-two-app..."
+          cd demo-two-app
           DEPLOYMENT_URL=$(vercel --prod --yes --token=$VERCEL_TOKEN)
           echo "Deployment URL: $DEPLOYMENT_URL"
         env:
@@ -39,5 +39,5 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## ✅ Demo One App Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Demo Two App Deployed" >> $GITHUB_STEP_SUMMARY
           echo "URL: $DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY
