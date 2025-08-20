@@ -27,6 +27,16 @@ const routes = [
     path: '/demo-three',
     name: 'demo-three',
     component: () => import('demoThreeApp/DemoThreeCanvas')
+  },
+  {
+    path: '/demo-counter',
+    name: 'demo-counter',
+    component: () => import('demoCounterApp/CounterDemo')
+  },
+  {
+    path: '/interface-demo',
+    name: 'interface-demo',
+    component: () => import('../views/InterfaceDemo.vue')
   }
 ]
 

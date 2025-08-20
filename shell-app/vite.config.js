@@ -34,8 +34,17 @@ export default defineConfig(({ mode }) => {
             entryGlobalName: "demoThreeApp",
             shareScope: "default",
           },
+          demoCounterApp: {
+            type: "module",
+            name: "demoCounterApp",
+            entry: env.VITE_DEMO_COUNTER_REMOTE_ENTRY || "http://localhost:3004/remoteEntry.js",
+            entryGlobalName: "demoCounterApp",
+            shareScope: "default",
+          },
         },
         exposes: {
+          "./interfaces": "./src/interfaces/index.js",
+          "./counterInterface": "./src/interfaces/counter.js",
         },
         filename: "remoteEntry.js",
         shared: {

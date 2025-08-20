@@ -6,6 +6,8 @@
       <router-link to="/demo-one">Demo One</router-link>
       <router-link to="/demo-two">Demo Two</router-link>
       <router-link to="/demo-three">Demo Three</router-link>
+      <router-link to="/demo-counter">🔢 Demo Counter</router-link>
+      <router-link to="/interface-demo">🔗 Interface Demo</router-link>
     </nav>
 
     <main>
