@@ -10,8 +10,7 @@
         "VITE_DEMO_ONE_REMOTE_ENTRY",
         "VITE_DEMO_TWO_REMOTE_ENTRY",
         "VITE_DEMO_THREE_REMOTE_ENTRY"
-      ],
-      "concurrency": 1
+      ]
     },
     "dev": {
       "cache": false,

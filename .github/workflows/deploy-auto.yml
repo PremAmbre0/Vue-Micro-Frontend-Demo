@@ -123,9 +123,9 @@ jobs:
 
       - name: Build All Apps
         run: |
-          echo "🚀 Building all micro frontends using Turbo..."
-          echo "📦 Running: npm run build"
-          npm run build
+          echo "🚀 Building all micro frontends using Turbo (sequential)..."
+          echo "📦 Running: turbo run build --concurrency=1"
+          npx turbo run build --concurrency=1
           echo ""
           echo "📋 Checking dist structure:"
           ls -la dist/ || echo "No dist directory found yet"
