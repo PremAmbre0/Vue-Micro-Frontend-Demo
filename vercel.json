@@ -1,60 +1,59 @@
 {
   "version": 2,
-  "name": "vue-micro-frontend-demo",
   "builds": [
     {
       "src": "dist/**",
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/shell-app/(.*)",
-      "dest": "/shell-app/$1"
+      "source": "/shell-app/(.*)",
+      "destination": "/shell-app/$1"
     },
     {
-      "src": "/demo-one-app/(.*)",
-      "dest": "/demo-one-app/$1"
+      "source": "/demo-one-app/(.*)",
+      "destination": "/demo-one-app/$1"
     },
     {
-      "src": "/demo-two-app/(.*)",
-      "dest": "/demo-two-app/$1"
+      "source": "/demo-two-app/(.*)",
+      "destination": "/demo-two-app/$1"
     },
     {
-      "src": "/demo-three-app/(.*)",
-      "dest": "/demo-three-app/$1"
+      "source": "/demo-three-app/(.*)",
+      "destination": "/demo-three-app/$1"
     },
     {
-      "src": "/demo-counter-app/(.*)",
-      "dest": "/demo-counter-app/$1"
+      "source": "/demo-counter-app/(.*)",
+      "destination": "/demo-counter-app/$1"
     },
     {
-      "src": "/shell-app",
-      "dest": "/shell-app/index.html"
+      "source": "/shell-app",
+      "destination": "/shell-app/index.html"
     },
     {
-      "src": "/demo-one-app",
-      "dest": "/demo-one-app/index.html"
+      "source": "/demo-one-app",
+      "destination": "/demo-one-app/index.html"
     },
     {
-      "src": "/demo-two-app",
-      "dest": "/demo-two-app/index.html"
+      "source": "/demo-two-app",
+      "destination": "/demo-two-app/index.html"
     },
     {
-      "src": "/demo-three-app",
-      "dest": "/demo-three-app/index.html"
+      "source": "/demo-three-app",
+      "destination": "/demo-three-app/index.html"
     },
     {
-      "src": "/demo-counter-app",
-      "dest": "/demo-counter-app/index.html"
+      "source": "/demo-counter-app",
+      "destination": "/demo-counter-app/index.html"
     },
     {
-      "src": "/",
-      "dest": "/shell-app/index.html"
+      "source": "/",
+      "destination": "/shell-app/index.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/shell-app/$1"
+      "source": "/(.*)",
+      "destination": "/shell-app/$1"
     }
   ],
   "headers": [
