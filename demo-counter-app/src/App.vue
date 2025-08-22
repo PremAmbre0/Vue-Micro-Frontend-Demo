@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <h1>Demo Counter App</h1>
+      <h1>🔢 Demo Counter App</h1>
       <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
     
@@ -94,12 +94,12 @@ header::before {
 h1 {
   color: var(--primary-color);
   margin-bottom: 1rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
-  -webkit-background-clip: text;
+  /* background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%); */
+  /* -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background-clip: text; */
 }
 
 p {

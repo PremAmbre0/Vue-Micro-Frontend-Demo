@@ -3,7 +3,7 @@ import DemoTwoCanvas from './components/DemoTwoCanvas.vue'
 </script>
 
 <template>
-  <div id="app">
+  <div>
     <header>
       <h1>📝 Demo Two App - Text & Image Editor</h1>
       <p>Standalone Fabric.js demo for text and image manipulation</p>
@@ -15,7 +15,7 @@ import DemoTwoCanvas from './components/DemoTwoCanvas.vue'
   </div>
 </template>
 
-<style scoped>
+<style>
 /* Import theme variables */
 :root {
   --primary-color: #0054C9;
@@ -47,24 +47,26 @@ import DemoTwoCanvas from './components/DemoTwoCanvas.vue'
 body {
   margin: 0;
   padding: 0;
-  background: var(--background-secondary);
+  /* background: var(--background-secondary); */
   font-family: var(--font-family);
 }
 
 #app {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
+  /* background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%); */
   font-family: var(--font-family);
   color: var(--text-primary);
 }
 
 header {
   text-align: center;
-  padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
-  color: white;
-  margin-bottom: 0;
+  margin: 3rem 0;
+  padding: 2rem;
+  background: var(--background-primary);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
+  /* border: 1px solid var(--border-light); */
+  border-top: 4px solid var(--primary-color);
   position: relative;
   overflow: hidden;
 }
@@ -82,11 +84,12 @@ header::before {
 
 header h1 {
   margin: 0 0 1rem 0;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
   position: relative;
   z-index: 1;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--primary-color);
 }
 
 header p {
