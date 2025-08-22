@@ -14,7 +14,7 @@ import DemoOneCanvas from './components/DemoOneCanvas.vue'
   </div>
 </template>
 
-<style scoped>
+<style>
 /* Import theme variables */
 :root {
   --primary-color: #0054C9;

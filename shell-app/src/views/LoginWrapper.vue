@@ -21,7 +21,7 @@ if (tokenParams.code) {
   <div class="login-wrapper">Redirecting to Login</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .login-wrapper {
   height: 100%;
   width: 100%;

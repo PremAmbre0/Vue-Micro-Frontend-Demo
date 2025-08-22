@@ -506,7 +506,7 @@ watch(brushColor, (newColor) => {
 });
 </script>
 
-<style scoped>
+<style>
 .all-demos-container {
   padding: 20px;
   max-width: 1200px;

@@ -405,7 +405,7 @@ const clearCanvas = () => {
 };
 </script>
 
-<style scoped>
+<style>
 .dynamic-canvas-container {
   padding: 20px;
   max-width: 1200px;

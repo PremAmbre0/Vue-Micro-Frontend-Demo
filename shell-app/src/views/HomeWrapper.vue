@@ -140,7 +140,7 @@ const testDemoOne = () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .home-page-wrapper {
   padding: 0;
   max-width: 1400px;

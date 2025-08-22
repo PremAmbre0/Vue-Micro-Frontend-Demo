@@ -28,7 +28,7 @@ const retry = () => {
 }
 </script>
 
-<style scoped>
+<style>
 .error-boundary {
   padding: 1rem;
   border: 1px solid #ff6b6b;

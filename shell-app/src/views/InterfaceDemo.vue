@@ -155,7 +155,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .interface-demo {
   max-width: 1400px;
   margin: 0 auto;

@@ -282,7 +282,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .counter-demo {
   max-width: 700px;
   margin: 0 auto;
