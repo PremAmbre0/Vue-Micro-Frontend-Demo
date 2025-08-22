@@ -2,32 +2,6 @@ name: Deploy All Apps
 
 on:
   workflow_dispatch:
-    inputs:
-      deploy_shell:
-        description: 'Deploy Shell App'
-        required: false
-        default: true
-        type: boolean
-      deploy_demo_one:
-        description: 'Deploy Demo One App'
-        required: false
-        default: true
-        type: boolean
-      deploy_demo_two:
-        description: 'Deploy Demo Two App'
-        required: false
-        default: true
-        type: boolean
-      deploy_demo_three:
-        description: 'Deploy Demo Three App'
-        required: false
-        default: true
-        type: boolean
-      deploy_demo_counter:
-        description: 'Deploy Demo Counter App'
-        required: false
-        default: true
-        type: boolean
 
 jobs:
   deploy:
@@ -46,125 +20,109 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and Deploy Apps
+      - name: Clean previous builds
         run: |
-          echo "🚀 Starting deployment process..."
+          echo "🧹 Cleaning previous builds and virtual packages..."
+          npm run clean || echo "Clean script not available, continuing..."
+          rm -rf node_modules/__mf__virtual || echo "No virtual packages to clean"
+          rm -rf dist || echo "No dist directory to clean"
+          echo "✅ Cleanup completed"
+
+      - name: Build All Apps
+        run: |
+          echo "🚀 Building all micro frontends using Turbo (sequential)..."
+          echo "📦 Running: turbo run build --concurrency=1"
+          npx turbo run build --concurrency=1
           echo ""
-          
-          # Demo One App
-          if [ "${{ inputs.deploy_demo_one }}" == "true" ]; then
-            echo "📦 Building Demo One App..."
-            cd demo-one-app
-            npm run build
-            echo "✅ Demo One App built successfully"
-            echo "🚀 Triggering deploy for Demo One App..."
-            echo "   → Would deploy to production"
-            cd ..
-            echo ""
-          else
-            echo "⏭️ Skipping Demo One App deployment"
-            echo ""
+          echo "📋 Checking dist structure:"
+          ls -la dist/ || echo "No dist directory found yet"
+          echo ""
+          echo "🎉 All apps built successfully!"
+          echo ""
+          echo "� Expected structure:"
+          echo "   dist/shell-app/"
+          echo "   dist/demo-one-app/"
+          echo "   dist/demo-two-app/"
+          echo "   dist/demo-three-app/"
+          echo "   dist/demo-counter-app/"
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Check Vercel Configuration
+        run: |
+          echo "🔍 Checking Vercel configuration..."
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ VERCEL_TOKEN is not set"
+            echo "Please add VERCEL_TOKEN to your repository secrets"
+            exit 1
           fi
-          
-          # Demo Two App
-          if [ "${{ inputs.deploy_demo_two }}" == "true" ]; then
-            echo "📦 Building Demo Two App..."
-            cd demo-two-app
-            npm run build
-            echo "✅ Demo Two App built successfully"
-            echo "🚀 Triggering deploy for Demo Two App..."
-            echo "   → Would deploy to production"
-            cd ..
-            echo ""
-          else
-            echo "⏭️ Skipping Demo Two App deployment"
-            echo ""
+          if [ -z "$VERCEL_ORG_ID" ]; then
+            echo "❌ VERCEL_ORG_ID is not set"
+            echo "Please add VERCEL_ORG_ID to your repository secrets"
+            exit 1
           fi
-          
-          # Demo Three App
-          if [ "${{ inputs.deploy_demo_three }}" == "true" ]; then
-            echo "📦 Building Demo Three App..."
-            cd demo-three-app
-            npm run build
-            echo "✅ Demo Three App built successfully"
-            echo "🚀 Triggering deploy for Demo Three App..."
-            echo "   → Would deploy to production"
-            cd ..
-            echo ""
-          else
-            echo "⏭️ Skipping Demo Three App deployment"
-            echo ""
+          if [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "❌ VERCEL_PROJECT_ID is not set"
+            echo "Please add VERCEL_PROJECT_ID to your repository secrets"
+            exit 1
           fi
-          
-          # Demo Counter App
-          if [ "${{ inputs.deploy_demo_counter }}" == "true" ]; then
-            echo "📦 Building Demo Counter App..."
-            cd demo-counter-app
-            npm run build
-            echo "✅ Demo Counter App built successfully"
-            echo "🚀 Triggering deploy for Demo Counter App..."
-            echo "   → Would deploy to production"
-            cd ..
-            echo ""
-          else
-            echo "⏭️ Skipping Demo Counter App deployment"
-            echo ""
-          fi
-          
-          # Shell App (deploy last as it depends on others)
-          if [ "${{ inputs.deploy_shell }}" == "true" ]; then
-            echo "📦 Building Shell App..."
-            cd shell-app
-            npm run build
-            echo "✅ Shell App built successfully"
-            echo "🚀 Triggering deploy for Shell App..."
-            echo "   → Would deploy to production"
-            cd ..
-            echo ""
-          else
-            echo "⏭️ Skipping Shell App deployment"
-            echo ""
-          fi
-          
-          echo "🎉 All deployments completed!"
+          echo "✅ All Vercel secrets are configured"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Vercel
+        run: |
+          echo "🚀 Deploying to single Vercel project..."
+          echo "📁 Deploying from dist directory with multiple app paths..."
+
+          # Deploy the unified dist directory
+          DEPLOYMENT_URL=$(vercel dist --prod --yes --token="$VERCEL_TOKEN")
+          echo "✅ Deployment completed!"
+          echo "🌐 Deployment URL: $DEPLOYMENT_URL"
+
+          echo "📍 App URLs:"
+          echo "   Shell App: $DEPLOYMENT_URL/shell-app"
+          echo "   Demo One: $DEPLOYMENT_URL/demo-one-app"
+          echo "   Demo Two: $DEPLOYMENT_URL/demo-two-app"
+          echo "   Demo Three: $DEPLOYMENT_URL/demo-three-app"
+          echo "   Demo Counter: $DEPLOYMENT_URL/demo-counter-app"
+
+          # Save deployment URL for summary
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Create Summary
         run: |
-          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Single Vercel Project Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Apps Processed:" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ inputs.deploy_demo_one }}" == "true" ]; then
-            echo "- ✅ Demo One App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ Demo One App: Skipped" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ "${{ inputs.deploy_demo_two }}" == "true" ]; then
-            echo "- ✅ Demo Two App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ Demo Two App: Skipped" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ "${{ inputs.deploy_demo_three }}" == "true" ]; then
-            echo "- ✅ Demo Three App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ Demo Three App: Skipped" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ "${{ inputs.deploy_demo_counter }}" == "true" ]; then
-            echo "- ✅ Demo Counter App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ Demo Counter App: Skipped" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ "${{ inputs.deploy_shell }}" == "true" ]; then
-            echo "- ✅ Shell App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ Shell App: Skipped" >> $GITHUB_STEP_SUMMARY
-          fi
-          
+          echo "### 🌐 Deployment URL: \$DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📝 Note:" >> $GITHUB_STEP_SUMMARY
-          echo "Currently only building and console logging deployment triggers." >> $GITHUB_STEP_SUMMARY
-          echo "Actual deployment commands are not executed yet." >> $GITHUB_STEP_SUMMARY
+          echo "### 📍 App URLs:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ [Shell App](\$DEPLOYMENT_URL/shell-app)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ [Demo One App](\$DEPLOYMENT_URL/demo-one-app)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ [Demo Two App](\$DEPLOYMENT_URL/demo-two-app)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ [Demo Three App](\$DEPLOYMENT_URL/demo-three-app)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ [Demo Counter App](\$DEPLOYMENT_URL/demo-counter-app)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Deployment Structure:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "dist/" >> $GITHUB_STEP_SUMMARY
+          echo "├── shell-app/          # Main shell application" >> $GITHUB_STEP_SUMMARY
+          echo "├── demo-one-app/       # Basic shapes demo" >> $GITHUB_STEP_SUMMARY
+          echo "├── demo-two-app/       # Text & images demo" >> $GITHUB_STEP_SUMMARY
+          echo "├── demo-three-app/     # Interactive canvas demo" >> $GITHUB_STEP_SUMMARY
+          echo "└── demo-counter-app/   # Counter with state sharing" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Benefits:" >> $GITHUB_STEP_SUMMARY
+          echo "- Single Vercel project for all micro frontends" >> $GITHUB_STEP_SUMMARY
+          echo "- Path-based routing (/shell-app, /demo-one-app, etc.)" >> $GITHUB_STEP_SUMMARY
+          echo "- Unified deployment and management" >> $GITHUB_STEP_SUMMARY
+          echo "- Cost-effective single project billing" >> $GITHUB_STEP_SUMMARY
+          echo "- Turbo-powered build optimization" >> $GITHUB_STEP_SUMMARY
