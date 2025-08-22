@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
       include: ['fabric']
     },
     build: {
-      outDir: "../dist/demo-one-app",
+      outDir: "dist",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {

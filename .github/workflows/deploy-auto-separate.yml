@@ -1,0 +1,161 @@
+name: Auto Deploy to Separate Projects
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      shell_changed: ${{ steps.changes.outputs.shell_changed }}
+      demo_one_changed: ${{ steps.changes.outputs.demo_one_changed }}
+      demo_two_changed: ${{ steps.changes.outputs.demo_two_changed }}
+      demo_three_changed: ${{ steps.changes.outputs.demo_three_changed }}
+      demo_counter_changed: ${{ steps.changes.outputs.demo_counter_changed }}
+      has_changes: ${{ steps.changes.outputs.has_changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect Changes
+        id: changes
+        run: |
+          echo "🔍 Detecting changes in micro frontend apps..."
+          
+          # Get list of changed files
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger - deploying all apps"
+            echo "shell_changed=true" >> $GITHUB_OUTPUT
+            echo "demo_one_changed=true" >> $GITHUB_OUTPUT
+            echo "demo_two_changed=true" >> $GITHUB_OUTPUT
+            echo "demo_three_changed=true" >> $GITHUB_OUTPUT
+            echo "demo_counter_changed=true" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            # Check for changes in each app directory
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+            echo "Changed files: $CHANGED_FILES"
+            
+            # Initialize flags
+            SHELL_CHANGED=false
+            DEMO_ONE_CHANGED=false
+            DEMO_TWO_CHANGED=false
+            DEMO_THREE_CHANGED=false
+            DEMO_COUNTER_CHANGED=false
+            
+            # Check each app directory
+            if echo "$CHANGED_FILES" | grep -q "^shell-app/"; then
+              SHELL_CHANGED=true
+              echo "📦 Shell app changed"
+            fi
+            
+            if echo "$CHANGED_FILES" | grep -q "^demo-one-app/"; then
+              DEMO_ONE_CHANGED=true
+              echo "📦 Demo One app changed"
+            fi
+            
+            if echo "$CHANGED_FILES" | grep -q "^demo-two-app/"; then
+              DEMO_TWO_CHANGED=true
+              echo "📦 Demo Two app changed"
+            fi
+            
+            if echo "$CHANGED_FILES" | grep -q "^demo-three-app/"; then
+              DEMO_THREE_CHANGED=true
+              echo "📦 Demo Three app changed"
+            fi
+            
+            if echo "$CHANGED_FILES" | grep -q "^demo-counter-app/"; then
+              DEMO_COUNTER_CHANGED=true
+              echo "📦 Demo Counter app changed"
+            fi
+            
+            # Check for global changes that affect all apps
+            if echo "$CHANGED_FILES" | grep -qE "^(package\.json|\.env\.prod|turbo\.json|\.github/workflows/)"; then
+              echo "🌍 Global changes detected - deploying all apps"
+              SHELL_CHANGED=true
+              DEMO_ONE_CHANGED=true
+              DEMO_TWO_CHANGED=true
+              DEMO_THREE_CHANGED=true
+              DEMO_COUNTER_CHANGED=true
+            fi
+            
+            # Set outputs
+            echo "shell_changed=$SHELL_CHANGED" >> $GITHUB_OUTPUT
+            echo "demo_one_changed=$DEMO_ONE_CHANGED" >> $GITHUB_OUTPUT
+            echo "demo_two_changed=$DEMO_TWO_CHANGED" >> $GITHUB_OUTPUT
+            echo "demo_three_changed=$DEMO_THREE_CHANGED" >> $GITHUB_OUTPUT
+            echo "demo_counter_changed=$DEMO_COUNTER_CHANGED" >> $GITHUB_OUTPUT
+            
+            # Check if any changes detected
+            if [ "$SHELL_CHANGED" = "true" ] || [ "$DEMO_ONE_CHANGED" = "true" ] || [ "$DEMO_TWO_CHANGED" = "true" ] || [ "$DEMO_THREE_CHANGED" = "true" ] || [ "$DEMO_COUNTER_CHANGED" = "true" ]; then
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+              echo "✅ Changes detected - proceeding with deployment"
+            else
+              echo "has_changes=false" >> $GITHUB_OUTPUT
+              echo "ℹ️ No changes detected in any micro frontend apps"
+            fi
+          fi
+
+  # Deploy individual apps based on changes
+  deploy-shell:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.shell_changed == 'true'
+    uses: ./.github/workflows/deploy-shell-app.yml
+    secrets: inherit
+
+  deploy-demo-one:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.demo_one_changed == 'true'
+    uses: ./.github/workflows/deploy-demo-one-app.yml
+    secrets: inherit
+
+  deploy-demo-two:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.demo_two_changed == 'true'
+    uses: ./.github/workflows/deploy-demo-two-app.yml
+    secrets: inherit
+
+  deploy-demo-three:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.demo_three_changed == 'true'
+    uses: ./.github/workflows/deploy-demo-three-app.yml
+    secrets: inherit
+
+  deploy-demo-counter:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.demo_counter_changed == 'true'
+    uses: ./.github/workflows/deploy-demo-counter-app.yml
+    secrets: inherit
+
+  summary:
+    needs: [detect-changes, deploy-shell, deploy-demo-one, deploy-demo-two, deploy-demo-three, deploy-demo-counter]
+    if: always() && needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment Summary
+        run: |
+          echo "## 🎉 Micro Frontend Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Deployed Apps:" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.detect-changes.outputs.shell_changed }}" = "true" ]; then
+            echo "- ✅ **Shell App**: https://shell-app-seven.vercel.app" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.detect-changes.outputs.demo_one_changed }}" = "true" ]; then
+            echo "- ✅ **Demo One App**: https://demo-app-one-two.vercel.app" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.detect-changes.outputs.demo_two_changed }}" = "true" ]; then
+            echo "- ✅ **Demo Two App**: https://demo-app-two-delta.vercel.app" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.detect-changes.outputs.demo_three_changed }}" = "true" ]; then
+            echo "- ✅ **Demo Three App**: https://demo-app-three-jet.vercel.app" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.detect-changes.outputs.demo_counter_changed }}" = "true" ]; then
+            echo "- ✅ **Demo Counter App**: https://demo-counter.vercel.app" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Main Application:" >> $GITHUB_STEP_SUMMARY
+          echo "**🏠 Shell App**: https://shell-app-seven.vercel.app" >> $GITHUB_STEP_SUMMARY

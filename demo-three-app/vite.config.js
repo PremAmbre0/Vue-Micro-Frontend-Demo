@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
       include: ['fabric']
     },
     build: {
-      outDir: "../dist/demo-three-app",
+      outDir: "dist",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -68,7 +68,6 @@ export default defineConfig(({ mode }) => {
     preview: {
       port: parseInt(env.VITE_DEMO_THREE_PORT) || 3003,
       cors: true,
-      outDir: "../dist/demo-three-app",
     }
   }
 });

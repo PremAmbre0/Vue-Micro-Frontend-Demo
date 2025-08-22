@@ -76,7 +76,7 @@ export default defineConfig(({ mode }) => {
       include: ['fabric', 'vue', 'vue-router', 'pinia']
     },
     build: {
-      outDir: "../dist/shell-app",
+      outDir: "dist",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -102,7 +102,6 @@ export default defineConfig(({ mode }) => {
     preview: {
       port: parseInt(env.VITE_SHELL_PORT) || 3000,
       cors: true,
-      outDir: "../dist/shell-app",
     }
   }
 });
