@@ -7,18 +7,37 @@ import { fabric } from 'fabric';
  * @returns {fabric.Canvas} - The initialized canvas
  */
 export function initDemoOneCanvas(canvasId) {
-  const canvas = new fabric.Canvas(canvasId, {
-    width: 800,
-    height: 600,
-    backgroundColor: '#f8f9fa'
-  });
+  try {
+    // Check if canvas element exists
+    const canvasElement = document.getElementById(canvasId);
+    if (!canvasElement) {
+      console.error(`Canvas element with id '${canvasId}' not found`);
+      return null;
+    }
 
-  // Add some default styling
-  canvas.selectionColor = 'rgba(66, 184, 131, 0.3)';
-  canvas.selectionBorderColor = '#42b883';
-  canvas.selectionLineWidth = 2;
+    // Check if fabric is available
+    if (!fabric || !fabric.Canvas) {
+      console.error('Fabric.js not available');
+      return null;
+    }
 
-  return canvas;
+    const canvas = new fabric.Canvas(canvasId, {
+      width: 800,
+      height: 600,
+      backgroundColor: '#f8f9fa'
+    });
+
+    // Add some default styling
+    canvas.selectionColor = 'rgba(66, 184, 131, 0.3)';
+    canvas.selectionBorderColor = '#42b883';
+    canvas.selectionLineWidth = 2;
+
+    console.log(`Demo One canvas initialized successfully: ${canvasId}`);
+    return canvas;
+  } catch (error) {
+    console.error('Error initializing Demo One canvas:', error);
+    return null;
+  }
 }
 
 /**

@@ -67,69 +67,109 @@ const selectedColor = ref("#0054C9");
 let canvas = null;
 
 onMounted(() => {
-  // Initialize the canvas
-  canvas = initDemoOneCanvas("demo-one-canvas");
+  // Initialize the canvas with error handling
+  try {
+    canvas = initDemoOneCanvas("demo-one-canvas");
 
-  // Add some default shapes for demonstration
-  setTimeout(() => {
-    addRectangle(canvas, { left: 50, top: 50, fill: "#42b883" });
-    addCircle(canvas, { left: 200, top: 100, fill: "#3b82f6" });
-    addTriangle(canvas, { left: 350, top: 80, fill: "#ef4444" });
-  }, 100);
-});
+    if (!canvas) {
+      console.error('Failed to initialize Demo One canvas');
+      return;
+    }
 
-onUnmounted(() => {
-  if (canvas) {
-    canvas.dispose();
+    // Add some default shapes for demonstration
+    setTimeout(() => {
+      if (canvas) {
+        addRectangle(canvas, { left: 50, top: 50, fill: "#42b883" });
+        addCircle(canvas, { left: 200, top: 100, fill: "#3b82f6" });
+        addTriangle(canvas, { left: 350, top: 80, fill: "#ef4444" });
+      }
+    }, 100);
+  } catch (error) {
+    console.error('Error in Demo One canvas initialization:', error);
   }
 });
 
-// Methods
+onUnmounted(() => {
+  try {
+    if (canvas && canvas.dispose) {
+      canvas.dispose();
+      canvas = null;
+    }
+  } catch (error) {
+    console.error('Error disposing Demo One canvas:', error);
+  }
+});
+
+// Methods with error handling
 const addRect = () => {
-  if (canvas) {
-    addRectangle(canvas, {
-      left: Math.random() * 600,
-      top: Math.random() * 400,
-      fill: selectedColor.value,
-    });
+  try {
+    if (canvas && canvas.add) {
+      addRectangle(canvas, {
+        left: Math.random() * 600,
+        top: Math.random() * 400,
+        fill: selectedColor.value,
+      });
+    }
+  } catch (error) {
+    console.error('Error adding rectangle:', error);
   }
 };
 
 const addCirc = () => {
-  if (canvas) {
-    addCircle(canvas, {
-      left: Math.random() * 600,
-      top: Math.random() * 400,
-      fill: selectedColor.value,
-    });
+  try {
+    if (canvas && canvas.add) {
+      addCircle(canvas, {
+        left: Math.random() * 600,
+        top: Math.random() * 400,
+        fill: selectedColor.value,
+      });
+    }
+  } catch (error) {
+    console.error('Error adding circle:', error);
   }
 };
 
 const addTri = () => {
-  if (canvas) {
-    addTriangle(canvas, {
-      left: Math.random() * 600,
-      top: Math.random() * 400,
-      fill: selectedColor.value,
-    });
+  try {
+    if (canvas && canvas.add) {
+      addTriangle(canvas, {
+        left: Math.random() * 600,
+        top: Math.random() * 400,
+        fill: selectedColor.value,
+      });
+    }
+  } catch (error) {
+    console.error('Error adding triangle:', error);
   }
 };
 
 const changeColor = () => {
-  if (canvas) {
-    changeSelectedColor(canvas, selectedColor.value);
+  try {
+    if (canvas && canvas.getActiveObject) {
+      changeSelectedColor(canvas, selectedColor.value);
+    }
+  } catch (error) {
+    console.error('Error changing color:', error);
   }
 };
 
 const deleteSelected = () => {
-  if (canvas) {
-    deleteSelectedLogic(canvas);
+  try {
+    if (canvas && canvas.getActiveObject) {
+      deleteSelectedLogic(canvas);
+    }
+  } catch (error) {
+    console.error('Error deleting selected:', error);
   }
 };
 
 const clearCanvas = () => {
-  if (canvas) {
-    clearCanvasLogic(canvas);
+  try {
+    if (canvas && canvas.clear) {
+      clearCanvasLogic(canvas);
+    }
+  } catch (error) {
+    console.error('Error clearing canvas:', error);
   }
 };
 </script>

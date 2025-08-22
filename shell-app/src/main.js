@@ -3,27 +3,9 @@ import { createApp, markRaw } from 'vue';
 
 import { createPinia } from 'pinia';
 
-if (import.meta.env.PROD) {
-  const demoApps = [
-    { name: 'demo-one', url: import.meta.env.VITE_DEMO_ONE_CSS_URL },
-    { name: 'demo-two', url: import.meta.env.VITE_DEMO_TWO_CSS_URL },
-    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL },
-    { name: 'demo-counter', url: import.meta.env.VITE_DEMO_COUNTER_CSS_URL }
-  ];
-
-  demoApps.forEach(app => {
-    if (app.url) {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = app.url
-      link.onload = () => console.log(`✅ ${app.name} CSS loaded successfully`)
-      link.onerror = () => console.error(`❌ Failed to load ${app.name} CSS`)
-      document.head.appendChild(link)
-    } else {
-      console.warn(`⚠️ No CSS URL configured for ${app.name}`)
-    }
-  });
-}
+// Note: CSS loading disabled - micro frontends should be self-contained
+// Each micro frontend will load its own CSS when imported
+console.log('🎨 CSS loading: Micro frontends will load their own styles')
 
 import App from './App.vue';
 import router from './router';
