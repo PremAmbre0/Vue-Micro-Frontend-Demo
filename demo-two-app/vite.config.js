@@ -6,6 +6,9 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
+  // Fallback values for production deployment
+  const shellRemoteEntry = env.VITE_SHELL_REMOTE_ENTRY || 'https://shell-app-seven.vercel.app/remoteEntry.js'
+
   return {
     base: "/",
     plugins: [
@@ -20,7 +23,7 @@ export default defineConfig(({ mode }) => {
           shellApp: {
             type: "module",
             name: "shellApp",
-            entry: env.VITE_SHELL_REMOTE_ENTRY,
+            entry: shellRemoteEntry,
             entryGlobalName: "shellApp",
             shareScope: "default",
           },

@@ -6,6 +6,12 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
+  // Fallback values for production deployment
+  const demoOneRemoteEntry = env.VITE_DEMO_ONE_REMOTE_ENTRY || 'https://demo-app-one-two.vercel.app/remoteEntry.js'
+  const demoTwoRemoteEntry = env.VITE_DEMO_TWO_REMOTE_ENTRY || 'https://demo-app-two-delta.vercel.app/remoteEntry.js'
+  const demoThreeRemoteEntry = env.VITE_DEMO_THREE_REMOTE_ENTRY || 'https://demo-app-three-jet.vercel.app/remoteEntry.js'
+  const demoCounterRemoteEntry = env.VITE_DEMO_COUNTER_REMOTE_ENTRY || 'https://demo-counter.vercel.app/remoteEntry.js'
+
   return {
     base: "/",
     plugins: [
@@ -16,28 +22,28 @@ export default defineConfig(({ mode }) => {
           demoOneApp: {
             type: "module",
             name: "demoOneApp",
-            entry: env.VITE_DEMO_ONE_REMOTE_ENTRY,
+            entry: demoOneRemoteEntry,
             entryGlobalName: "demoOneApp",
             shareScope: "default",
           },
           demoTwoApp: {
             type: "module",
             name: "demoTwoApp",
-            entry: env.VITE_DEMO_TWO_REMOTE_ENTRY,
+            entry: demoTwoRemoteEntry,
             entryGlobalName: "demoTwoApp",
             shareScope: "default",
           },
           demoThreeApp: {
             type: "module",
             name: "demoThreeApp",
-            entry: env.VITE_DEMO_THREE_REMOTE_ENTRY,
+            entry: demoThreeRemoteEntry,
             entryGlobalName: "demoThreeApp",
             shareScope: "default",
           },
           demoCounterApp: {
             type: "module",
             name: "demoCounterApp",
-            entry: env.VITE_DEMO_COUNTER_REMOTE_ENTRY,
+            entry: demoCounterRemoteEntry,
             entryGlobalName: "demoCounterApp",
             shareScope: "default",
           },
