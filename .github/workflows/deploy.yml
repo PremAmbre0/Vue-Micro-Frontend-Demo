@@ -20,6 +20,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Clean previous builds
+        run: |
+          echo "🧹 Cleaning previous builds and virtual packages..."
+          npm run clean || echo "Clean script not available, continuing..."
+          rm -rf node_modules/__mf__virtual || echo "No virtual packages to clean"
+          rm -rf dist || echo "No dist directory to clean"
+          echo "✅ Cleanup completed"
+
       - name: Build All Apps
         run: |
           echo "🚀 Building all micro frontends using Turbo..."
