@@ -1,10 +1,18 @@
 import { federation } from "@module-federation/vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
+import {
+  loadMicroFrontendEnv,
+  getSharedDependencies,
+  getBuildConfig,
+  getServerConfig
+} from "../shared/vite-env-config.js";
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+  // Load environment configuration
+  const { env, isDevelopment, isProduction, defaultUrls, getRemoteEntry } =
+    loadMicroFrontendEnv(mode, 'Shell App')
 
   return {
     base: "/",
@@ -16,28 +24,28 @@ export default defineConfig(({ mode }) => {
           demoOneApp: {
             type: "module",
             name: "demoOneApp",
-            entry: env.VITE_DEMO_ONE_REMOTE_ENTRY || "http://localhost:3001/remoteEntry.js",
+            entry: getRemoteEntry('VITE_DEMO_ONE_REMOTE_ENTRY', defaultUrls.demoOne),
             entryGlobalName: "demoOneApp",
             shareScope: "default",
           },
           demoTwoApp: {
             type: "module",
             name: "demoTwoApp",
-            entry: env.VITE_DEMO_TWO_REMOTE_ENTRY || "http://localhost:3002/remoteEntry.js",
+            entry: getRemoteEntry('VITE_DEMO_TWO_REMOTE_ENTRY', defaultUrls.demoTwo),
             entryGlobalName: "demoTwoApp",
             shareScope: "default",
           },
           demoThreeApp: {
             type: "module",
             name: "demoThreeApp",
-            entry: env.VITE_DEMO_THREE_REMOTE_ENTRY || "http://localhost:3003/remoteEntry.js",
+            entry: getRemoteEntry('VITE_DEMO_THREE_REMOTE_ENTRY', defaultUrls.demoThree),
             entryGlobalName: "demoThreeApp",
             shareScope: "default",
           },
           demoCounterApp: {
             type: "module",
             name: "demoCounterApp",
-            entry: env.VITE_DEMO_COUNTER_REMOTE_ENTRY || "http://localhost:3004/remoteEntry.js",
+            entry: getRemoteEntry('VITE_DEMO_COUNTER_REMOTE_ENTRY', defaultUrls.demoCounter),
             entryGlobalName: "demoCounterApp",
             shareScope: "default",
           },
@@ -47,24 +55,7 @@ export default defineConfig(({ mode }) => {
           "./counterInterface": "./src/interfaces/counter.js",
         },
         filename: "remoteEntry.js",
-        shared: {
-          vue: {
-            singleton: true,
-            requiredVersion: "^3.5.18"
-          },
-          "vue-router": {
-            singleton: true,
-            requiredVersion: "^4.2.4"
-          },
-          pinia: {
-            singleton: true,
-            requiredVersion: "^2.1.7"
-          },
-          fabric: {
-            singleton: true,
-            requiredVersion: "^5.3.0"
-          }
-        }
+        shared: getSharedDependencies(true)
       }),
     ],
     resolve: {

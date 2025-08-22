@@ -4,8 +4,26 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` in the current working directory.
-  const env = loadEnv(mode, process.cwd(), '')
+  // Determine the root directory for environment files
+  const rootDir = process.cwd().includes('demo-counter-app') ? '../' : './'
+
+  // Load environment variables from the root directory
+  const env = loadEnv(mode, rootDir, '')
+
+  // Environment-based configuration
+  const isDevelopment = mode === 'development'
+  const isProduction = mode === 'production'
+
+  // Default shell URL
+  const defaultShellUrl = 'http://localhost:3000/remoteEntry.js'
+  const shellRemoteEntry = env.VITE_SHELL_REMOTE_ENTRY || defaultShellUrl
+
+  // Debug logging for environment variables
+  console.log(`🔢 Demo Counter App - Mode: ${mode}`)
+  console.log(`🔢 Demo Counter App - Root Dir: ${rootDir}`)
+  console.log(`🔢 Demo Counter App - Is Development: ${isDevelopment}`)
+  console.log(`🔢 Demo Counter App - Is Production: ${isProduction}`)
+  console.log(`🔢 Demo Counter App - Shell Remote Entry: ${shellRemoteEntry}`)
 
   return {
     base: "/",
@@ -20,7 +38,7 @@ export default defineConfig(({ mode }) => {
           shellApp: {
             type: "module",
             name: "shellApp",
-            entry: env.VITE_SHELL_REMOTE_ENTRY || "http://localhost:3000/remoteEntry.js",
+            entry: shellRemoteEntry,
             entryGlobalName: "shellApp",
             shareScope: "default",
           },
