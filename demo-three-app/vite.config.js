@@ -40,8 +40,33 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       include: ['fabric']
     },
-    build: getBuildConfig('remote'),
-    server: getServerConfig(env, 'VITE_DEMO_THREE_PORT', 3003),
-    preview: getServerConfig(env, 'VITE_DEMO_THREE_PORT', 3003)
+    build: {
+      outDir: "dist",
+      target: "chrome89",
+      cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.fileName && assetInfo.fileName.endsWith('.css')) {
+              return 'assets/style.css'
+            }
+            return 'assets/[name].[hash].[ext]'
+          }
+        },
+      },
+    },
+    server: {
+      port: parseInt(env.VITE_DEMO_THREE_PORT) || 3003,
+      cors: true,
+      fs: {
+        allow: ["..", "."]
+      },
+      allowedHosts: true,
+    },
+    preview: {
+      port: parseInt(env.VITE_DEMO_THREE_PORT) || 3003,
+      cors: true,
+    }
   }
 });

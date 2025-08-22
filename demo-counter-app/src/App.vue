@@ -46,7 +46,7 @@ export default {
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-family: "Inter", sans-serif;
 }
 
 * {

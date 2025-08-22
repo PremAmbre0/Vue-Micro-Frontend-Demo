@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
             if (assetInfo.fileName && assetInfo.fileName.endsWith('.css')) {
               return 'style.css'
             }
-            return assetInfo.fileName
+            return '[name].[hash].[ext]'
           }
         }
       }
