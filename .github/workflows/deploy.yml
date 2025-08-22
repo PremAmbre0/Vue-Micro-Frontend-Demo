@@ -49,13 +49,37 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
+      - name: Check Vercel Configuration
+        run: |
+          echo "🔍 Checking Vercel configuration..."
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ VERCEL_TOKEN is not set"
+            echo "Please add VERCEL_TOKEN to your repository secrets"
+            exit 1
+          fi
+          if [ -z "$VERCEL_ORG_ID" ]; then
+            echo "❌ VERCEL_ORG_ID is not set"
+            echo "Please add VERCEL_ORG_ID to your repository secrets"
+            exit 1
+          fi
+          if [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "❌ VERCEL_PROJECT_ID is not set"
+            echo "Please add VERCEL_PROJECT_ID to your repository secrets"
+            exit 1
+          fi
+          echo "✅ All Vercel secrets are configured"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
       - name: Deploy to Vercel
         run: |
           echo "🚀 Deploying to single Vercel project..."
           echo "📁 Deploying from dist directory with multiple app paths..."
 
           # Deploy the unified dist directory
-          DEPLOYMENT_URL=$(vercel dist --prod --yes --token=$VERCEL_TOKEN)
+          DEPLOYMENT_URL=$(vercel dist --prod --yes --token="$VERCEL_TOKEN")
           echo "✅ Deployment completed!"
           echo "🌐 Deployment URL: $DEPLOYMENT_URL"
 
@@ -65,6 +89,9 @@ jobs:
           echo "   Demo Two: $DEPLOYMENT_URL/demo-two-app"
           echo "   Demo Three: $DEPLOYMENT_URL/demo-three-app"
           echo "   Demo Counter: $DEPLOYMENT_URL/demo-counter-app"
+
+          # Save deployment URL for summary
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
