@@ -7,7 +7,8 @@ if (import.meta.env.PROD) {
   const demoApps = [
     { name: 'demo-one', url: import.meta.env.VITE_DEMO_ONE_CSS_URL },
     { name: 'demo-two', url: import.meta.env.VITE_DEMO_TWO_CSS_URL },
-    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL }
+    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL },
+    { name: 'demo-counter', url: import.meta.env.VITE_DEMO_COUNTER_CSS_URL }
   ];
 
   demoApps.forEach(app => {

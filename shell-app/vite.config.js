@@ -12,6 +12,12 @@ export default defineConfig(({ mode }) => {
   const demoThreeRemoteEntry = env.VITE_DEMO_THREE_REMOTE_ENTRY || 'https://demo-app-three-jet.vercel.app/remoteEntry.js'
   const demoCounterRemoteEntry = env.VITE_DEMO_COUNTER_REMOTE_ENTRY || 'https://demo-counter.vercel.app/remoteEntry.js'
 
+  // Define CSS URLs for environment variables
+  process.env.VITE_DEMO_ONE_CSS_URL = env.VITE_DEMO_ONE_CSS_URL || 'https://demo-app-one-two.vercel.app/assets/style.css'
+  process.env.VITE_DEMO_TWO_CSS_URL = env.VITE_DEMO_TWO_CSS_URL || 'https://demo-app-two-delta.vercel.app/assets/style.css'
+  process.env.VITE_DEMO_THREE_CSS_URL = env.VITE_DEMO_THREE_CSS_URL || 'https://demo-app-three-jet.vercel.app/assets/style.css'
+  process.env.VITE_DEMO_COUNTER_CSS_URL = env.VITE_DEMO_COUNTER_CSS_URL || 'https://demo-counter.vercel.app/assets/style.css'
+
   return {
     base: "/",
     plugins: [
@@ -48,6 +54,7 @@ export default defineConfig(({ mode }) => {
             shareScope: "default",
           },
         },
+
         exposes: {
           "./interfaces": "./src/interfaces/index.js",
           "./counterInterface": "./src/interfaces/counter.js",

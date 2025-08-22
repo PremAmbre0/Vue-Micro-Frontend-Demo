@@ -34,23 +34,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Demo Counter App -->
-      <div class="demo-section remote-section">
-        <h2>🎯 Demo Counter App (Remote)</h2>
-        <p>This is a separate micro frontend that connects to Shell's store via interfaces</p>
-        
-        <div class="remote-container">
-          <Suspense>
-            <template #default>
-              <CounterDemo />
-            </template>
-            <template #fallback>
-              <div class="loading">Loading Demo Counter App...</div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
     </div>
 
     <div class="explanation-section">
