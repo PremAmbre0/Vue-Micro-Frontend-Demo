@@ -29,7 +29,17 @@ a,
 
   #app {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     padding: 0 2rem;
   }
+
+  header{
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1024px){
+  body header {
+  display: none;
+}
 }
