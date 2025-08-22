@@ -66,33 +66,8 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       include: ['fabric', 'vue', 'vue-router', 'pinia']
     },
-    build: {
-      outDir: "dist",
-      target: "chrome89",
-      cssCodeSplit: false,
-      rollupOptions: {
-        output: {
-          manualChunks: undefined,
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-              return 'style.css'
-            }
-            return assetInfo.name
-          }
-        }
-      }
-    },
-    server: {
-      port: parseInt(env.VITE_SHELL_PORT) || 3000,
-      cors: true,
-      fs: {
-        allow: ["..", "."]
-      },
-      allowedHosts: true,
-    },
-    preview: {
-      port: parseInt(env.VITE_SHELL_PORT) || 3000,
-      cors: true,
-    }
+    build: getBuildConfig('shell'),
+    server: getServerConfig(env, 'VITE_SHELL_PORT', 3000),
+    preview: getServerConfig(env, 'VITE_SHELL_PORT', 3000)
   }
 });
