@@ -9,6 +9,7 @@
       <CounterDemo />
     </main>
   </div>
+  
 </template>
 
 <script>
