@@ -4,7 +4,6 @@
       <h1>🔢 Demo Counter App</h1>
       <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
-    
     <main>
       <CounterDemo />
     </main>

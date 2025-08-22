@@ -9,7 +9,6 @@
       <router-link to="/demo-counter">🔢 Demo Counter</router-link>
       <router-link to="/interface-demo">🔗 Interface Demo</router-link>
     </nav>
-
     <main>
       <RouterView />
     </main>

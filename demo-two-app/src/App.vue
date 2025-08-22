@@ -8,7 +8,6 @@ import DemoTwoCanvas from './components/DemoTwoCanvas.vue'
       <h1>📝 Demo Two App - Text & Image Editor</h1>
       <p>Standalone Fabric.js demo for text and image manipulation</p>
     </header>
-
     <main>
       <DemoTwoCanvas />
     </main>

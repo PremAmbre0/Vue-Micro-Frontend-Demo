@@ -8,7 +8,6 @@ import DemoThreeCanvas from './components/DemoThreeCanvas.vue'
       <h1>🎯 Demo Three App - Interactive Canvas</h1>
       <p>Standalone Fabric.js demo for advanced interactions and object manipulation</p>
     </header>
-
     <main>
       <DemoThreeCanvas />
     </main>
