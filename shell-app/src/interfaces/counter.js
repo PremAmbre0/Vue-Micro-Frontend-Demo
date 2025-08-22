@@ -1,4 +1,5 @@
 import { useCommonStore } from '../stores/common.store.js'
+import { getActivePinia } from 'pinia'
 
 /**
  * Counter Interface for Shell App
@@ -16,12 +17,32 @@ let storeInstance = null
  */
 const getStore = () => {
   if (!storeInstance) {
+    // Check if Pinia is active before trying to use the store
+    const pinia = getActivePinia()
+    if (!pinia) {
+      console.warn('[Counter Interface]: Pinia is not active yet. Shell App may still be initializing.')
+      throw new Error('[Counter Interface]: Pinia is not active. Make sure the Shell App is fully loaded.')
+    }
+    console.log('[Counter Interface]: Pinia is active, creating store instance')
     storeInstance = useCommonStore()
+    console.log('[Counter Interface]: Store instance created successfully')
   }
   return storeInstance
 }
 
 export const counterInterface = {
+  /**
+   * Check if the interface is ready to use
+   * @returns {boolean} True if Pinia is active and store can be used
+   */
+  isReady: () => {
+    try {
+      return !!getActivePinia()
+    } catch {
+      return false
+    }
+  },
+
   /**
    * Get the current counter value
    * @returns {number} Current counter value

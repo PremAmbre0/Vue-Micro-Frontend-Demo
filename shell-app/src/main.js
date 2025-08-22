@@ -5,18 +5,22 @@ import { createPinia } from 'pinia';
 
 if (import.meta.env.PROD) {
   const demoApps = [
-    { name: 'demo-one', url: import.meta.env.VITE_DEMO_ONE_CSS_URL || 'http://localhost:3001/assets/style.css' },
-    { name: 'demo-two', url: import.meta.env.VITE_DEMO_TWO_CSS_URL || 'http://localhost:3002/assets/style.css' },
-    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL || 'http://localhost:3003/assets/style.css' }
+    { name: 'demo-one', url: import.meta.env.VITE_DEMO_ONE_CSS_URL },
+    { name: 'demo-two', url: import.meta.env.VITE_DEMO_TWO_CSS_URL },
+    { name: 'demo-three', url: import.meta.env.VITE_DEMO_THREE_CSS_URL }
   ];
 
   demoApps.forEach(app => {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = app.url
-    link.onload = () => console.log(`✅ ${app.name} CSS loaded successfully`)
-    link.onerror = () => console.error(`❌ Failed to load ${app.name} CSS`)
-    document.head.appendChild(link)
+    if (app.url) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = app.url
+      link.onload = () => console.log(`✅ ${app.name} CSS loaded successfully`)
+      link.onerror = () => console.error(`❌ Failed to load ${app.name} CSS`)
+      document.head.appendChild(link)
+    } else {
+      console.warn(`⚠️ No CSS URL configured for ${app.name}`)
+    }
   });
 }
 

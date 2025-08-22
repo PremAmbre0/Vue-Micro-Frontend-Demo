@@ -19,13 +19,14 @@ export default defineConfig(({ mode }) => {
           shellApp: {
             type: "module",
             name: "shellApp",
-            entry: env.VITE_SHELL_REMOTE_ENTRY || "http://localhost:3000/remoteEntry.js",
+            entry: env.VITE_SHELL_REMOTE_ENTRY,
             entryGlobalName: "shellApp",
             shareScope: "default",
           },
         },
         shared: {
-          vue: { singleton: true }
+          vue: { singleton: true },
+          pinia: { singleton: true }
         }
       }),
       vue(),

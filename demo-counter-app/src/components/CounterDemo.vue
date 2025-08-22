@@ -66,8 +66,18 @@
 
     <div class="error-section" v-else>
       <h2>Unable to Connect</h2>
-      <p>Make sure the Shell App is running and accessible.</p>
-      <button @click="tryReconnect" class="btn btn-primary">Try Reconnect</button>
+      <div v-if="isStandaloneMode">
+        <p><strong>Standalone Mode Detected</strong></p>
+        <p>This micro frontend is designed to work as part of the Shell App.</p>
+        <p>Please access it through:</p>
+        <a :href="`${shellAppUrl}/demo-counter`" class="shell-link">
+          🔗 {{ shellAppUrl }}/demo-counter
+        </a>
+      </div>
+      <div v-else>
+        <p>Make sure the Shell App is running and accessible.</p>
+        <button @click="tryReconnect" class="btn btn-primary">Try Reconnect</button>
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +89,7 @@ export default {
   name: 'CounterDemo',
   setup() {
     const isConnected = ref(false)
+    const isStandaloneMode = ref(false)
     const currentValue = ref(0)
     const customAmount = ref(1)
     const setValue = ref(0)
@@ -90,7 +101,10 @@ export default {
       absoluteNum: 0
     })
     const activityLog = ref([])
-    
+
+    // Get shell app URL from environment
+    const shellAppUrl = `http://localhost:${import.meta.env.VITE_SHELL_PORT || '3000'}`
+
     let counterInterface = null
     let unsubscribe = null
 
@@ -118,25 +132,76 @@ export default {
 
     const connectToShell = async () => {
       try {
+        console.log('[Demo Counter]: Starting connection to Shell App...')
+        addToLog('Starting connection to Shell App...')
+
+        // Check if we're running in standalone mode
+        const isStandalone = window.location.port === import.meta.env.VITE_DEMO_COUNTER_PORT
+        if (isStandalone) {
+          console.log('[Demo Counter]: Running in standalone mode')
+          isStandaloneMode.value = true
+          addToLog('Running in standalone mode')
+          addToLog('This micro frontend is designed to work within the Shell App')
+          addToLog(`Please access it through: ${shellAppUrl}/demo-counter`)
+          isConnected.value = false
+          return
+        }
+
         // Import the counter interface from shell app
+        console.log('[Demo Counter]: Importing shell app interfaces...')
         const { counterInterface: shellCounter } = await import('shellApp/interfaces')
+        console.log('[Demo Counter]: Shell app interfaces imported successfully')
+
+        // Check if the interface is ready
+        console.log('[Demo Counter]: Checking if interface is ready...')
+        if (!shellCounter.isReady()) {
+          console.log('[Demo Counter]: Interface not ready, waiting...')
+          // Wait for shell app to be ready with exponential backoff
+          let attempts = 0
+          const maxAttempts = 15 // Increased attempts for remote connection
+
+          while (attempts < maxAttempts && !shellCounter.isReady()) {
+            const delay = Math.min(1000 * Math.pow(1.5, attempts), 3000) // Gentler backoff
+            console.log(`[Demo Counter]: Attempt ${attempts + 1}/${maxAttempts}, waiting ${delay}ms`)
+            addToLog(`Waiting for Shell App... (attempt ${attempts + 1}/${maxAttempts})`)
+            await new Promise(resolve => setTimeout(resolve, delay))
+            attempts++
+          }
+
+          if (!shellCounter.isReady()) {
+            throw new Error('Shell App failed to initialize after multiple attempts')
+          }
+        }
+
+        console.log('[Demo Counter]: Interface is ready, setting up connection...')
         counterInterface = shellCounter
-        
+
         // Subscribe to changes
+        console.log('[Demo Counter]: Subscribing to store changes...')
         unsubscribe = counterInterface.subscribe((newValue) => {
+          console.log(`[Demo Counter]: Store value changed to ${newValue}`)
           currentValue.value = newValue
           updateComputedValues()
           addToLog(`Value changed to ${newValue}`)
         })
 
         // Initial value update
+        console.log('[Demo Counter]: Getting initial value...')
         updateCurrentValue()
         isConnected.value = true
+        console.log('[Demo Counter]: Successfully connected to Shell App')
         addToLog('Connected to Shell App')
       } catch (error) {
-        console.error('Failed to connect to Shell App:', error)
+        console.error('[Demo Counter]: Failed to connect to Shell App:', error)
         isConnected.value = false
-        addToLog('Failed to connect to Shell App')
+
+        // Check if it's a federation loading error
+        if (error.message.includes('Loading script failed') || error.message.includes('Loading CSS chunk')) {
+          addToLog(`Failed to load Shell App - make sure it's running on ${shellAppUrl}`)
+          isStandaloneMode.value = true
+        } else {
+          addToLog(`Failed to connect: ${error.message}`)
+        }
       }
     }
 
@@ -198,6 +263,8 @@ export default {
 
     return {
       isConnected,
+      isStandaloneMode,
+      shellAppUrl,
       currentValue,
       customAmount,
       setValue,
@@ -532,6 +599,27 @@ export default {
   margin-bottom: 2rem;
   font-size: 1.1rem;
   color: #7F1D1D;
+}
+
+.shell-link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.shell-link:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  text-decoration: none;
+  color: white;
 }
 
 /* Responsive Design */
