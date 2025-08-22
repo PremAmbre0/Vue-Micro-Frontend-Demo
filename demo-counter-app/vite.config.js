@@ -37,6 +37,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
+      outDir: "../dist/demo-counter-app",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -57,11 +58,13 @@ export default defineConfig(({ mode }) => {
       cors: true,
       fs: {
         allow: ["..", "."]
-      }
+      },
+      allowedHosts: true,
     },
     preview: {
       port: parseInt(env.VITE_DEMO_COUNTER_PORT) || 3004,
-      cors: true
+      cors: true,
+      outDir: "../dist/demo-counter-app",
     }
   }
 });
