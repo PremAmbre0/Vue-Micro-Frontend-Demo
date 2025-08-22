@@ -1,4 +1,4 @@
-name: Auto Deploy Changed Apps
+name: Detect Changed Apps
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
       demo-one: ${{ steps.detect.outputs.demo-one }}
       demo-two: ${{ steps.detect.outputs.demo-two }}
       demo-three: ${{ steps.detect.outputs.demo-three }}
+      demo-counter: ${{ steps.detect.outputs.demo-counter }}
       has_changes: ${{ steps.detect.outputs.has_changes }}
     steps:
       - name: Checkout
@@ -47,6 +48,7 @@ jobs:
             echo "demo-one=false" >> $GITHUB_OUTPUT
             echo "demo-two=false" >> $GITHUB_OUTPUT
             echo "demo-three=false" >> $GITHUB_OUTPUT
+            echo "demo-counter=false" >> $GITHUB_OUTPUT
           else
             echo "Changed packages detected:"
             echo "$CHANGED"
@@ -81,73 +83,66 @@ jobs:
             else
               echo "demo-three=false" >> $GITHUB_OUTPUT
             fi
+
+            if echo "$CHANGED" | grep -q "demo-counter-app"; then
+              echo "demo-counter=true" >> $GITHUB_OUTPUT
+              echo "✅ demo-counter-app changed"
+            else
+              echo "demo-counter=false" >> $GITHUB_OUTPUT
+            fi
           fi
 
-  deploy-shell:
-    name: Deploy Shell App
-    needs: detect-changes
-    if: needs.detect-changes.outputs.shell == 'true'
-    uses: ./.github/workflows/deploy-shell.yml
-    secrets: inherit
 
-  deploy-demo-one:
-    name: Deploy Demo One App
-    needs: detect-changes
-    if: needs.detect-changes.outputs.demo-one == 'true'
-    uses: ./.github/workflows/deploy-demo-one.yml
-    secrets: inherit
-
-  deploy-demo-two:
-    name: Deploy Demo Two App
-    needs: detect-changes
-    if: needs.detect-changes.outputs.demo-two == 'true'
-    uses: ./.github/workflows/deploy-demo-two.yml
-    secrets: inherit
-
-  deploy-demo-three:
-    name: Deploy Demo Three App
-    needs: detect-changes
-    if: needs.detect-changes.outputs.demo-three == 'true'
-    uses: ./.github/workflows/deploy-demo-three.yml
-    secrets: inherit
 
   summary:
-    name: Deployment Summary
-    needs: [detect-changes, deploy-shell, deploy-demo-one, deploy-demo-two, deploy-demo-three]
+    name: Change Detection Summary
+    needs: [detect-changes]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Create Summary
         run: |
-          echo "## 🚀 Auto Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Change Detection Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ needs.detect-changes.outputs.has_changes }}" == "false" ]; then
             echo "### ✅ No changes detected" >> $GITHUB_STEP_SUMMARY
-            echo "No deployments needed" >> $GITHUB_STEP_SUMMARY
+            echo "No apps need to be rebuilt" >> $GITHUB_STEP_SUMMARY
           else
-            echo "### Deployment Status:" >> $GITHUB_STEP_SUMMARY
-            
+            echo "### 📦 Apps that would be rebuilt:" >> $GITHUB_STEP_SUMMARY
+
             if [ "${{ needs.detect-changes.outputs.shell }}" == "true" ]; then
-              echo "- Shell App: ${{ needs.deploy-shell.result || '⏭️ Skipped' }}" >> $GITHUB_STEP_SUMMARY
+              echo "- ✅ Shell App (changed)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ⏭️ Shell App (no changes)" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [ "${{ needs.detect-changes.outputs.demo-one }}" == "true" ]; then
-              echo "- Demo One: ${{ needs.deploy-demo-one.result || '⏭️ Skipped' }}" >> $GITHUB_STEP_SUMMARY
+              echo "- ✅ Demo One App (changed)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ⏭️ Demo One App (no changes)" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [ "${{ needs.detect-changes.outputs.demo-two }}" == "true" ]; then
-              echo "- Demo Two: ${{ needs.deploy-demo-two.result || '⏭️ Skipped' }}" >> $GITHUB_STEP_SUMMARY
+              echo "- ✅ Demo Two App (changed)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ⏭️ Demo Two App (no changes)" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [ "${{ needs.detect-changes.outputs.demo-three }}" == "true" ]; then
-              echo "- Demo Three: ${{ needs.deploy-demo-three.result || '⏭️ Skipped' }}" >> $GITHUB_STEP_SUMMARY
+              echo "- ✅ Demo Three App (changed)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ⏭️ Demo Three App (no changes)" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ "${{ needs.detect-changes.outputs.demo-counter }}" == "true" ]; then
+              echo "- ✅ Demo Counter App (changed)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ⏭️ Demo Counter App (no changes)" >> $GITHUB_STEP_SUMMARY
             fi
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔗 Production URLs:" >> $GITHUB_STEP_SUMMARY
-          echo "- [Shell App](https://shell-app-bice.vercel.app)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Demo One](https://demo-one-app.vercel.app)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Demo Two](https://demo-two-app.vercel.app)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Demo Three](https://demo-three-app.vercel.app)" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Note:" >> $GITHUB_STEP_SUMMARY
+          echo "Deployment is currently disabled for testing change detection." >> $GITHUB_STEP_SUMMARY
+          echo "Only change detection is running to verify which apps would be rebuilt." >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,170 @@
+name: Deploy All Apps
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_shell:
+        description: 'Deploy Shell App'
+        required: false
+        default: true
+        type: boolean
+      deploy_demo_one:
+        description: 'Deploy Demo One App'
+        required: false
+        default: true
+        type: boolean
+      deploy_demo_two:
+        description: 'Deploy Demo Two App'
+        required: false
+        default: true
+        type: boolean
+      deploy_demo_three:
+        description: 'Deploy Demo Three App'
+        required: false
+        default: true
+        type: boolean
+      deploy_demo_counter:
+        description: 'Deploy Demo Counter App'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  deploy:
+    name: Deploy Apps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and Deploy Apps
+        run: |
+          echo "🚀 Starting deployment process..."
+          echo ""
+          
+          # Demo One App
+          if [ "${{ inputs.deploy_demo_one }}" == "true" ]; then
+            echo "📦 Building Demo One App..."
+            cd demo-one-app
+            npm run build
+            echo "✅ Demo One App built successfully"
+            echo "🚀 Triggering deploy for Demo One App..."
+            echo "   → Would deploy to production"
+            cd ..
+            echo ""
+          else
+            echo "⏭️ Skipping Demo One App deployment"
+            echo ""
+          fi
+          
+          # Demo Two App
+          if [ "${{ inputs.deploy_demo_two }}" == "true" ]; then
+            echo "📦 Building Demo Two App..."
+            cd demo-two-app
+            npm run build
+            echo "✅ Demo Two App built successfully"
+            echo "🚀 Triggering deploy for Demo Two App..."
+            echo "   → Would deploy to production"
+            cd ..
+            echo ""
+          else
+            echo "⏭️ Skipping Demo Two App deployment"
+            echo ""
+          fi
+          
+          # Demo Three App
+          if [ "${{ inputs.deploy_demo_three }}" == "true" ]; then
+            echo "📦 Building Demo Three App..."
+            cd demo-three-app
+            npm run build
+            echo "✅ Demo Three App built successfully"
+            echo "🚀 Triggering deploy for Demo Three App..."
+            echo "   → Would deploy to production"
+            cd ..
+            echo ""
+          else
+            echo "⏭️ Skipping Demo Three App deployment"
+            echo ""
+          fi
+          
+          # Demo Counter App
+          if [ "${{ inputs.deploy_demo_counter }}" == "true" ]; then
+            echo "📦 Building Demo Counter App..."
+            cd demo-counter-app
+            npm run build
+            echo "✅ Demo Counter App built successfully"
+            echo "🚀 Triggering deploy for Demo Counter App..."
+            echo "   → Would deploy to production"
+            cd ..
+            echo ""
+          else
+            echo "⏭️ Skipping Demo Counter App deployment"
+            echo ""
+          fi
+          
+          # Shell App (deploy last as it depends on others)
+          if [ "${{ inputs.deploy_shell }}" == "true" ]; then
+            echo "📦 Building Shell App..."
+            cd shell-app
+            npm run build
+            echo "✅ Shell App built successfully"
+            echo "🚀 Triggering deploy for Shell App..."
+            echo "   → Would deploy to production"
+            cd ..
+            echo ""
+          else
+            echo "⏭️ Skipping Shell App deployment"
+            echo ""
+          fi
+          
+          echo "🎉 All deployments completed!"
+
+      - name: Create Summary
+        run: |
+          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Apps Processed:" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ inputs.deploy_demo_one }}" == "true" ]; then
+            echo "- ✅ Demo One App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⏭️ Demo One App: Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ inputs.deploy_demo_two }}" == "true" ]; then
+            echo "- ✅ Demo Two App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⏭️ Demo Two App: Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ inputs.deploy_demo_three }}" == "true" ]; then
+            echo "- ✅ Demo Three App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⏭️ Demo Three App: Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ inputs.deploy_demo_counter }}" == "true" ]; then
+            echo "- ✅ Demo Counter App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⏭️ Demo Counter App: Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ inputs.deploy_shell }}" == "true" ]; then
+            echo "- ✅ Shell App: Built and ready for deployment" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⏭️ Shell App: Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Note:" >> $GITHUB_STEP_SUMMARY
+          echo "Currently only building and console logging deployment triggers." >> $GITHUB_STEP_SUMMARY
+          echo "Actual deployment commands are not executed yet." >> $GITHUB_STEP_SUMMARY
