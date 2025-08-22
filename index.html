@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Micro Frontend Architecture Guide 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #fafafa;
+            background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: white;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #111827 0%, #374151 100%);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-left: 280px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero .subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            justify-content: center;
+        }
+
+        .nav a {
+            color: #6b7280;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .nav a:hover {
+            color: #111827;
+            background: #f9fafb;
+            border-color: #e5e7eb;
+        }
+
+        .content-wrapper {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+        }
+
+        .content {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem 2rem;
+            position: relative;
+            z-index: 1;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            overflow-y: auto;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(248, 250, 252, 0.95);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .sidebar-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(59, 130, 246, 0.05);
+            color: #1e40af;
+            border-left-color: #3b82f6;
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #1e40af;
+            border-left-color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .sidebar-section {
+            margin: 1rem 0;
+        }
+
+        .sidebar-section h4 {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: auto;
+        }
+
+        .sidebar-footer p {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu-toggle svg {
+            width: 20px;
+            height: 20px;
+            color: #374151;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 100px;
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.75rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2rem;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: #374151;
+            margin: 3rem 0 1.5rem 0;
+            letter-spacing: -0.01em;
+        }
+
+        .section h4 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #111827;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section p {
+            margin-bottom: 1.5rem;
+            color: #4b5563;
+            font-size: 1.05rem;
+        }
+
+        /* Original Comparison Grid - Enhanced */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .comparison-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 2rem;
+            background: white;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .comparison-card:hover::before {
+            opacity: 1;
+        }
+
+        .comparison-card.winner {
+            border-color: #059669;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            position: relative;
+        }
+
+        .comparison-card.winner::after {
+            content: '⭐ Recommended';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #059669;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .comparison-card h4 {
+            color: #111827;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .comparison-card ul {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /* Visual Comparison Grid - Scannable at a Glance */
+        .visual-comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .visual-comparison-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .visual-comparison-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .visual-comparison-card.winner {
+            border-color: #059669;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+        }
+
+        .visual-comparison-card.basic {
+            border-color: #6b7280;
+        }
+
+        .visual-comparison-card.legacy {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+        }
+
+        .visual-comparison-card.modern {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%);
+        }
+
+        .approach-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .approach-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .approach-header h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: #111827;
+        }
+
+        .complexity-badge {
+            margin-left: auto;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .complexity-badge.simple {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .complexity-badge.moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .complexity-badge.complex {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .winner-badge {
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            background: #059669;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+        }
+
+        .rating-bars {
+            margin: 1rem 0;
+        }
+
+        .rating-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .rating-item span {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6b7280;
+            min-width: 80px;
+            text-align: left;
+        }
+
+        .rating-bar {
+            flex: 1;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rating-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .visual-comparison-card.winner .rating-bar .fill {
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+
+        .visual-comparison-card.legacy .rating-bar .fill {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        .visual-comparison-card.modern .rating-bar .fill {
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+        }
+
+        .use-case {
+            background: #f8fafc;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            border: 1px solid #e2e8f0;
+        }
+
+        .visual-comparison-card.winner .use-case {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Decision Matrix */
+        .decision-matrix {
+            margin: 4rem 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .decision-matrix h4 {
+            background: #f8fafc;
+            padding: 1.5rem;
+            margin: 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: #111827;
+            font-size: 1.25rem;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr;
+            gap: 0;
+        }
+
+        /* 4-column variant for simplified matrices */
+        .matrix-grid.cols-4 {
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+        }
+
+        .matrix-row {
+            display: contents;
+        }
+
+        .matrix-row.header .matrix-cell {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .matrix-row.winner-row .matrix-cell {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-left: 4px solid #059669;
+        }
+
+        .matrix-cell {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .matrix-cell:last-child {
+            border-right: none;
+        }
+
+        .matrix-row:hover .matrix-cell {
+            background: #fafbfc;
+        }
+
+        .matrix-row.winner-row:hover .matrix-cell {
+            background: linear-gradient(135deg, #ecfdf5 0%, #fafbfc 100%);
+        }
+
+        .rating-high {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .rating-medium {
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        .rating-low {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Responsive adjustments for all layouts */
+        @media (max-width: 768px) {
+
+            .visual-comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .matrix-grid,
+            .matrix-grid.cols-4 {
+                grid-template-columns: 1fr;
+                gap: 1px;
+                background: #e5e7eb;
+            }
+
+            .matrix-row {
+                display: block;
+                background: white;
+                margin-bottom: 1px;
+            }
+
+            .matrix-cell {
+                display: block;
+                border-right: none;
+                border-bottom: 1px solid #f1f5f9;
+                padding: 0.75rem 1rem;
+            }
+
+            .matrix-row.header {
+                display: none;
+            }
+
+            .matrix-cell::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #6b7280;
+                display: block;
+                margin-bottom: 0.25rem;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .pros, .cons {
+            padding: 1.75rem;
+            border-radius: 12px;
+            background: #ffffff;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .pros {
+            border-left: 4px solid #10b981;
+        }
+
+        .pros-title {
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .cons {
+            border-left: 4px solid #ef4444;
+        }
+
+        .cons-title {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pros li, .cons li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            position: relative;
+            padding-left: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .pros li:last-child, .cons li:last-child {
+            border-bottom: none;
+        }
+
+        .pros li::before { content: '✓'; position: absolute; left: 0; color: #10b981; font-weight: bold; font-size: 0.9rem; }
+        .cons li::before { content: '•'; position: absolute; left: 0; color: #ef4444; font-weight: bold; font-size: 0.9rem; }
+
+        /* Chip-based pros/cons layout */
+        .pros-cons.pros-cons--chips .pros ul,
+        .pros-cons.pros-cons--chips .cons ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .pros-cons.pros-cons--chips .pros li,
+        .pros-cons.pros-cons--chips .cons li {
+            border: none;
+            padding: 0.35rem 0.6rem 0.35rem 0.6rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            line-height: 1.2;
+            position: static;
+        }
+        .pros-cons.pros-cons--chips .pros li::before,
+        .pros-cons.pros-cons--chips .cons li::before { display: none; }
+        .pros-cons.pros-cons--chips .pros li { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+        .pros-cons.pros-cons--chips .cons li { background: #fef2f2; border: 1px solid #fecaca; color: #7f1d1d; }
+
+        .pros:hover, .cons:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+
+
+        .architecture-diagram {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: #e2e8f0;
+        }
+
+        /* Visual Architecture Diagram System */
+        .arch-visual { margin-top: 1rem; color: #e2e8f0; }
+        .arch-title {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin: 0.5rem 0 1rem 0;
+            font-size: 1rem;
+            color: #93c5fd;
+            text-transform: uppercase;
+        }
+        .arch-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1rem 1rem;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+        }
+        .arch-card.integration { background: linear-gradient(135deg, rgba(2,6,23,0.9), rgba(15,23,42,0.9)); }
+        .arch-subtitle { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 0.5rem; font-weight: 700; }
+        .arch-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        .badge {
+            font-size: 0.75rem;
+            background: #111827;
+            border: 1px solid #374151;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            color: #cbd5e1;
+            white-space: nowrap;
+        }
+        .arch-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .arch-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .arch-subgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-top: 0.5rem; }
+        .chip {
+            background: #111827;
+            border: 1px solid #374151;
+            color: #cbd5e1;
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .list { margin: 0.25rem 0 0 0.5rem; padding-left: 1rem; }
+        .down-arrows { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0.25rem 0 0.5rem 0; }
+        .down-arrow { width: 2px; height: 20px; background: #64748b; margin: 0 auto; position: relative; }
+        .down-arrow::after { content: ''; position: absolute; bottom: -6px; left: -5px; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #64748b; }
+        .small { font-size: 0.85rem; color: #94a3b8; }
+        @media (max-width: 900px) { .arch-grid-3 { grid-template-columns: 1fr; } .down-arrows { grid-template-columns: 1fr; } }
+
+        .demo-highlight {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .demo-highlight h3 {
+            color: #ea580c;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Benefits cards grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+            border: 1px solid #fed7aa;
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+
+        .benefit-card h4 {
+            margin: 0.5rem 0 0.75rem;
+            color: #9a3412;
+        }
+
+        .benefit-icon {
+            font-size: 1.6rem;
+        }
+
+        .benefit-card ul {
+            margin: 0.5rem 0 0;
+            padding-left: 1.2rem;
+        }
+
+        .benefit-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: #ffedd5;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+            border-radius: 999px;
+            padding: 0.1rem 0.5rem;
+            margin-top: 0.9rem;
+        }
+
+        .benefit-divider {
+            border: 0;
+            border-top: 1px solid #fed7aa;
+            margin: 0.9rem 0 0.75rem;
+        }
+
+        @media (max-width: 1100px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 700px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card .emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #111827;
+            line-height: 1.3;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+
+
+
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 2rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            white-space: pre;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .warning {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-left: 4px solid #ef4444;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        /* Compact icon list grid - reduces card repetition */
+        .icon-list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem 1.25rem;
+            margin: 1.5rem 0 0 0;
+        }
+
+        .icon-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.9rem 1rem;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .icon-list-item .icon {
+            font-size: 1.25rem;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .icon-list-item h5 {
+            margin: 0;
+            font-size: 1rem;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .icon-list-item p {
+            margin: 0.15rem 0 0;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Business Impact - redesigned section */
+        .impact-header {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0 2rem 0;
+            border-radius: 10px;
+            color: #1e40af;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.75rem;
+            margin: 2rem 0 0.5rem 0;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .impact-card .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .impact-card h4 {
+            margin: 0.25rem 0 0.35rem 0;
+            font-size: 1.05rem;
+            color: #0f172a;
+        }
+
+        .impact-card p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+
+        .compare-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.75rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .compare-card .column h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .compare-card .column ul {
+            padding-left: 1.15rem;
+            color: #4b5563;
+        }
+
+        @media (max-width: 1100px) {
+            .impact-grid { grid-template-columns: repeat(2, 1fr); }
+            .compare-card { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 700px) {
+            .impact-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Best Practices - redesigned section */
+        .guideline-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .guideline-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+
+        .guideline-card .header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .guideline-card .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            background: #eef2ff;
+            color: #3730a3;
+            font-size: 1.1rem;
+        }
+
+        .guideline-card h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #0f172a;
+        }
+
+        .guideline-card .subtle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 0.15rem;
+        }
+
+        .guideline-card .checklist {
+            margin-top: 0.75rem;
+            padding-left: 1.15rem;
+            color: #4b5563;
+        }
+
+        .guideline-card .checklist li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1100px) {
+            .guideline-grid { grid-template-columns: 1fr; }
+        }
+
+        .toc {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .toc h3 {
+            margin-bottom: 1.5rem;
+            color: #111827;
+            font-size: 1.5rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .toc a:hover {
+            color: #111827;
+        }
+
+        .company-highlight {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .company-highlight h3 {
+            color: #065f46;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .content {
+                padding: 3rem 3rem 2rem 3rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .content {
+                padding: 2rem 2rem 1rem 2rem;
+            }
+
+            .arch-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .content {
+                padding: 2rem 1rem 1rem 1rem;
+            }
+
+            .hero {
+                padding: 4rem 0;
+                margin-left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .nav a {
+                padding: 0.75rem;
+                text-align: center;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+                overflow-x: auto;
+            }
+
+            .demo-highlight {
+                padding: 1.5rem;
+            }
+
+            .architecture-diagram {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+        }
+
+        /* Typography improvements */
+        strong {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .section h2::before {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #111827;
+            margin-bottom: 1rem;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Better list styling */
+        .section ul li::marker {
+            color: #9ca3af;
+        }
+
+        /* Code highlighting */
+        .code-block .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .code-block .keyword {
+            color: #60a5fa;
+        }
+
+        .code-block .string {
+            color: #34d399;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <img src="http://altersquare.io/wp-content/uploads/2025/08/logo-bluedark.png" 
+                     alt="AlterSquare Logo" 
+                     style="height: 28px; object-fit: contain;">
+                <h3 style="margin: 0; text-align: center;">Micro Frontend Guide</h3>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">
+                <h4>Getting Started</h4>
+                <ul>
+                    <li><a href="#introduction" onclick="setActiveLink(this)">Introduction</a></li>
+                    <li><a href="#what-are-microfrontends" onclick="setActiveLink(this)">What Are Micro Frontends?</a></li>
+                    <li><a href="#why-microfrontends" onclick="setActiveLink(this)">Why Micro Frontends?</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4>Implementation</h4>
+                <ul>
+                    <li><a href="#approaches" onclick="setActiveLink(this)">Implementation Approaches</a></li>
+                    <li><a href="#demo-analysis" onclick="setActiveLink(this)">AlterSquare Demo Analysis</a></li>
+                    <li><a href="#interface-communication" onclick="setActiveLink(this)">Interface Communication</a></li>
+                    <li><a href="#best-practices" onclick="setActiveLink(this)">Best Practices</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4>Advanced Topics</h4>
+                <ul>
+                    <li><a href="#challenges" onclick="setActiveLink(this)">Challenges & Solutions</a></li>
+                    <li><a href="#when-to-use" onclick="setActiveLink(this)">When to Use</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <p>Complete Guide 2025</p>
+            <p>Built with ❤️ for developers</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Complete Micro Frontend Architecture Guide</h1>
+                <p>Master the art of building scalable, maintainable, and independently deployable frontend applications</p>
+                <p class="subtitle">From Monoliths to Micro Frontends: A 2025 Developer's Journey</p>
+            </div>
+        </div>
+
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <div class="content">
+            <!-- Introduction -->
+            <section id="introduction" class="section">
+                <h2>Introduction to Frontend Architecture Evolution</h2>
+                
+                <p>Frontend development has undergone a dramatic transformation. What started as simple HTML pages has evolved into complex, feature-rich applications that rival desktop software in functionality and user experience.</p>
+
+                <h3>The Evolution Journey</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="emoji">📄</span>
+                        <h4>Static Pages (1990s)</h4>
+                        <p>Simple HTML and CSS with minimal JavaScript</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🖥️</span>
+                        <h4>Dynamic Web Apps (2000s)</h4>
+                        <p>Server-side rendering with PHP, ASP.NET, JSP</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">⚡</span>
+                        <h4>Single Page Apps (2010s)</h4>
+                        <p>React, Angular, Vue.js - Rich client-side experiences</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🏗️</span>
+                        <h4>Micro Frontends (2020s)</h4>
+                        <p>Modular, scalable, independently deployable architectures</p>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>Key Insight:</strong> As frontend applications grow in complexity, monolithic architectures become bottlenecks. When your codebase exceeds 50,000 lines and your team grows beyond 8 developers, traditional approaches start breaking down.
+                </div>
+
+                <h3>Current State of Frontend Development (2025)</h3>
+                <ul>
+                    <li><strong>Massive Applications:</strong> Modern web apps like Netflix, Spotify, and Figma rival desktop applications in complexity</li>
+                    <li><strong>Large Teams:</strong> Companies have hundreds of frontend developers working on the same product</li>
+                    <li><strong>Rapid Deployment:</strong> Daily or hourly deployments are the norm, not the exception</li>
+                    <li><strong>Technology Diversity:</strong> Teams want to use the best tools for specific problems</li>
+                    <li><strong>Performance Demands:</strong> Users expect instant loading and smooth interactions</li>
+                </ul>
+            </section>
+
+            <!-- What Are Micro Frontends -->
+            <section id="what-are-microfrontends" class="section">
+                <h2>What Are Micro Frontends?</h2>
+                
+                <p><strong>Micro Frontends</strong> are an architectural pattern that extends the microservices concept to frontend development. Instead of building a monolithic frontend application, you break it down into smaller, independently deployable applications that work together to create a cohesive user experience.</p>
+
+                <div class="architecture-diagram">
+                    <div class="arch-visual" aria-hidden="true">
+                        <div class="arch-title">Traditional Monolithic Frontend</div>
+                        <div class="arch-card" style="margin-bottom: 1rem;">
+                            <div class="arch-subtitle">One Large App</div>
+                            <div class="arch-grid-3">
+                                <div class="chip">Header / Footer / Auth</div>
+                                <div class="chip">Products / Cart / Search</div>
+                                <div class="chip">Checkout / Payment / Profile</div>
+                            </div>
+                            <ul class="list small">
+                                <li>Single repository</li>
+                                <li>One deployment</li>
+                                <li>Shared dependencies</li>
+                                <li>High team coordination</li>
+                            </ul>
+                        </div>
+
+                        <div class="arch-title">Micro Frontend Architecture</div>
+                        <div class="arch-grid-3">
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Shell App</div>
+                                <div class="arch-badges">
+                                    <span class="badge">Team: Platform</span>
+                                    <span class="badge">Tech: Vue 3</span>
+                                    <span class="badge">Deploy: Daily</span>
+                                </div>
+                                <ul class="list small">
+                                    <li>Header</li>
+                                    <li>Footer</li>
+                                    <li>Navigation</li>
+                                </ul>
+                            </div>
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Commerce App</div>
+                                <div class="arch-badges">
+                                    <span class="badge">Team: Commerce</span>
+                                    <span class="badge">Tech: React</span>
+                                    <span class="badge">Deploy: Hourly</span>
+                                </div>
+                                <ul class="list small">
+                                    <li>Products</li>
+                                    <li>Cart</li>
+                                    <li>Search</li>
+                                    <li>Checkout</li>
+                                </ul>
+                            </div>
+                            <div class="arch-card">
+                                <div class="arch-subtitle">User App</div>
+                                <div class="arch-badges">
+                                    <span class="badge">Team: Identity</span>
+                                    <span class="badge">Tech: Angular</span>
+                                    <span class="badge">Deploy: Weekly</span>
+                                </div>
+                                <ul class="list small">
+                                    <li>Profile</li>
+                                    <li>Auth</li>
+                                    <li>Settings</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="down-arrows" aria-hidden="true">
+                            <div class="down-arrow"></div>
+                            <div class="down-arrow"></div>
+                            <div class="down-arrow"></div>
+                        </div>
+                        <div class="arch-card integration">
+                            <div class="arch-subtitle">Integration Layer</div>
+                            <div class="arch-badges">
+                                <span class="badge">Module Federation</span>
+                                <span class="badge">Shared State</span>
+                                <span class="badge">Communication</span>
+                                <span class="badge">Routing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Core Principles of Micro Frontends</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="emoji">🔧</span>
+                        <h4>Technology Independence</h4>
+                        <p>Each team can choose their own tech stack - React, Vue, Angular, or even vanilla JS</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🚀</span>
+                        <h4>Independent Deployment</h4>
+                        <p>Deploy features without coordinating with other teams or rebuilding the entire app</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">👥</span>
+                        <h4>Team Autonomy</h4>
+                        <p>Teams own their entire stack from UI to backend services</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🔒</span>
+                        <h4>Fault Isolation</h4>
+                        <p>If one micro frontend fails, others continue to work normally</p>
+                    </div>
+                </div>
+
+                <h3>Real-World Examples</h3>
+                <ul>
+                    <li><strong>Netflix:</strong> Different teams handle search, recommendations, player, and user profiles</li>
+                    <li><strong>Spotify:</strong> Separate teams for music player, playlists, social features, and podcasts</li>
+                    <li><strong>IKEA:</strong> Product catalog, shopping cart, checkout, and account management as separate apps</li>
+                    <li><strong>Upwork:</strong> Job search, messaging, payments, and profiles as independent micro frontends</li>
+                </ul>
+            </section>
+
+            <!-- Why Micro Frontends -->
+            <section id="why-microfrontends" class="section">
+                <h2>Why Your Application Needs Micro Frontends</h2>
+
+                <h3>The Problems with Monolithic Frontends</h3>
+                
+                <div class="warning">
+                    <strong>Monolithic Frontend Problems:</strong>
+                    <ul>
+                        <li><strong>Deployment Bottlenecks:</strong> Every change requires full application deployment</li>
+                        <li><strong>Technology Lock-in:</strong> Entire app stuck with initial technology choices</li>
+                        <li><strong>Team Coordination Overhead:</strong> Multiple teams stepping on each other's toes</li>
+                        <li><strong>Testing Complexity:</strong> Changes in one area can break seemingly unrelated features</li>
+                        <li><strong>Slow Development:</strong> New developers need weeks to understand the entire codebase</li>
+                        <li><strong>Risk of Failure:</strong> One bug can bring down the entire application</li>
+                    </ul>
+                </div>
+
+                <h3>How Micro Frontends Solve These Problems</h3>
+
+                <div class="pros-cons pros-cons--chips">
+                    <div class="pros">
+                        <div class="pros-title">Micro Frontend Benefits</div>
+                        <ul>
+                            <li>Independent Development</li>
+                            <li>Tech Flexibility</li>
+                            <li>Faster Deployment</li>
+                            <li>Better Scalability</li>
+                            <li>Reduced Blast Radius</li>
+                            <li>Easier Testing</li>
+                            <li>Clear Ownership</li>
+                            <li>Incremental Migration</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <div class="cons-title">Challenges to Consider</div>
+                        <ul>
+                            <li>Increased Complexity</li>
+                            <li>Performance Overhead</li>
+                            <li>UX Consistency</li>
+                            <li>Integration Complexity</li>
+                            <li>Testing Overhead</li>
+                            <li>Operational Complexity</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Success Metrics: Real-World Impact</h3>
+                
+                <div class="success">
+                    <strong>Proven Results from Companies Using Micro Frontends:</strong>
+                    <ul>
+                        <li><strong>IKEA:</strong> 50% reduction in development time, 75% reduction in page load time</li>
+                        <li><strong>Netflix:</strong> Increased deployment frequency from weekly to multiple times per day</li>
+                        <li><strong>Spotify:</strong> Reduced time-to-market for new features by 40%</li>
+                        <li><strong>Upwork:</strong> Improved developer productivity by enabling autonomous team workflows</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Implementation Approaches -->
+            <section id="approaches" class="section">
+                <h2>Implementation Approaches: Choosing the Right Strategy</h2>
+
+                <p>There are several ways to implement micro frontends, each with different trade-offs. Let's explore the most popular approaches and understand when to use each one.</p>
+
+                <!-- Visual Comparison Grid - At-a-Glance -->
+                <div class="visual-comparison-grid">
+                    <div class="visual-comparison-card basic">
+                        <div class="approach-header">
+                            <span class="approach-icon">🌐</span>
+                            <h4>Server-Side</h4>
+                            <div class="complexity-badge simple">Simple</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 90%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 85%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 40%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 30%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Traditional Web Apps</div>
+                    </div>
+
+                    <div class="visual-comparison-card basic">
+                        <div class="approach-header">
+                            <span class="approach-icon">📦</span>
+                            <h4>Build-Time</h4>
+                            <div class="complexity-badge simple">Simple</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 95%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 95%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 50%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 20%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Component Libraries</div>
+                    </div>
+
+                    <div class="visual-comparison-card legacy">
+                        <div class="approach-header">
+                            <span class="approach-icon">🖼️</span>
+                            <h4>IFrames</h4>
+                            <div class="complexity-badge moderate">Moderate</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 80%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 30%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 60%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 100%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Legacy Integration</div>
+                    </div>
+
+                    <div class="visual-comparison-card modern">
+                        <div class="approach-header">
+                            <span class="approach-icon">🌟</span>
+                            <h4>Web Components</h4>
+                            <div class="complexity-badge moderate">Moderate</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 70%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 80%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 75%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 85%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Framework Agnostic</div>
+                    </div>
+
+                    <div class="visual-comparison-card modern">
+                        <div class="approach-header">
+                            <span class="approach-icon">🔄</span>
+                            <h4>Client Routing</h4>
+                            <div class="complexity-badge moderate">Moderate</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 75%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 75%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 70%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 80%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Page-Based Apps</div>
+                    </div>
+
+                    <div class="visual-comparison-card winner">
+                        <div class="approach-header">
+                            <span class="approach-icon">⚡</span>
+                            <h4>Module Federation</h4>
+                            <div class="complexity-badge complex">Advanced</div>
+                            <div class="winner-badge">🏆 Best</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-item">
+                                <span>Setup</span>
+                                <div class="rating-bar"><div class="fill" style="width: 60%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Performance</span>
+                                <div class="rating-bar"><div class="fill" style="width: 90%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Flexibility</span>
+                                <div class="rating-bar"><div class="fill" style="width: 95%"></div></div>
+                            </div>
+                            <div class="rating-item">
+                                <span>Independence</span>
+                                <div class="rating-bar"><div class="fill" style="width: 95%"></div></div>
+                            </div>
+                        </div>
+                        <div class="use-case">Modern SPAs</div>
+                    </div>
+                </div>
+
+                <!-- Quick Decision Matrix -->
+                <div class="decision-matrix">
+                    <h4>Quick Decision Guide</h4>
+                    <div class="matrix-grid">
+                        <div class="matrix-row header">
+                            <div class="matrix-cell">Approach</div>
+                            <div class="matrix-cell">Easy Setup</div>
+                            <div class="matrix-cell">Performance</div>
+                            <div class="matrix-cell">Independence</div>
+                            <div class="matrix-cell">Modern Features</div>
+                            <div class="matrix-cell">Recommendation</div>
+                        </div>
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">🌐</span> Server-Side</div>
+                            <div class="matrix-cell" data-label="Easy Setup">✅</div>
+                            <div class="matrix-cell" data-label="Performance">✅</div>
+                            <div class="matrix-cell" data-label="Independence">❌</div>
+                            <div class="matrix-cell" data-label="Modern Features">❌</div>
+                            <div class="matrix-cell rating-low" data-label="Recommendation">Traditional only</div>
+                        </div>
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">📦</span> Build-Time</div>
+                            <div class="matrix-cell" data-label="Easy Setup">✅</div>
+                            <div class="matrix-cell" data-label="Performance">✅</div>
+                            <div class="matrix-cell" data-label="Independence">❌</div>
+                            <div class="matrix-cell" data-label="Modern Features">⚠️</div>
+                            <div class="matrix-cell rating-low" data-label="Recommendation">Libraries only</div>
+                        </div>
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">🖼️</span> IFrames</div>
+                            <div class="matrix-cell" data-label="Easy Setup">✅</div>
+                            <div class="matrix-cell" data-label="Performance">❌</div>
+                            <div class="matrix-cell" data-label="Independence">✅</div>
+                            <div class="matrix-cell" data-label="Modern Features">❌</div>
+                            <div class="matrix-cell rating-low" data-label="Recommendation">Legacy only</div>
+                        </div>
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">🌟</span> Web Components</div>
+                            <div class="matrix-cell" data-label="Easy Setup">⚠️</div>
+                            <div class="matrix-cell" data-label="Performance">✅</div>
+                            <div class="matrix-cell" data-label="Independence">✅</div>
+                            <div class="matrix-cell" data-label="Modern Features">⚠️</div>
+                            <div class="matrix-cell rating-medium" data-label="Recommendation">Consider</div>
+                        </div>
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">🔄</span> Client Routing</div>
+                            <div class="matrix-cell" data-label="Easy Setup">✅</div>
+                            <div class="matrix-cell" data-label="Performance">✅</div>
+                            <div class="matrix-cell" data-label="Independence">✅</div>
+                            <div class="matrix-cell" data-label="Modern Features">⚠️</div>
+                            <div class="matrix-cell rating-medium" data-label="Recommendation">Good choice</div>
+                        </div>
+                        <div class="matrix-row winner-row">
+                            <div class="matrix-cell" data-label="Approach"><span class="approach-icon">⚡</span> Module Federation</div>
+                            <div class="matrix-cell" data-label="Easy Setup">⚠️</div>
+                            <div class="matrix-cell" data-label="Performance">✅</div>
+                            <div class="matrix-cell" data-label="Independence">✅</div>
+                            <div class="matrix-cell" data-label="Modern Features">✅</div>
+                            <div class="matrix-cell rating-high" data-label="Recommendation">🏆 Best choice</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Why Module Federation is Leading the Way</h3>
+                
+                <div class="highlight">
+                    <strong>Module Federation has emerged as the most popular approach because it offers:</strong>
+                    <ul>
+                        <li><strong>Runtime Flexibility:</strong> Load modules on demand without rebuild</li>
+                        <li><strong>Optimized Bundle Size:</strong> Share dependencies intelligently</li>
+                        <li><strong>Independent Deployment:</strong> True deployment independence</li>
+                        <li><strong>Framework Agnostic:</strong> Works with React, Vue, Angular, and more</li>
+                        <li><strong>Strong Ecosystem:</strong> Growing community and tooling support</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+<pre><span class="comment">// Example: Module Federation Configuration</span>
+<span class="comment">// Host Application (Shell)</span>
+<span class="keyword">const</span> ModuleFederationPlugin = <span class="keyword">require</span>(<span class="string">'@module-federation/webpack'</span>);
+
+<span class="keyword">module.exports</span> = {
+  plugins: [
+    <span class="keyword">new</span> ModuleFederationPlugin({
+      name: <span class="string">'shell'</span>,
+      remotes: {
+        <span class="string">'commerce-app'</span>: <span class="string">'commerceApp@http://localhost:3001/remoteEntry.js'</span>,
+        <span class="string">'user-app'</span>: <span class="string">'userApp@http://localhost:3002/remoteEntry.js'</span>,
+      },
+      shared: {
+        react: { singleton: <span class="keyword">true</span> },
+        <span class="string">'react-dom'</span>: { singleton: <span class="keyword">true</span> }
+      }
+    })
+  ]
+}
+
+<span class="comment">// Remote Application (Commerce)</span>
+<span class="keyword">module.exports</span> = {
+  plugins: [
+    <span class="keyword">new</span> ModuleFederationPlugin({
+      name: <span class="string">'commerceApp'</span>,
+      exposes: {
+        <span class="string">'./ProductCatalog'</span>: <span class="string">'./src/components/ProductCatalog'</span>,
+        <span class="string">'./ShoppingCart'</span>: <span class="string">'./src/components/ShoppingCart'</span>
+      },
+      shared: {
+        react: { singleton: <span class="keyword">true</span> },
+        <span class="string">'react-dom'</span>: { singleton: <span class="keyword">true</span> }
+      }
+    })
+  ]
+}</pre>
+                </div>
+
+
+            </section>
+
+            <!-- Demo Analysis -->
+            <section id="demo-analysis" class="section">
+                <h2>Real-World Example: AlterSquare Canvas Demo Analysis</h2>
+
+                <div class="company-highlight">
+                    <h3>AlterSquare's Micro Frontend Canvas Architecture</h3>
+                    <p>A comprehensive demonstration of advanced micro frontend capabilities using Vite + Vue 3 + Module Federation + Fabric.js</p>
+                </div>
+
+                <p>AlterSquare has created an excellent demonstration that showcases the true power of micro frontend architecture. Let's analyze how their canvas application perfectly demonstrates the key benefits of this approach.</p>
+
+                <h3>Architecture Overview</h3>
+                
+                <div class="architecture-diagram">
+                    <div class="arch-visual" aria-hidden="true">
+                        <div class="arch-title">AlterSquare Micro Frontend Canvas Architecture</div>
+                        <div class="arch-card" style="margin-bottom: 0.75rem;">
+                            <div class="arch-subtitle">Shell App (Host) — Port 3004</div>
+                            <div class="small" style="margin-bottom: 0.35rem;">Main Orchestrator & Canvas Manager</div>
+                            <div class="arch-subgrid">
+                                <div class="chip">Shared Fabric.js init</div>
+                                <div class="chip">Dynamic module loading</div>
+                                <div class="chip">Global canvas ops</div>
+                                <div class="chip">Routing & navigation</div>
+                                <div class="chip">Unified experience</div>
+                                <div class="chip">Exposes: shellFabric</div>
+                            </div>
+                            <div class="arch-badges" style="margin-top: 0.75rem;">
+                                <span class="badge">Consumes: all demos</span>
+                            </div>
+                        </div>
+
+                        <div class="down-arrows" aria-hidden="true" style="margin: 0.5rem 0 1rem;">
+                            <div class="down-arrow"></div>
+                            <div class="down-arrow"></div>
+                            <div class="down-arrow"></div>
+                        </div>
+
+                        <div class="arch-grid-3">
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Demo One App — Port 3005</div>
+                                <div class="small">Basic Shapes Team</div>
+                                <ul class="list small">
+                                    <li>Rectangle, Circle, Triangle</li>
+                                    <li>Color selection</li>
+                                </ul>
+                                <div class="arch-badges">
+                                    <span class="badge">Exposes: demoOneLogic</span>
+                                    <span class="badge">DemoOneCanvas</span>
+                                    <span class="badge">Vue 3 + Vite</span>
+                                </div>
+                                <div class="small" style="margin-top: 0.35rem;">Deploy: Independent</div>
+                            </div>
+
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Demo Two App — Port 3007</div>
+                                <div class="small">Text & Image Team</div>
+                                <ul class="list small">
+                                    <li>Text manipulation, font styling</li>
+                                    <li>Image loading & positioning</li>
+                                </ul>
+                                <div class="arch-badges">
+                                    <span class="badge">Exposes: demoTwoLogic</span>
+                                    <span class="badge">DemoTwoCanvas</span>
+                                    <span class="badge">Vue 3 + Vite</span>
+                                </div>
+                                <div class="small" style="margin-top: 0.35rem;">Deploy: Independent</div>
+                            </div>
+
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Demo Three App — Port 3006</div>
+                                <div class="small">Drawing Team</div>
+                                <ul class="list small">
+                                    <li>Free-hand drawing</li>
+                                    <li>Brush customization & modes</li>
+                                </ul>
+                                <div class="arch-badges">
+                                    <span class="badge">Exposes: demoThreeLogic</span>
+                                    <span class="badge">DemoThreeCanvas</span>
+                                    <span class="badge">Vue 3 + Vite</span>
+                                </div>
+                                <div class="small" style="margin-top: 0.35rem;">Deploy: Independent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Why This Demo Perfectly Demonstrates Micro Frontend Benefits</h3>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🧩</div>
+                        <h4>Independent Development & Deployment</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>In a monolithic canvas app, all features live in one repo. Workstreams for shapes, text/images, and free‑hand drawing step on each other’s toes, causing merge conflicts and release coupling.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>The demo splits capabilities into autonomous micro frontends (Demos One–Three) and a shell platform. Each team iterates and deploys independently while seamlessly composing at runtime.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">Autonomous teams</span>
+                            <span class="badge">Independent releases</span>
+                            <span class="badge">Runtime composition</span>
+                            <span class="badge">Fewer merge conflicts</span>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🔗</div>
+                        <h4>Shared Canvas State Management</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>Multiple independently built features must operate on one Fabric.js canvas without clobbering each other’s state or event handlers.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>The shell initializes and owns the shared canvas. Each demo exposes narrowly scoped functions to interact with the canvas, while global actions (zoom, export, clear) stay centralized for consistency.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">Single source of truth</span>
+                            <span class="badge">Scoped APIs</span>
+                            <span class="badge">Global controls</span>
+                            <span class="badge">Feature isolation</span>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">⚡</div>
+                        <h4>Dynamic Module Loading</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>Bundling all drawing features upfront bloats the initial download and delays time‑to‑interactive.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>Features load on demand via Module Federation. The page starts fast with core shell logic, then fetches only the demos a user opens, with graceful error handling for failed loads.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">On‑demand</span>
+                            <span class="badge">Progressive</span>
+                            <span class="badge">Only what's used</span>
+                            <span class="badge">Graceful fallback</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Key Implementation Insights</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="emoji">🎯</span>
+                        <h4>Module Federation Pattern</h4>
+                        <p>Uses Vite + Module Federation for runtime module sharing with excellent developer experience</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🖼️</span>
+                        <h4>Canvas Sharing Strategy</h4>
+                        <p>Demonstrates how to share complex stateful resources (Fabric.js canvas) across micro frontends</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🔄</span>
+                        <h4>Component Federation</h4>
+                        <p>Shows both function-level and component-level sharing patterns</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🚀</span>
+                        <h4>Multiple Integration Modes</h4>
+                        <p>Dynamic Canvas, All Demos Showcase, and Individual Demo pages</p>
+                    </div>
+                </div>
+
+                <h3>Business Impact Demonstration</h3>
+
+                <div class="impact-header">
+                    Micro frontends shift impact from centralized bottlenecks to empowered domain teams, improving delivery speed, safety, and user experience.
+                </div>
+
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <div class="icon">👥</div>
+                        <h4>Team Specialization</h4>
+                        <p>Autonomous drawing, shapes, and text teams own their domains end‑to‑end.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon">⚡</div>
+                        <h4>Rapid Feature Delivery</h4>
+                        <p>Ship new tools without modifying unrelated modules or waiting on global releases.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon">🧪</div>
+                        <h4>Targeted Experiments</h4>
+                        <p>Run A/B tests per module to de‑risk changes and validate value quickly.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon">🔁</div>
+                        <h4>Technology Evolution</h4>
+                        <p>Upgrade canvas libraries or internals within a single demo in isolation.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon">📦</div>
+                        <h4>Lean Downloads</h4>
+                        <p>Users load only the features they need, improving performance.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon">🛡️</div>
+                        <h4>Fault Isolation</h4>
+                        <p>Failures are contained; shapes and text continue if drawing fails.</p>
+                    </div>
+                </div>
+
+                <div class="compare-card">
+                    <div class="column">
+                        <h4>Without Micro Frontends</h4>
+                        <ul>
+                            <li>Tightly coupled teams across a single codebase</li>
+                            <li>Slower releases due to global integration</li>
+                            <li>Risky experiments affecting the whole app</li>
+                            <li>Failures cascade across features</li>
+                            <li>Large bundles for every user</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>With Micro Frontends</h4>
+                        <ul>
+                            <li>Autonomous domain teams with clear ownership</li>
+                            <li>Independent deployments per feature</li>
+                            <li>Safe, targeted A/B testing</li>
+                            <li>Fault containment between modules</li>
+                            <li>On‑demand code loading</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Technical Excellence</h3>
+
+                <div class="code-block">
+<pre><span class="comment">// Example from AlterSquare Demo: Dynamic Module Loading</span>
+<span class="keyword">const</span> loadDemoOne = <span class="keyword">async</span> () => {
+  <span class="keyword">try</span> {
+    <span class="comment">// Dynamic import via Module Federation</span>
+    <span class="keyword">const</span> demoOneModule = <span class="keyword">await import</span>(<span class="string">'demoOneApp/demoOneLogic'</span>)
+    
+    <span class="comment">// Module loaded, now available for canvas operations</span>
+    demoOneModule.addRectangle(canvas, {
+      left: <span class="string">100</span>,
+      top: <span class="string">100</span>,
+      fill: selectedColor.value
+    })
+    
+    console.log(<span class="string">'Demo One loaded and ready'</span>)
+  } <span class="keyword">catch</span> (error) {
+    console.error(<span class="string">'Failed to load Demo One:'</span>, error)
+    <span class="comment">// Graceful degradation - app continues working</span>
+  }
+}</pre>
+                </div>
+
+                <div class="highlight">
+                    <strong>Why This Demo is Exceptional:</strong> Unlike typical "Hello World" micro frontend examples, AlterSquare's demo showcases real-world complexity with shared state, dynamic loading, and practical integration patterns that developers actually need in production applications.
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section id="best-practices" class="section">
+                <h2>Best Practices & Production Guidelines</h2>
+
+                <div class="guideline-grid">
+                    <div class="guideline-card">
+                        <div class="header">
+                            <div class="icon">🏗️</div>
+                            <div>
+                                <h3>Architecture & Design</h3>
+                                <div class="subtle">Foundations to keep teams decoupled and software evolvable</div>
+                            </div>
+                        </div>
+                        <ul class="checklist">
+                            <li>Organize by business domain (not tech layers)</li>
+                            <li>Minimize cross-MFE dependencies; use narrow contracts</li>
+                            <li>Define clear ownership and SLAs per module</li>
+                            <li>Plan fault tolerance and graceful degradation paths</li>
+                        </ul>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="header">
+                            <div class="icon">🧩</div>
+                            <div>
+                                <h3>Module Federation</h3>
+                                <div class="subtle">Configuration patterns that scale across environments</div>
+                            </div>
+                        </div>
+                        <ul class="checklist">
+                            <li>Use env-based remote URLs for staging/prod</li>
+                            <li>Share frameworks as singletons; allow lib poly-versioning</li>
+                            <li>Version and validate exposed contracts</li>
+                            <li>Guard remote failures with retries and fallbacks</li>
+                        </ul>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="header">
+                            <div class="icon">🎨</div>
+                            <div>
+                                <h3>UI/UX Consistency</h3>
+                                <div class="subtle">One experience, many teams</div>
+                            </div>
+                        </div>
+                        <ul class="checklist">
+                            <li>Adopt a shared design system as a federated package</li>
+                            <li>Publish tokens (color, spacing, type) as source of truth</li>
+                            <li>Automate visual regression and accessibility checks</li>
+                            <li>Establish review gates for shared components</li>
+                        </ul>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="header">
+                            <div class="icon">⚡</div>
+                            <div>
+                                <h3>Performance & Delivery</h3>
+                                <div class="subtle">Fast by default, faster in practice</div>
+                            </div>
+                        </div>
+                        <ul class="checklist">
+                            <li>Analyze bundles frequently; dedupe shared deps</li>
+                            <li>Lazy-load MFEs and prefetch likely next routes</li>
+                            <li>Leverage CDN caching and immutable asset naming</li>
+                            <li>Track Core Web Vitals per module in prod</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Practical Code Examples</h3>
+
+                <div class="code-block">
+<pre><span class="comment">// Vite: Module Federation best practices (RSPack/Module Federation plugin for Vite)</span>
+<span class="keyword">import</span> { defineConfig } <span class="keyword">from</span> <span class="string">'vite'</span>
+<span class="keyword">import</span> react <span class="keyword">from</span> <span class="string">'@vitejs/plugin-react'</span>
+<span class="keyword">import</span> federation <span class="keyword">from</span> <span class="string">'@module-federation/vite'</span>
+
+<span class="keyword">export default</span> defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: <span class="string">'shell'</span>,
+      filename: <span class="string">'remoteEntry.js'</span>,
+      remotes: {
+        <span class="comment">// Env-driven remotes for each environment</span>
+        drawing: <span class="string">`${process.env.VITE_DRAWING_URL}/remoteEntry.js`</span>,
+        shapes: <span class="string">`${process.env.VITE_SHAPES_URL}/remoteEntry.js`</span>
+      },
+      exposes: {
+        <span class="comment">// Keep API surfaces small and stable</span>
+        <span class="string">'./canvasApi'</span>: <span class="string">'./src/canvas/api.ts'</span>
+      },
+      shared: {
+        <span class="comment">// Singletons for frameworks; others can be poly-versioned</span>
+        react: { singleton: <span class="keyword">true</span>, requiredVersion: <span class="string">'^18.0.0'</span> },
+        <span class="string">'react-dom'</span>: { singleton: <span class="keyword">true</span>, requiredVersion: <span class="string">'^18.0.0'</span> }
+      }
+    })
+  ],
+  define: {
+    <span class="comment">// Ensure env vars are injected at build time</span>
+    <span class="string">'process.env.VITE_DRAWING_URL'</span>: <span class="string">JSON.stringify(process.env.VITE_DRAWING_URL)</span>,
+    <span class="string">'process.env.VITE_SHAPES_URL'</span>: <span class="string">JSON.stringify(process.env.VITE_SHAPES_URL)</span>
+  }
+})</pre>
+                </div>
+
+                <div class="code-block">
+<pre><span class="comment">// Vite: Dynamic import pattern with error isolation</span>
+<span class="keyword">async function</span> loadShapesModule() {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> { addPolygon } = <span class="keyword">await import</span>(<span class="string">'shapesApp/polygon'</span>)
+    addPolygon(canvas, { sides: <span class="string">6</span>, radius: <span class="string">48</span> })
+  } <span class="keyword">catch</span> (err) {
+    console.error(<span class="string">'Shapes module failed to load'</span>, err)
+    <span class="comment">// Graceful fallback keeps the shell responsive</span>
+    toast(<span class="string">'Shapes temporarily unavailable'</span>)
+  }
+}</pre>
+                </div>
+            </section>
+
+            <!-- Challenges -->
+            <section id="challenges" class="section">
+                <h2>Challenges & Solutions</h2>
+
+                <h3>Technical Challenges</h3>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>⚡ Performance Issues</h4>
+                        <p><strong>Challenge:</strong> Multiple bundles, duplicated dependencies</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Smart dependency sharing in Module Federation</li>
+                            <li>Bundle analysis and optimization</li>
+                            <li>Strategic lazy loading</li>
+                            <li>CDN caching strategies</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>🔄 Version Management</h4>
+                        <p><strong>Challenge:</strong> Managing shared library versions across teams</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Semantic versioning policies</li>
+                            <li>Automated dependency updates</li>
+                            <li>Version compatibility testing</li>
+                            <li>Gradual rollout strategies</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>🧪 Testing Complexity</h4>
+                        <p><strong>Challenge:</strong> Testing integrated applications</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Contract testing between modules</li>
+                            <li>End-to-end test automation</li>
+                            <li>Service virtualization</li>
+                            <li>Continuous integration pipelines</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>🎨 UI Consistency</h4>
+                        <p><strong>Challenge:</strong> Maintaining consistent user experience</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Shared design system</li>
+                            <li>Style guide enforcement</li>
+                            <li>Visual regression testing</li>
+                            <li>Cross-team design reviews</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Organizational Solutions</h3>
+
+                <div class="icon-list-grid">
+                    <div class="icon-list-item">
+                        <div class="icon">🤝</div>
+                        <div>
+                            <h5>Architecture Guild</h5>
+                            <p>Cross-team group to set standards, review designs, and unblock decisions.</p>
+                        </div>
+                    </div>
+                    <div class="icon-list-item">
+                        <div class="icon">📚</div>
+                        <div>
+                            <h5>Shared Documentation</h5>
+                            <p>Central API contracts, guidelines, and runbooks as a single source of truth.</p>
+                        </div>
+                    </div>
+                    <div class="icon-list-item">
+                        <div class="icon">🎥</div>
+                        <div>
+                            <h5>Regular Demos</h5>
+                            <p>Cadenced demos to share context and gather early feedback across teams.</p>
+                        </div>
+                    </div>
+                    <div class="icon-list-item">
+                        <div class="icon">🔁</div>
+                        <div>
+                            <h5>Rotation Programs</h5>
+                            <p>Short rotations to spread knowledge and reduce key-person risk.</p>
+                        </div>
+                    </div>
+                    <div class="icon-list-item">
+                        <div class="icon">🧑‍💻</div>
+                        <div>
+                            <h5>Communities of Practice</h5>
+                            <p>Meetups for deep dives, tooling alignment, and shared problem solving.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- When to Use -->
+            <section id="when-to-use" class="section">
+                <h2>Decision Framework: When to Use Micro Frontends</h2>
+
+                <h3>Perfect Candidates for Micro Frontends</h3>
+
+                <div class="success">
+                    <strong>Use Micro Frontends When:</strong>
+                    <ul>
+                        <li><strong>Large Teams (8+ developers):</strong> Multiple teams working on the same frontend</li>
+                        <li><strong>Complex Applications (50,000+ lines):</strong> Application has grown beyond manageable size</li>
+                        <li><strong>Independent Features:</strong> Clear business domain boundaries exist</li>
+                        <li><strong>Different Technologies:</strong> Teams want to use different frameworks or libraries</li>
+                        <li><strong>Rapid Development:</strong> Need to deploy features independently</li>
+                        <li><strong>Legacy Migration:</strong> Gradually modernizing a monolithic application</li>
+                        <li><strong>Multi-Tenant Applications:</strong> Different features for different customer segments</li>
+                        <li><strong>Organizational Autonomy:</strong> Teams want full ownership of their features</li>
+                    </ul>
+                </div>
+
+                <h3>When NOT to Use Micro Frontends</h3>
+
+                <div class="warning">
+                    <strong>Avoid Micro Frontends When:</strong>
+                    <ul>
+                        <li><strong>Small Applications:</strong> Simple apps with limited complexity</li>
+                        <li><strong>Small Teams (< 8 developers):</strong> Overhead exceeds benefits</li>
+                        <li><strong>Tight Coupling:</strong> Features are heavily interdependent</li>
+                        <li><strong>Performance Critical:</strong> Milliseconds matter more than development speed</li>
+                        <li><strong>Limited Resources:</strong> Lack expertise or time for complex setup</li>
+                        <li><strong>Prototypes/MVPs:</strong> Need to move fast with simple architecture</li>
+                        <li><strong>Short-term Projects:</strong> Not worth the architectural investment</li>
+                    </ul>
+                </div>
+
+                <h3>Decision Matrix</h3>
+
+                <div class="decision-matrix">
+                    <h4>Micro Frontend Decision Matrix</h4>
+                    <div class="matrix-grid cols-4">
+                        <div class="matrix-row header">
+                            <div class="matrix-cell">Factor</div>
+                            <div class="matrix-cell">Low</div>
+                            <div class="matrix-cell">Medium</div>
+                            <div class="matrix-cell">High</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Team Size</div>
+                            <div class="matrix-cell" data-label="Low">Small (1-4) — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Medium (5-12) — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Large (13+) — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Application Size</div>
+                            <div class="matrix-cell" data-label="Low">Simple — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Medium — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Complex — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Domain Boundaries</div>
+                            <div class="matrix-cell" data-label="Low">Unclear — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Some — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Clear — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Deployment Needs</div>
+                            <div class="matrix-cell" data-label="Low">Coordinated — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Mixed — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Independent — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Technology Needs</div>
+                            <div class="matrix-cell" data-label="Low">Homogeneous — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Mixed — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Diverse — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Performance Needs</div>
+                            <div class="matrix-cell" data-label="Low">Critical — ❌</div>
+                            <div class="matrix-cell" data-label="Medium">Important — ⚠️</div>
+                            <div class="matrix-cell" data-label="High">Flexible — ✅</div>
+                        </div>
+
+                        <div class="matrix-row">
+                            <div class="matrix-cell" data-label="Factor">Legend</div>
+                            <div class="matrix-cell" data-label="Low">❌ Not recommended</div>
+                            <div class="matrix-cell" data-label="Medium">⚠️ Consider carefully</div>
+                            <div class="matrix-cell" data-label="High">✅ Strong indicator</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Final Recommendations</h3>
+
+                <div class="highlight">
+                    <strong>Key Takeaways:</strong>
+                    <ul>
+                        <li><strong>Start with Organizational Needs:</strong> Micro frontends solve organizational problems, not just technical ones</li>
+                        <li><strong>Invest in Tooling:</strong> Good tooling and automation are essential for success</li>
+                        <li><strong>Focus on Communication:</strong> Both technical (APIs) and human (teams) communication</li>
+                        <li><strong>Measure Everything:</strong> Track metrics to ensure the architecture is providing value</li>
+                        <li><strong>Be Patient:</strong> Benefits often take 6-12 months to fully materialize</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Conclusion</h2>
+                
+                <p>Micro Frontend Architecture represents a significant evolution in how we build large-scale web applications. Like the microservices revolution in backend development, it addresses the fundamental challenges of scale, team coordination, and technology evolution.</p>
+
+                <div class="success">
+                    <strong>The Future is Modular:</strong>
+                    <p>As web applications continue to grow in complexity and teams continue to scale, micro frontends provide a proven path to maintainable, scalable architectures. The key is understanding when and how to apply these patterns effectively.</p>
+                </div>
+
+                <p>AlterSquare's canvas demo perfectly illustrates how micro frontends can solve real-world problems while maintaining excellent user experience. Whether you're building the next Netflix, Spotify, or innovative canvas application, micro frontends provide the architectural foundation for sustainable growth.</p>
+
+                <div class="highlight">
+                    <strong>Ready to Get Started?</strong>
+                    <ol>
+                        <li>Analyze your current architecture and pain points</li>
+                        <li>Start with a small, isolated feature as your first micro frontend</li>
+                        <li>Establish patterns and tooling based on your learnings</li>
+                        <li>Gradually expand as your team builds expertise</li>
+                        <li>Measure success and iterate on your approach</li>
+                    </ol>
+                </div>
+            </section>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <div class="content">
+            <!-- Interface Communication & Component Sharing -->
+            <section id="interface-communication" class="section">
+                <h2>Interface Communication & Component Sharing</h2>
+
+                <p>One of the most powerful features of modern micro frontend architecture is the ability to share state and components between applications while maintaining independence. This section demonstrates the advanced interface communication patterns used in the AlterSquare demo suite.</p>
+
+                <h3>Interface Communication Architecture</h3>
+
+                <div class="architecture-diagram">
+                    <div class="arch-visual" aria-hidden="true">
+                        <div class="arch-title">Interface Communication Flow</div>
+                        <div class="arch-grid-2">
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Shell App (State Provider)</div>
+                                <div class="small">Centralized State Management</div>
+                                <ul class="list small">
+                                    <li>Pinia store with counter state</li>
+                                    <li>Interface definitions & contracts</li>
+                                    <li>State subscription system</li>
+                                    <li>Module Federation exports</li>
+                                </ul>
+                                <div class="arch-badges">
+                                    <span class="badge">Exposes: interfaces</span>
+                                    <span class="badge">Provides: state store</span>
+                                </div>
+                            </div>
+                            <div class="arch-card">
+                                <div class="arch-subtitle">Demo Counter App (State Consumer)</div>
+                                <div class="small">Interface Communication Client</div>
+                                <ul class="list small">
+                                    <li>Dynamic interface import</li>
+                                    <li>Real-time state subscription</li>
+                                    <li>Activity logging & monitoring</li>
+                                    <li>Graceful error handling</li>
+                                </ul>
+                                <div class="arch-badges">
+                                    <span class="badge">Imports: shellApp/interfaces</span>
+                                    <span class="badge">Consumes: state store</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="down-arrows" aria-hidden="true">
+                            <div class="down-arrow"></div>
+                            <div class="down-arrow"></div>
+                        </div>
+                        <div class="arch-card integration">
+                            <div class="arch-subtitle">Real-Time Communication</div>
+                            <div class="arch-grid-2">
+                                <div class="chip">Interface Contracts</div>
+                                <div class="chip">State Synchronization</div>
+                                <div class="chip">Event Subscriptions</div>
+                                <div class="chip">Error Boundaries</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>How Interface Communication Works</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="emoji">🔌</span>
+                        <h4>Interface Definition</h4>
+                        <p>Shell App exposes clean API contracts through Module Federation for other apps to consume</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🔄</span>
+                        <h4>Real-Time Sync</h4>
+                        <p>Changes in one app instantly reflect in all connected apps using reactive subscriptions</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">🛡️</span>
+                        <h4>Error Handling</h4>
+                        <p>Graceful fallbacks when interfaces are unavailable, with standalone mode support</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="emoji">📊</span>
+                        <h4>Activity Monitoring</h4>
+                        <p>Live activity feeds showing real-time state changes and communication events</p>
+                    </div>
+                </div>
+
+                <h3>Implementation: Counter Interface Example</h3>
+
+                <div class="code-block">
+<pre><span class="comment">// Shell App - Interface Definition (src/interfaces/counter.js)</span>
+<span class="keyword">import</span> { useCommonStore } <span class="keyword">from</span> <span class="string">'../stores/common.store.js'</span>
+<span class="keyword">import</span> { getActivePinia } <span class="keyword">from</span> <span class="string">'pinia'</span>
+
+<span class="keyword">export const</span> counterInterface = {
+  <span class="comment">// Check if interface is ready</span>
+  isReady() {
+    <span class="keyword">try</span> {
+      <span class="keyword">return</span> !!getActivePinia()
+    } <span class="keyword">catch</span> {
+      <span class="keyword">return false</span>
+    }
+  },
+
+  <span class="comment">// Get current counter value</span>
+  getValue() {
+    <span class="keyword">const</span> store = useCommonStore()
+    <span class="keyword">return</span> store.num
+  },
+
+  <span class="comment">// Modify counter state</span>
+  increment() {
+    <span class="keyword">const</span> store = useCommonStore()
+    store.increment()
+  },
+
+  decrement() {
+    <span class="keyword">const</span> store = useCommonStore()
+    store.decrement()
+  },
+
+  <span class="comment">// Subscribe to real-time changes</span>
+  subscribe(callback) {
+    <span class="keyword">const</span> store = useCommonStore()
+    <span class="keyword">return</span> store.$subscribe((mutation, state) => {
+      callback(state.num, mutation)
+    })
+  }
+}</pre>
+                </div>
+
+                <div class="code-block">
+<pre><span class="comment">// Shell App - Module Federation Configuration</span>
+<span class="comment">// vite.config.js</span>
+exposes: {
+  <span class="string">"./interfaces"</span>: <span class="string">"./src/interfaces/index.js"</span>,
+  <span class="string">"./counterInterface"</span>: <span class="string">"./src/interfaces/counter.js"</span>,
+}
+
+<span class="comment">// Demo Counter App - Interface Usage</span>
+<span class="comment">// src/components/CounterDemo.vue</span>
+<span class="keyword">const</span> connectToShell = <span class="keyword">async</span> () => {
+  <span class="keyword">try</span> {
+    <span class="comment">// Dynamic import from Shell App</span>
+    <span class="keyword">const</span> { counterInterface } = <span class="keyword">await import</span>(<span class="string">'shellApp/interfaces'</span>)
+
+    <span class="comment">// Subscribe to real-time changes</span>
+    unsubscribe = counterInterface.subscribe((newValue) => {
+      currentValue.value = newValue
+      addToLog(<span class="string">`Value changed to ${newValue}`</span>)
+    })
+
+    <span class="comment">// Get initial value</span>
+    currentValue.value = counterInterface.getValue()
+    isConnected.value = <span class="keyword">true</span>
+  } <span class="keyword">catch</span> (error) {
+    console.error(<span class="string">'Interface connection failed:'</span>, error)
+  }
+}</pre>
+                </div>
+
+                <h3>Component Import Patterns</h3>
+
+                <div class="demo-highlight">
+                    <h3>🧩 How Components Are Shared</h3>
+                    <p>The AlterSquare demo showcases multiple patterns for sharing components and functionality between micro frontends:</p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <span class="emoji">🎨</span>
+                            <h4>Canvas Components</h4>
+                            <p>Shared Fabric.js canvas instances for collaborative drawing across demo apps</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="emoji">🔢</span>
+                            <h4>Counter Components</h4>
+                            <p>Real-time state synchronization between Shell App and Demo Counter App</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="emoji">🏪</span>
+                            <h4>Store Federation</h4>
+                            <p>Centralized Pinia store accessible across all micro frontends</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="emoji">🔗</span>
+                            <h4>Interface Registry</h4>
+                            <p>Discoverable API contracts with version management</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Store Management & State Sharing</h3>
+
+                <div class="code-block">
+<pre><span class="comment">// Shell App - Pinia Store (src/stores/common.store.js)</span>
+<span class="keyword">import</span> { defineStore } <span class="keyword">from</span> <span class="string">'pinia'</span>
+
+<span class="keyword">export const</span> useCommonStore = defineStore(<span class="string">'common'</span>, {
+  state: () => ({
+    num: 0
+  }),
+
+  actions: {
+    increment() {
+      <span class="keyword">this</span>.num++
+      console.log(<span class="string">'Incremented to:'</span>, <span class="keyword">this</span>.num)
+    },
+
+    decrement() {
+      <span class="keyword">this</span>.num--
+      console.log(<span class="string">'Decremented to:'</span>, <span class="keyword">this</span>.num)
+    },
+
+    setNum(value) {
+      <span class="keyword">this</span>.num = value
+      console.log(<span class="string">'Set to:'</span>, <span class="keyword">this</span>.num)
+    },
+
+    incrementBy(amount) {
+      <span class="keyword">this</span>.num += amount
+      console.log(<span class="string">'Incremented by'</span>, amount, <span class="string">'to:'</span>, <span class="keyword">this</span>.num)
+    }
+  },
+
+  getters: {
+    doubleNum: (state) => state.num * 2,
+    isPositive: (state) => state.num > 0,
+    isNegative: (state) => state.num < 0,
+    absoluteNum: (state) => Math.abs(state.num)
+  }
+})</pre>
+                </div>
+
+                <h3>Key Benefits of Interface Communication</h3>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🔗</div>
+                        <h4>Loose Coupling</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>Micro frontends need to share state but shouldn't be tightly coupled to each other's implementation details.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>Interface contracts provide clean APIs that hide implementation details while enabling powerful state sharing.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">Clean contracts</span>
+                            <span class="badge">Implementation hiding</span>
+                            <span class="badge">Version compatibility</span>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">⚡</div>
+                        <h4>Real-Time Synchronization</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>Changes in one micro frontend need to be immediately reflected in other connected applications.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>Reactive subscription system ensures instant updates across all connected micro frontends.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">Instant updates</span>
+                            <span class="badge">Event-driven</span>
+                            <span class="badge">Reactive subscriptions</span>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🛡️</div>
+                        <h4>Graceful Degradation</h4>
+                        <span class="benefit-label">Problem</span>
+                        <p>Micro frontends should work independently even when other apps are unavailable or failing.</p>
+                        <hr class="benefit-divider" />
+                        <span class="benefit-label">Solution</span>
+                        <p>Standalone mode support with graceful fallbacks when interface connections fail.</p>
+                        <div class="arch-badges" style="margin-top: 0.6rem;">
+                            <span class="badge">Standalone mode</span>
+                            <span class="badge">Error boundaries</span>
+                            <span class="badge">Fallback strategies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>🚀 Live Demo Experience:</strong> The AlterSquare demo counter app demonstrates this pattern perfectly. When you increment the counter in the Shell App, you can see it update in real-time in the Demo Counter App, and vice versa. The activity log shows exactly what's happening behind the scenes.
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px;">
+                        <strong>🔧 Try It Yourself:</strong><br>
+                        <span style="font-size: 0.9rem; color: #64748b;">
+                            1. Run the Shell App (localhost:3000)<br>
+                            2. Run the Demo Counter App (localhost:3004)<br>
+                            3. Navigate to the Interface Demo page<br>
+                            4. Watch real-time state synchronization in action
+                        </span>
+                    </div>
+                </div>
+            </section>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1rem;">
+                <img src="http://altersquare.io/wp-content/uploads/2025/08/logo-bluedark.png"
+                     alt="AlterSquare Logo"
+                     style="width: 24px; height: 24px; object-fit: contain;">
+                <p style="margin: 0; font-weight: 600; color: #374151;">Powered by AlterSquare</p>
+            </div>
+            <p>© 2025 Complete Micro Frontend Architecture Guide</p>
+            <p>Inspired by AlterSquare's excellent canvas demo and the growing micro frontend ecosystem</p>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function setActiveLink(clickedLink) {
+            // Remove active class from all links
+            const allLinks = document.querySelectorAll('.sidebar-nav a');
+            allLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to clicked link
+            clickedLink.classList.add('active');
+            
+            // Close sidebar on mobile after clicking a link
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        // Set active link based on current section
+        function updateActiveLink() {
+            const sections = document.querySelectorAll('.section');
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Update active link on scroll
+        window.addEventListener('scroll', updateActiveLink);
+        
+        // Set initial active link
+        document.addEventListener('DOMContentLoaded', () => {
+            updateActiveLink();
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(e.target) && 
+                !mobileToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
