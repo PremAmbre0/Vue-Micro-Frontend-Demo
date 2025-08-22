@@ -6,7 +6,8 @@
     "shell-app",
     "demo-one-app",
     "demo-two-app",
-    "demo-three-app"
+    "demo-three-app",
+    "demo-counter-app"
   ],
   "scripts": {
     "dev": "dotenv -e .env.local -- turbo run dev --parallel",

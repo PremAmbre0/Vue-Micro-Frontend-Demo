@@ -42,6 +42,7 @@ export default defineConfig(({ mode }) => {
       include: ['fabric']
     },
     build: {
+      outDir: "../dist/demo-one-app",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -62,11 +63,13 @@ export default defineConfig(({ mode }) => {
       cors: true,
       fs: {
         allow: ["..", "."]
-      }
+      },
+      allowedHosts: true,
     },
     preview: {
       port: parseInt(env.VITE_DEMO_ONE_PORT) || 3001,
-      cors: true
+      cors: true,
+      outDir: "../dist/demo-one-app",
     }
   }
 });

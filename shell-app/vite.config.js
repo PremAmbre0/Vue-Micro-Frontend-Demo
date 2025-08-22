@@ -34,8 +34,17 @@ export default defineConfig(({ mode }) => {
             entryGlobalName: "demoThreeApp",
             shareScope: "default",
           },
+          demoCounterApp: {
+            type: "module",
+            name: "demoCounterApp",
+            entry: env.VITE_DEMO_COUNTER_REMOTE_ENTRY || "http://localhost:3004/remoteEntry.js",
+            entryGlobalName: "demoCounterApp",
+            shareScope: "default",
+          },
         },
         exposes: {
+          "./interfaces": "./src/interfaces/index.js",
+          "./counterInterface": "./src/interfaces/counter.js",
         },
         filename: "remoteEntry.js",
         shared: {
@@ -67,6 +76,7 @@ export default defineConfig(({ mode }) => {
       include: ['fabric', 'vue', 'vue-router', 'pinia']
     },
     build: {
+      outDir: "../dist/shell-app",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -86,11 +96,13 @@ export default defineConfig(({ mode }) => {
       cors: true,
       fs: {
         allow: ["..", "."]
-      }
+      },
+      allowedHosts: true,
     },
     preview: {
       port: parseInt(env.VITE_SHELL_PORT) || 3000,
-      cors: true
+      cors: true,
+      outDir: "../dist/shell-app",
     }
   }
 });

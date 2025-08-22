@@ -12,10 +12,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       federation({
         filename: "remoteEntry.js",
-        name: "demoTwoApp",
+        name: "demoCounterApp",
         exposes: {
-          "./DemoTwoCanvas": "./src/components/DemoTwoCanvas.vue",
-          "./demoTwoLogic": "./src/fabric/demoTwo.js",
+          "./CounterDemo": "./src/components/CounterDemo.vue",
         },
         remotes: {
           shellApp: {
@@ -27,8 +26,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         shared: {
-          vue: { singleton: true },
-          fabric: { singleton: true }
+          vue: { singleton: true }
         }
       }),
       vue(),
@@ -38,11 +36,8 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
-    optimizeDeps: {
-      include: ['fabric']
-    },
     build: {
-      outDir: "../dist/demo-two-app",
+      outDir: "../dist/demo-counter-app",
       target: "chrome89",
       cssCodeSplit: false,
       rollupOptions: {
@@ -55,10 +50,11 @@ export default defineConfig(({ mode }) => {
             return 'assets/[name].[hash].[ext]'
           }
         },
+        external: [],
       },
     },
     server: {
-      port: parseInt(env.VITE_DEMO_TWO_PORT) || 3002,
+      port: parseInt(env.VITE_DEMO_COUNTER_PORT) || 3004,
       cors: true,
       fs: {
         allow: ["..", "."]
@@ -66,9 +62,9 @@ export default defineConfig(({ mode }) => {
       allowedHosts: true,
     },
     preview: {
-      port: parseInt(env.VITE_DEMO_TWO_PORT) || 3002,
+      port: parseInt(env.VITE_DEMO_COUNTER_PORT) || 3004,
       cors: true,
-      outDir: "../dist/demo-two-app",
+      outDir: "../dist/demo-counter-app",
     }
   }
 });

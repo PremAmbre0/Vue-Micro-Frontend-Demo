@@ -1,21 +1,28 @@
-<script setup>
-import DemoOneCanvas from './components/DemoOneCanvas.vue'
-</script>
-
 <template>
   <div id="app">
     <header>
-      <h1>🎨 Demo One App - Basic Shapes & Drawings</h1>
-      <p>Standalone Fabric.js demo for basic shape creation and manipulation</p>
+      <h1>Demo Counter App</h1>
+      <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
-
+    
     <main>
-      <DemoOneCanvas />
+      <CounterDemo />
     </main>
   </div>
 </template>
 
-<style scoped>
+<script>
+import CounterDemo from './components/CounterDemo.vue'
+
+export default {
+  name: 'App',
+  components: {
+    CounterDemo
+  }
+}
+</script>
+
+<style>
 /* Import theme variables */
 :root {
   --primary-color: #0054C9;
@@ -52,19 +59,23 @@ body {
 }
 
 #app {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-primary);
   min-height: 100vh;
   background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
-  font-family: var(--font-family);
-  color: var(--text-primary);
+  padding: 2rem;
 }
 
 header {
   text-align: center;
-  padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
-  color: white;
-  margin-bottom: 0;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--background-primary);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
   position: relative;
   overflow: hidden;
 }
@@ -74,34 +85,51 @@ header::before {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
 }
 
-header h1 {
-  margin: 0 0 1rem 0;
-  font-size: 3rem;
+h1 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  position: relative;
-  z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-header p {
-  margin: 0;
-  font-size: 1.25rem;
-  opacity: 0.95;
+p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
   font-weight: 400;
-  position: relative;
-  z-index: 1;
+  margin: 0;
 }
 
 main {
-  padding: 2rem;
-  max-width: 1400px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+  #app {
+    padding: 1rem;
+  }
+
+  header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+}
 </style>
