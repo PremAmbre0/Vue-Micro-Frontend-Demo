@@ -1,6 +1,7 @@
 {
   "name": "vite-federation-workspace",
   "private": true,
+  "type": "module",
   "packageManager": "npm@10.9.2",
   "workspaces": [
     "shell-app",
@@ -11,11 +12,10 @@
   ],
   "scripts": {
     "dev": "dotenv -e .env.local -- turbo run dev --parallel",
-    "build": "dotenv -e .env.prod -- turbo run build",
+    "build": "dotenv -e .env.production -- turbo run build",
     "build:dev": "dotenv -e .env.local -- turbo run build",
-    "build:changed": "dotenv -e .env.prod -- turbo run build --filter=\"...[HEAD~1]\"",
+    "build:changed": "dotenv -e .env.production -- turbo run build --filter=\"...[HEAD~1]\"",
     "preview": "dotenv -e .env.local -- turbo run preview --parallel",
-    "update-env": "node scripts/update-env.js",
     "clean": "turbo run clean",
     "install:clean": "npm run clean && rm -rf node_modules package-lock.json && npm install"
   },
