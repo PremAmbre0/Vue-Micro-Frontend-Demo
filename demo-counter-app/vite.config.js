@@ -4,8 +4,14 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  // Load environment variables from root directory
-  const env = loadEnv(mode, '../', '')
+  // Try to load environment variables from root directory first (for development)
+  // Then fallback to current directory (for Vercel deployment)
+  let env = loadEnv(mode, '../', '')
+
+  // If no environment variables found, try loading from current directory
+  if (!env.VITE_DEMO_COUNTER_PORT) {
+    env = loadEnv(mode, './', '')
+  }
 
   // Validate required environment variables
   const requiredEnvVars = ['VITE_SHELL_REMOTE_ENTRY', 'VITE_DEMO_COUNTER_PORT']
