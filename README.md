@@ -93,7 +93,24 @@ This will start all five applications simultaneously:
 - **🖌️ Demo Three**: Port 3003 (Drawing)
 - **🔢 Demo Counter**: Port 3004 (State management demo)
 
-All URLs and ports are now centrally managed through environment variables in `.env.local` for development and `.env.production` for production builds.
+All URLs and ports are now centrally managed through environment variables in `.env.local` for development and `.env.sandbox` for testing with your own URLs.
+
+## 🏗️ Try the Architecture (Sandbox Mode)
+
+Want to test this micro frontend architecture with your own deployment URLs? We've made it super easy!
+
+```bash
+# Interactive setup with your own URLs
+npm run setup:sandbox
+
+# Build for sandbox
+npm run build:sandbox
+
+# Preview with your URLs
+npm run preview:sandbox
+```
+
+📖 **[Complete Sandbox Guide →](./SANDBOX.md)**
 
 ### 🌐 Application Routes
 
@@ -118,21 +135,14 @@ All URLs and ports are now centrally managed through environment variables in `.
 # Development build (uses .env.local)
 npm run build
 
-# Production build - all apps (uses .env.production)
-npm run build:prod
-
-# Production build - individual apps (uses .env.production)
-npm run build:shell
-npm run build:demo-one
-npm run build:demo-two
-npm run build:demo-three
-npm run build:demo-counter
+# Sandbox build - all apps (uses .env.sandbox)
+npm run build:sandbox
 
 # Preview development build
 npm run preview
 
-# Preview production build
-npm run preview:prod
+# Preview sandbox build
+npm run preview:sandbox
 
 # Serve built applications locally for testing
 npm run serve

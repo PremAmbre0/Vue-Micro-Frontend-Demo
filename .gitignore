@@ -82,3 +82,6 @@ temp/
 
 # turbo files
 *.turbo
+
+# GitHub workflows (sandbox branch doesn't need CI/CD)
+.github/workflows/

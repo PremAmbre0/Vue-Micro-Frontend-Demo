@@ -5,7 +5,6 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
       "env": [
-        "NODE_ENV",
         "VITE_SHELL_REMOTE_ENTRY",
         "VITE_DEMO_ONE_REMOTE_ENTRY",
         "VITE_DEMO_TWO_REMOTE_ENTRY",
@@ -31,7 +30,6 @@
       "cache": false,
       "persistent": true,
       "env": [
-        "NODE_ENV",
         "VITE_SHELL_REMOTE_ENTRY",
         "VITE_DEMO_ONE_REMOTE_ENTRY",
         "VITE_DEMO_TWO_REMOTE_ENTRY",

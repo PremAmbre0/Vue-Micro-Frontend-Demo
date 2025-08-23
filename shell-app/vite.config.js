@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  // Try to load environment variables from root directory first (for development)
+  // Try to load environment variables from root directory first (for development/sandbox)
   // Then fallback to current directory (for Vercel deployment)
   let env = loadEnv(mode, '../', '')
 
