@@ -170,7 +170,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 // Reactive state for controls
 const demoOneColor = ref("#0054C9");
 const demoTwoText = ref("Hello World!");
-const demoTwoImageUrl = ref("https://picsum.photos/200/150");
+const demoTwoImageUrl = ref("");
 const isLoadingImage = ref(false);
 const isDrawingMode = ref(false);
 const brushWidth = ref(5);

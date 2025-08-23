@@ -99,13 +99,9 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: undefined,
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.fileName && assetInfo.fileName.endsWith('.css')) {
-              return 'style.css'
-            }
-            return '[name].[hash].[ext]'
-          }
-        }
+          assetFileNames: 'assets/[name].[ext]'
+        },
+        external: [],
       }
     },
     server: {

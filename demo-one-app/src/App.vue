@@ -9,6 +9,7 @@ import DemoOneCanvas from './components/DemoOneCanvas.vue'
       <p>Standalone Fabric.js demo for basic shape creation and manipulation</p>
     </header>
     <main>
+      
       <DemoOneCanvas />
     </main>
   </div>

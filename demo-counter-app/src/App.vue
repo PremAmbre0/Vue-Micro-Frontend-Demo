@@ -5,6 +5,7 @@
       <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
     <main>
+      
       <CounterDemo />
     </main>
   </div>
