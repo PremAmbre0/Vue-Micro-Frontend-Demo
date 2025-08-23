@@ -4,7 +4,22 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+  // Load environment variables from root directory
+  const env = loadEnv(mode, '../', '')
+
+  // Validate required environment variables
+  const requiredEnvVars = [
+    'VITE_DEMO_ONE_REMOTE_ENTRY',
+    'VITE_DEMO_TWO_REMOTE_ENTRY',
+    'VITE_DEMO_THREE_REMOTE_ENTRY',
+    'VITE_DEMO_COUNTER_REMOTE_ENTRY',
+    'VITE_SHELL_PORT'
+  ]
+
+  const missingVars = requiredEnvVars.filter(varName => !env[varName])
+  if (missingVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}. Please check your .env.local or .env.production file.`)
+  }
 
   // Use environment variables for all remote entries
   const demoOneRemoteEntry = env.VITE_DEMO_ONE_REMOTE_ENTRY
