@@ -25,15 +25,9 @@ jobs:
       - name: Build Shell App
         run: |
           echo "🏗️ Building shell-app..."
-          cd shell-app
-          npm run build
+          npm run build:prod
         env:
           NODE_ENV: production
-          VITE_SHELL_REMOTE_ENTRY: ${{ vars.VITE_SHELL_REMOTE_ENTRY || 'https://shell-app-seven.vercel.app/remoteEntry.js' }}
-          VITE_DEMO_ONE_REMOTE_ENTRY: ${{ vars.VITE_DEMO_ONE_REMOTE_ENTRY || 'https://demo-app-one-two.vercel.app/remoteEntry.js' }}
-          VITE_DEMO_TWO_REMOTE_ENTRY: ${{ vars.VITE_DEMO_TWO_REMOTE_ENTRY || 'https://demo-app-two-delta.vercel.app/remoteEntry.js' }}
-          VITE_DEMO_THREE_REMOTE_ENTRY: ${{ vars.VITE_DEMO_THREE_REMOTE_ENTRY || 'https://demo-app-three-jet.vercel.app/remoteEntry.js' }}
-          VITE_DEMO_COUNTER_REMOTE_ENTRY: ${{ vars.VITE_DEMO_COUNTER_REMOTE_ENTRY || 'https://demo-counter.vercel.app/remoteEntry.js' }}
       
       - name: Deploy Shell App
         run: |

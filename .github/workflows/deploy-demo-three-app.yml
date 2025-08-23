@@ -25,11 +25,9 @@ jobs:
       - name: Build Demo Three App
         run: |
           echo "🏗️ Building demo-three-app..."
-          cd demo-three-app
-          npm run build
+          npm run build:prod
         env:
           NODE_ENV: production
-          VITE_SHELL_REMOTE_ENTRY: ${{ vars.VITE_SHELL_REMOTE_ENTRY || 'https://shell-app-seven.vercel.app/remoteEntry.js' }}
       
       - name: Deploy Demo Three App
         run: |

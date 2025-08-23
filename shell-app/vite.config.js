@@ -6,14 +6,11 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
-  // For development and preview modes, use local URLs
-  const isLocal = mode === 'development' || mode === 'preview'
-
-  // Fallback values for production deployment
-  const demoOneRemoteEntry = env.VITE_DEMO_ONE_REMOTE_ENTRY || (isLocal ? 'http://localhost:3001/remoteEntry.js' : 'https://demo-app-one-two.vercel.app/remoteEntry.js')
-  const demoTwoRemoteEntry = env.VITE_DEMO_TWO_REMOTE_ENTRY || (isLocal ? 'http://localhost:3002/remoteEntry.js' : 'https://demo-app-two-delta.vercel.app/remoteEntry.js')
-  const demoThreeRemoteEntry = env.VITE_DEMO_THREE_REMOTE_ENTRY || (isLocal ? 'http://localhost:3003/remoteEntry.js' : 'https://demo-app-three-jet.vercel.app/remoteEntry.js')
-  const demoCounterRemoteEntry = env.VITE_DEMO_COUNTER_REMOTE_ENTRY || (isLocal ? 'http://localhost:3004/remoteEntry.js' : 'https://demo-counter.vercel.app/remoteEntry.js')
+  // Use environment variables for all remote entries
+  const demoOneRemoteEntry = env.VITE_DEMO_ONE_REMOTE_ENTRY
+  const demoTwoRemoteEntry = env.VITE_DEMO_TWO_REMOTE_ENTRY
+  const demoThreeRemoteEntry = env.VITE_DEMO_THREE_REMOTE_ENTRY
+  const demoCounterRemoteEntry = env.VITE_DEMO_COUNTER_REMOTE_ENTRY
 
   // Define CSS URLs for environment variables
   // These will be available as import.meta.env.VITE_* in the client code
@@ -106,7 +103,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      port: parseInt(env.VITE_SHELL_PORT) || 3000,
+      port: parseInt(env.VITE_SHELL_PORT),
       cors: true,
       fs: {
         allow: ["..", "."]
@@ -114,7 +111,7 @@ export default defineConfig(({ mode }) => {
       allowedHosts: true,
     },
     preview: {
-      port: parseInt(env.VITE_SHELL_PORT) || 3000,
+      port: parseInt(env.VITE_SHELL_PORT),
       cors: true,
     }
   }

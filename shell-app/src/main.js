@@ -12,23 +12,19 @@ const isDev = import.meta.env.MODE === 'development'
 const demoApps = [
   {
     name: 'demo-one',
-    url: import.meta.env.VITE_DEMO_ONE_CSS_URL ||
-         (isDev ? 'http://localhost:3001/assets/style.css' : 'https://demo-app-one-two.vercel.app/assets/style.css')
+    url: import.meta.env.VITE_DEMO_ONE_CSS_URL
   },
   {
     name: 'demo-two',
-    url: import.meta.env.VITE_DEMO_TWO_CSS_URL ||
-         (isDev ? 'http://localhost:3002/assets/style.css' : 'https://demo-app-two-delta.vercel.app/assets/style.css')
+    url: import.meta.env.VITE_DEMO_TWO_CSS_URL
   },
   {
     name: 'demo-three',
-    url: import.meta.env.VITE_DEMO_THREE_CSS_URL ||
-         (isDev ? 'http://localhost:3003/assets/style.css' : 'https://demo-app-three-jet.vercel.app/assets/style.css')
+    url: import.meta.env.VITE_DEMO_THREE_CSS_URL
   },
   {
     name: 'demo-counter',
-    url: import.meta.env.VITE_DEMO_COUNTER_CSS_URL ||
-         (isDev ? 'http://localhost:3004/assets/style.css' : 'https://demo-counter.vercel.app/assets/style.css')
+    url: import.meta.env.VITE_DEMO_COUNTER_CSS_URL
   }
 ];
 

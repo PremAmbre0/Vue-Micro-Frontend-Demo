@@ -87,15 +87,17 @@ npm run dev
 ```
 
 This will start all five applications simultaneously:
-- **🏠 Shell App**: http://localhost:3000 (Main application)
-- **🎨 Demo One**: http://localhost:3001 (Basic shapes)
-- **📝 Demo Two**: http://localhost:3002 (Text & images)
-- **🖌️ Demo Three**: http://localhost:3003 (Drawing)
-- **🔢 Demo Counter**: http://localhost:3004 (State management demo)
+- **🏠 Shell App**: Port 3000 (Main application)
+- **🎨 Demo One**: Port 3001 (Basic shapes)
+- **📝 Demo Two**: Port 3002 (Text & images)
+- **🖌️ Demo Three**: Port 3003 (Drawing)
+- **🔢 Demo Counter**: Port 3004 (State management demo)
+
+All URLs and ports are now centrally managed through environment variables in `.env.local` for development and `.env.production` for production builds.
 
 ### 🌐 Application Routes
 
-**Shell App (http://localhost:3000):**
+**Shell App (Port 3000):**
 - **`/`** - Dynamic Canvas (Landing page with on-demand loading)
 - **`/all-demos`** - All Demos Showcase (Complete feature demonstration)
 - **`/demo-one`** - Individual Demo One page
@@ -105,16 +107,25 @@ This will start all five applications simultaneously:
 - **`/interface-demo`** - Interface Communication Demo (Shell + Counter interaction)
 
 **Individual Demo Apps:**
-- **Demo One**: http://localhost:3001 (Standalone shapes demo)
-- **Demo Two**: http://localhost:3002 (Standalone text/image demo)
-- **Demo Three**: http://localhost:3003 (Standalone drawing demo)
-- **Demo Counter**: http://localhost:3004 (Standalone state management demo)
+- **Demo One**: Port 3001 (Standalone shapes demo)
+- **Demo Two**: Port 3002 (Standalone text/image demo)
+- **Demo Three**: Port 3003 (Standalone drawing demo)
+- **Demo Counter**: Port 3004 (Standalone state management demo)
 
-### Production Build & Deployment
+### Build Commands
 
 ```bash
-# Build all applications for production
+# Development build (uses .env.local)
 npm run build
+
+# Production build (uses .env.production)
+npm run build:prod
+
+# Preview development build
+npm run preview
+
+# Preview production build
+npm run preview:prod
 
 # Serve built applications locally for testing
 npm run serve
