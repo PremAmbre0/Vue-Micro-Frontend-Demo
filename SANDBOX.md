@@ -11,7 +11,12 @@ cd Vue-Micro-Frontend-Demo
 npm install
 ```
 
-### 2. Configure Your URLs
+### 2. Setup Local Environment
+```bash
+npm run setup:local
+```
+
+### 3. Configure Your URLs
 Run the interactive setup script to configure your deployment URLs:
 ```bash
 npm run setup:sandbox
@@ -24,12 +29,12 @@ The script will ask for your deployment URLs for each micro frontend:
 - Demo Three App URL (drawing demo)
 - Demo Counter App URL (state management demo)
 
-### 3. Build for Sandbox
+### 4. Build for Sandbox
 ```bash
 npm run build:sandbox
 ```
 
-### 4. Preview Sandbox
+### 5. Preview Sandbox
 ```bash
 npm run preview:sandbox
 ```

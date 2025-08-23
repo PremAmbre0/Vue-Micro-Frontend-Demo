@@ -95,20 +95,23 @@ This will start all five applications simultaneously:
 
 All URLs and ports are now centrally managed through environment variables in `.env.local` for development and `.env.sandbox` for testing with your own URLs.
 
-## 🚀 Seamless Development Experience
+## 🚀 Quick Setup
 
-**CodeSandbox-style automatic service discovery!** Just run one command and everything works:
+**Smart environment detection - works everywhere:**
 
 ```bash
+# 1. Setup environment (run once)
+npm run setup:local
+
+# 2. Start development
 npm run dev
 ```
 
-✨ **What happens automatically:**
-- 🔍 Scans for running micro frontend services
-- 🌐 Generates preview URLs (like CodeSandbox)
-- ⚙️ Auto-configures all environment variables
-- 🔗 Sets up micro frontend connections
-- 🎯 No manual URL configuration needed!
+✨ **Smart environment detection:**
+- 🌐 **CodeSandbox**: Automatically uses preview URLs via `@codesandbox/utils`
+- 💻 **Local**: Uses localhost URLs for development
+- 🔗 **Auto-configures**: All micro frontend connections
+- 🎯 **Ports**: 3000-3004 for all apps
 
 ## 🏗️ Try the Architecture (Sandbox Mode)
 
@@ -126,6 +129,14 @@ npm run preview:sandbox
 ```
 
 📖 **[Complete Sandbox Guide →](./SANDBOX.md)**
+
+## 🌐 CodeSandbox Ready
+
+This project is fully compatible with CodeSandbox! The setup script automatically detects CodeSandbox environment and uses proper preview URLs via `@codesandbox/utils`. Just fork and run:
+
+```bash
+npm run setup:local && npm run dev
+```
 
 ### 🌐 Application Routes
 
@@ -147,25 +158,20 @@ npm run preview:sandbox
 ### Available Commands
 
 ```bash
-# 🚀 Seamless Development (Auto-discovery + Start all services)
-npm run dev
+# 🔧 Setup Commands
+npm run setup:local        # Setup localhost URLs for development
+npm run setup:sandbox      # Interactive sandbox URL configuration
 
-# 🔧 Manual Development (Skip auto-discovery)
-npm run dev:manual
-
-# 🔍 Manual Service Discovery (Run discovery only)
-npm run setup:dev
+# 🚀 Development
+npm run dev                # Start all development servers
 
 # 📦 Build Commands
-npm run build              # Development build (auto-configured)
+npm run build              # Development build
 npm run build:sandbox      # Sandbox build (uses .env.sandbox)
 
 # 👀 Preview Commands
 npm run preview            # Preview development build
 npm run preview:sandbox    # Preview sandbox build
-
-# 🏗️ Sandbox Setup
-npm run setup:sandbox      # Interactive sandbox URL configuration
 
 # Serve built applications locally for testing
 npm run serve
