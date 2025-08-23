@@ -25,7 +25,7 @@ jobs:
       - name: Build Shell App
         run: |
           echo "🏗️ Building shell-app..."
-          npm run build:prod
+          npm run build:shell
         env:
           NODE_ENV: production
       

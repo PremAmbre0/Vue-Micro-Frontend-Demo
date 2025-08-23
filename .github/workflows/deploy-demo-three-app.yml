@@ -25,7 +25,7 @@ jobs:
       - name: Build Demo Three App
         run: |
           echo "🏗️ Building demo-three-app..."
-          npm run build:prod
+          npm run build:demo-three
         env:
           NODE_ENV: production
       

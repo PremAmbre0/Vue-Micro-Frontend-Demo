@@ -118,8 +118,15 @@ All URLs and ports are now centrally managed through environment variables in `.
 # Development build (uses .env.local)
 npm run build
 
-# Production build (uses .env.production)
+# Production build - all apps (uses .env.production)
 npm run build:prod
+
+# Production build - individual apps (uses .env.production)
+npm run build:shell
+npm run build:demo-one
+npm run build:demo-two
+npm run build:demo-three
+npm run build:demo-counter
 
 # Preview development build
 npm run preview
