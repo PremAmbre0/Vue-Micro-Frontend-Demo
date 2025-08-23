@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <nav>
+  <div id="app" class="shell-app">
+    <nav class="shell-nav">
       <router-link to="/">🏠 Dynamic Canvas</router-link>
       <router-link to="/all-demos">🎨 All Demos</router-link>
       <router-link to="/demo-one">Demo One</router-link>
@@ -9,7 +9,7 @@
       <router-link to="/demo-counter">🔢 Demo Counter</router-link>
       <router-link to="/interface-demo">🔗 Interface Demo</router-link>
     </nav>
-    <main>
+    <main class="shell-main">
       <RouterView />
     </main>
   </div>
@@ -57,7 +57,7 @@ body {
   line-height: 1.6;
 }
 
-#app {
+.shell-app #shell-app {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -66,7 +66,7 @@ body {
   background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
 }
 
-nav {
+.shell-nav {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
   padding: 1.5rem 2rem;
   margin-bottom: 0;
@@ -77,7 +77,7 @@ nav {
   backdrop-filter: blur(10px);
 }
 
-nav a {
+.shell-nav a {
   margin-right: 1rem;
   padding: 0.875rem 1.75rem;
   text-decoration: none;
@@ -91,7 +91,7 @@ nav a {
   overflow: hidden;
 }
 
-nav a::before {
+.shell-nav a::before {
   content: '';
   position: absolute;
   top: 0;
@@ -102,23 +102,23 @@ nav a::before {
   transition: left 0.5s;
 }
 
-nav a:hover::before {
+.shell-nav a:hover::before {
   left: 100%;
 }
 
-nav a:hover {
+.shell-nav a:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-nav a.router-link-active {
+.shell-nav a.router-link-active {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
 }
 
-main {
+.shell-main {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -173,8 +173,8 @@ main {
   100% { transform: rotate(360deg); }
 }
 
-/* Professional Button Styles */
-.btn {
+/* Shell App Professional Button Styles */
+.shell-app .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -192,47 +192,47 @@ main {
   box-shadow: var(--shadow-sm);
 }
 
-.btn:hover {
+.shell-app .btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
-.btn:active {
+.shell-app .btn:active {
   transform: translateY(0);
 }
 
-.btn-primary {
+.shell-app .btn-primary {
   background: linear-gradient(135deg, var(--primary-color) 0%, #0041A3 100%);
   color: white;
 }
 
-.btn-secondary {
+.shell-app .btn-secondary {
   background: linear-gradient(135deg, var(--text-secondary) 0%, #2D3748 100%);
   color: white;
 }
 
-.btn-success {
+.shell-app .btn-success {
   background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   color: white;
 }
 
-.btn-danger {
+.shell-app .btn-danger {
   background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
   color: white;
 }
 
-.btn-warning {
+.shell-app .btn-warning {
   background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   color: white;
 }
 
-.btn-info {
+.shell-app .btn-info {
   background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
   color: white;
 }
 
-/* Card Styles */
-.card {
+/* Shell App Card Styles */
+.shell-app .card {
   background: var(--background-primary);
   border-radius: var(--radius-lg);
   padding: 2rem;
@@ -241,32 +241,32 @@ main {
   transition: all 0.3s ease;
 }
 
-.card:hover {
+.shell-app .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
 }
 
-/* Responsive Design */
+/* Shell App Responsive Design */
 @media (max-width: 1024px) {
-  main {
+  .shell-main {
     padding: 1.5rem;
   }
 
-  nav {
+  .shell-nav {
     padding: 1.25rem 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  main {
+  .shell-main {
     padding: 1rem;
   }
 
-  nav {
+  .shell-nav {
     padding: 1rem;
   }
 
-  nav a {
+  .shell-nav a {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
     padding: 0.75rem 1.25rem;
@@ -285,14 +285,14 @@ main {
 }
 
 @media (max-width: 480px) {
-  nav a {
+  .shell-nav a {
     display: block;
     margin-right: 0;
     margin-bottom: 0.5rem;
     text-align: center;
   }
 
-  main {
+  .shell-main {
     padding: 0.75rem;
   }
 }

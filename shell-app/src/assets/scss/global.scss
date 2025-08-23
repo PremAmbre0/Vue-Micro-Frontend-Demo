@@ -3,15 +3,18 @@
 @use './mixins' as *;
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-* {
-  box-sizing: border-box;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+// Shell app specific styles - scoped to prevent conflicts with micro frontends
+.shell-app {
+  * {
+    box-sizing: border-box;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
 }
 
 html,
@@ -28,68 +31,72 @@ body {
   font-family: "Inter", sans-serif;
 }
 
-.image-wrapper-fit-parent,
-.iwfp {
-  svg {
-    height: 100% !important;
-    width: 100% !important;
+// Shell app specific utility classes - scoped to prevent conflicts
+.shell-app {
+
+  .image-wrapper-fit-parent,
+  .iwfp {
+    svg {
+      height: 100% !important;
+      width: 100% !important;
+    }
+
+    img {
+      height: 100% !important;
+      width: 100% !important;
+      object-fit: contain;
+    }
   }
 
-  img {
-    height: 100% !important;
-    width: 100% !important;
-    object-fit: contain;
-  }
-}
+  .image-wrapper-fill-width,
+  .iwfw {
+    svg {
+      height: auto !important;
+      width: 100% !important;
+    }
 
-.image-wrapper-fill-width,
-.iwfw {
-  svg {
-    height: auto !important;
-    width: 100% !important;
-  }
-
-  img {
-    height: auto !important;
-    width: 100% !important;
-  }
-}
-
-.image-wrapper-fill-height,
-.iwfh {
-  svg {
-    height: 100% !important;
-    width: auto !important;
+    img {
+      height: auto !important;
+      width: 100% !important;
+    }
   }
 
-  img {
-    height: 100% !important;
-    width: auto !important;
-  }
-}
+  .image-wrapper-fill-height,
+  .iwfh {
+    svg {
+      height: 100% !important;
+      width: auto !important;
+    }
 
-.image-wrapper-preserve-aspect-ratio,
-.iwpar {
-  svg {
-    height: auto !important;
-    width: auto !important;
-    max-height: 100% !important;
-    max-width: 100% !important;
+    img {
+      height: 100% !important;
+      width: auto !important;
+    }
   }
 
-  img {
-    height: auto !important;
-    width: auto !important;
-    max-height: 100% !important;
-    max-width: 100% !important;
+  .image-wrapper-preserve-aspect-ratio,
+  .iwpar {
+    svg {
+      height: auto !important;
+      width: auto !important;
+      max-height: 100% !important;
+      max-width: 100% !important;
+    }
+
+    img {
+      height: auto !important;
+      width: auto !important;
+      max-height: 100% !important;
+      max-width: 100% !important;
+    }
   }
-}
 
-.capitalize {
-  text-transform: capitalize;
-}
+  .capitalize {
+    text-transform: capitalize;
+  }
 
-.disabled {
-  pointer-events: none;
-  opacity: 0.5;
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }

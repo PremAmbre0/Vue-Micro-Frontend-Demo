@@ -1,163 +1,165 @@
 <template>
-  <div class="all-demos-container">
-    <header class="demos-header">
-      <h1>🎨 All Demos Showcase</h1>
-      <p>Experience all three micro frontend demos in one unified view</p>
-    </header>
+  <div class="shell-app">
+    <div class="shell-all-demos-container">
+      <header class="shell-demos-header">
+        <h1>🎨 All Demos Showcase</h1>
+        <p>Experience all three micro frontend demos in one unified view</p>
+      </header>
 
-    <!-- Global Controls -->
-    <div class="global-controls">
-      <h3>🌐 Global Controls</h3>
-      <div class="global-buttons">
-        <button @click="clearAllCanvases" class="btn btn-warning">
-          🗑️ Clear All Canvases
-        </button>
-        <button @click="deleteSelectedFromAll" class="btn btn-danger">
-          ❌ Delete Selected from All
-        </button>
-        <button @click="resetAllDemos" class="btn btn-secondary">
-          🔄 Reset All Demos
-        </button>
-      </div>
-    </div>
-
-    <!-- Demo One Section -->
-    <section class="demo-section demo-one-section">
-      <div class="demo-header">
-        <h2>🎨 Demo One - Basic Shapes</h2>
-        <p>Interactive shape creation and manipulation</p>
-      </div>
-
-      <!-- Demo One Controls -->
-      <div class="demo-controls demo-one-controls">
-        <div class="control-group">
-          <label>Color:</label>
-          <input v-model="demoOneColor" type="color" class="color-input" />
-        </div>
-        <div class="control-buttons">
-          <button @click="addRectangleToOne" class="btn btn-primary">
-            ➕ Rectangle
+      <!-- Global Controls -->
+      <div class="shell-global-controls">
+        <h3>🌐 Global Controls</h3>
+        <div class="shell-global-buttons">
+          <button @click="clearAllCanvases" class="shell-btn shell-btn-warning">
+            🗑️ Clear All Canvases
           </button>
-          <button @click="addCircleToOne" class="btn btn-primary">
-            ⭕ Circle
+          <button @click="deleteSelectedFromAll" class="shell-btn shell-btn-danger">
+            ❌ Delete Selected from All
           </button>
-          <button @click="addTriangleToOne" class="btn btn-primary">
-            🔺 Triangle
-          </button>
-          <button @click="clearDemoOne" class="btn btn-secondary">
-            🗑️ Clear
+          <button @click="resetAllDemos" class="shell-btn shell-btn-secondary">
+            🔄 Reset All Demos
           </button>
         </div>
       </div>
 
-      <div class="demo-canvas-container">
-        <canvas id="demo-one-canvas"></canvas>
-      </div>
-    </section>
-
-    <!-- Demo Two Section -->
-    <section class="demo-section demo-two-section">
-      <div class="demo-header">
-        <h2>📝 Demo Two - Text & Images</h2>
-        <p>Dynamic text and image editing capabilities</p>
-      </div>
-
-      <!-- Demo Two Controls -->
-      <div class="demo-controls demo-two-controls">
-        <div class="control-group">
-          <label>Text:</label>
-          <input
-            v-model="demoTwoText"
-            type="text"
-            placeholder="Enter text"
-            class="text-input"
-          />
-          <button @click="addTextToTwo" class="btn btn-primary">
-            ➕ Add Text
-          </button>
+      <!-- Demo One Section -->
+      <section class="shell-demo-section shell-demo-one-section">
+        <div class="shell-demo-header">
+          <h2>🎨 Demo One - Basic Shapes</h2>
+          <p>Interactive shape creation and manipulation</p>
         </div>
-        <div class="control-group">
-          <label>Image URL:</label>
-          <input
-            v-model="demoTwoImageUrl"
-            type="text"
-            placeholder="Image URL"
-            class="text-input"
-          />
-          <button
-            @click="addImageToTwo"
-            class="btn btn-success"
-            :disabled="isLoadingImage"
-          >
-            {{ isLoadingImage ? "⏳ Loading..." : "🖼️ Add Image" }}
-          </button>
-        </div>
-        <div class="control-buttons">
-          <button @click="clearDemoTwo" class="btn btn-secondary">
-            🗑️ Clear
-          </button>
-        </div>
-      </div>
 
-      <div class="demo-canvas-container">
-        <canvas id="demo-two-canvas"></canvas>
-      </div>
-    </section>
-
-    <!-- Demo Three Section -->
-    <section class="demo-section demo-three-section">
-      <div class="demo-header">
-        <h2>🖌️ Demo Three - Drawing</h2>
-        <p>Free-hand drawing and artistic creation</p>
-      </div>
-
-      <!-- Demo Three Controls -->
-      <div class="demo-controls demo-three-controls">
-        <div class="control-group">
-          <label>Drawing Mode:</label>
-          <button
-            @click="toggleDrawingMode"
-            :class="['btn', isDrawingMode ? 'btn-danger' : 'btn-success']"
-          >
-            {{ isDrawingMode ? "🛑 Stop Drawing" : "✏️ Start Drawing" }}
-          </button>
+        <!-- Demo One Controls -->
+        <div class="shell-demo-controls shell-demo-one-controls">
+          <div class="shell-control-group">
+            <label>Color:</label>
+            <input v-model="demoOneColor" type="color" class="shell-color-input" />
+          </div>
+          <div class="shell-control-buttons">
+            <button @click="addRectangleToOne" class="shell-btn shell-btn-primary">
+              ➕ Rectangle
+            </button>
+            <button @click="addCircleToOne" class="shell-btn shell-btn-primary">
+              ⭕ Circle
+            </button>
+            <button @click="addTriangleToOne" class="shell-btn shell-btn-primary">
+              🔺 Triangle
+            </button>
+            <button @click="clearDemoOne" class="shell-btn shell-btn-secondary">
+              🗑️ Clear
+            </button>
+          </div>
         </div>
-        <div class="control-group">
-          <label>Brush Width:</label>
-          <input
-            v-model="brushWidth"
-            type="range"
-            min="1"
-            max="20"
-            class="range-input"
-          />
-          <span>{{ brushWidth }}px</span>
-        </div>
-        <div class="control-group">
-          <label>Brush Color:</label>
-          <input v-model="brushColor" type="color" class="color-input" />
-        </div>
-        <div class="control-buttons">
-          <button @click="clearDemoThree" class="btn btn-secondary">
-            🗑️ Clear
-          </button>
-        </div>
-      </div>
 
-      <div class="demo-canvas-container">
-        <canvas id="demo-three-canvas"></canvas>
-      </div>
-    </section>
+        <div class="shell-demo-canvas-container">
+          <canvas id="demo-one-canvas"></canvas>
+        </div>
+      </section>
 
-    <!-- Info Section -->
-    <div class="info">
-      <p><strong>Micro Frontend Architecture Demo:</strong></p>
-      <ul>
-        <li>Each demo runs independently with its own Fabric.js canvas</li>
-        <li>Demonstrates isolated micro frontend functionality</li>
-        <li>All demos load automatically and showcase their core features</li>
-        <li>Perfect for demonstrating the full capabilities of the system</li>
-      </ul>
+      <!-- Demo Two Section -->
+      <section class="shell-demo-section shell-demo-two-section">
+        <div class="shell-demo-header">
+          <h2>📝 Demo Two - Text & Images</h2>
+          <p>Dynamic text and image editing capabilities</p>
+        </div>
+
+        <!-- Demo Two Controls -->
+        <div class="shell-demo-controls shell-demo-two-controls">
+          <div class="shell-control-group">
+            <label>Text:</label>
+            <input
+              v-model="demoTwoText"
+              type="text"
+              placeholder="Enter text"
+              class="shell-text-input"
+            />
+            <button @click="addTextToTwo" class="shell-btn shell-btn-primary">
+              ➕ Add Text
+            </button>
+          </div>
+          <div class="shell-control-group">
+            <label>Image URL:</label>
+            <input
+              v-model="demoTwoImageUrl"
+              type="text"
+              placeholder="Image URL"
+              class="shell-text-input"
+            />
+            <button
+              @click="addImageToTwo"
+              class="shell-btn shell-btn-success"
+              :disabled="isLoadingImage"
+            >
+              {{ isLoadingImage ? "⏳ Loading..." : "🖼️ Add Image" }}
+            </button>
+          </div>
+          <div class="shell-control-buttons">
+            <button @click="clearDemoTwo" class="shell-btn shell-btn-secondary">
+              🗑️ Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="shell-demo-canvas-container">
+          <canvas id="demo-two-canvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Demo Three Section -->
+      <section class="shell-demo-section shell-demo-three-section">
+        <div class="shell-demo-header">
+          <h2>🖌️ Demo Three - Drawing</h2>
+          <p>Free-hand drawing and artistic creation</p>
+        </div>
+
+        <!-- Demo Three Controls -->
+        <div class="shell-demo-controls shell-demo-three-controls">
+          <div class="shell-control-group">
+            <label>Drawing Mode:</label>
+            <button
+              @click="toggleDrawingMode"
+              :class="['shell-btn', isDrawingMode ? 'shell-btn-danger' : 'shell-btn-success']"
+            >
+              {{ isDrawingMode ? "🛑 Stop Drawing" : "✏️ Start Drawing" }}
+            </button>
+          </div>
+          <div class="shell-control-group">
+            <label>Brush Width:</label>
+            <input
+              v-model="brushWidth"
+              type="range"
+              min="1"
+              max="20"
+              class="shell-range-input"
+            />
+            <span>{{ brushWidth }}px</span>
+          </div>
+          <div class="shell-control-group">
+            <label>Brush Color:</label>
+            <input v-model="brushColor" type="color" class="shell-color-input" />
+          </div>
+          <div class="shell-control-buttons">
+            <button @click="clearDemoThree" class="shell-btn shell-btn-secondary">
+              🗑️ Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="shell-demo-canvas-container">
+          <canvas id="demo-three-canvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Info Section -->
+      <div class="shell-info">
+        <p><strong>Micro Frontend Architecture Demo:</strong></p>
+        <ul>
+          <li>Each demo runs independently with its own Fabric.js canvas</li>
+          <li>Demonstrates isolated micro frontend functionality</li>
+          <li>All demos load automatically and showcase their core features</li>
+          <li>Perfect for demonstrating the full capabilities of the system</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -506,31 +508,32 @@ watch(brushColor, (newColor) => {
 });
 </script>
 
-<style>
-.all-demos-container {
+<style scoped>
+/* Shell App Scoped Styles - Prevents conflicts with micro frontend CSS */
+.shell-all-demos-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.demos-header {
+.shell-demos-header {
   text-align: center;
   margin-bottom: 40px;
 }
 
-.demos-header h1 {
+.shell-demos-header h1 {
   color: #0054c9;
   margin-bottom: 10px;
   font-size: 2.5em;
 }
 
-.demos-header p {
+.shell-demos-header p {
   color: #495057;
   font-size: 1.2em;
 }
 
 /* Global Controls */
-.global-controls {
+.shell-global-controls {
   background: #f8f9fa;
   border: 2px solid #0054c9;
   border-radius: 12px;
@@ -539,26 +542,26 @@ watch(brushColor, (newColor) => {
   text-align: center;
 }
 
-.global-controls h3 {
+.shell-global-controls h3 {
   color: #0054c9;
   margin-bottom: 15px;
   font-size: 1.4em;
 }
 
-.global-buttons {
+.shell-global-buttons {
   display: flex;
   gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.global-buttons .btn {
+.shell-global-buttons .shell-btn {
   font-size: 1.1em;
   padding: 12px 20px;
   min-width: 180px;
 }
 
-.demo-section {
+.shell-demo-section {
   margin-bottom: 50px;
   background: #f8f9fa;
   border-radius: 12px;
@@ -566,48 +569,48 @@ watch(brushColor, (newColor) => {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.demo-one-section {
+.shell-demo-one-section {
   border-left: 6px solid #0054c9;
 }
 
-.demo-two-section {
+.shell-demo-two-section {
   border-left: 6px solid #6aaaeb;
 }
 
-.demo-three-section {
+.shell-demo-three-section {
   border-left: 6px solid #f59e0b;
 }
 
-.demo-header {
+.shell-demo-header {
   text-align: center;
   margin-bottom: 25px;
 }
 
-.demo-header h2 {
+.shell-demo-header h2 {
   margin: 0 0 10px 0;
   font-size: 1.8em;
 }
 
-.demo-one-section .demo-header h2 {
+.shell-demo-one-section .shell-demo-header h2 {
   color: #0054c9;
 }
 
-.demo-two-section .demo-header h2 {
+.shell-demo-two-section .shell-demo-header h2 {
   color: #6aaaeb;
 }
 
-.demo-three-section .demo-header h2 {
+.shell-demo-three-section .shell-demo-header h2 {
   color: #f59e0b;
 }
 
-.demo-header p {
+.shell-demo-header p {
   color: #6c757d;
   font-size: 1.1em;
   margin: 0;
 }
 
 /* Demo Controls */
-.demo-controls {
+.shell-demo-controls {
   background: white;
   border-radius: 8px;
   padding: 20px;
@@ -615,19 +618,19 @@ watch(brushColor, (newColor) => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.demo-one-controls {
+.shell-demo-one-controls {
   border-left: 4px solid #0054c9;
 }
 
-.demo-two-controls {
+.shell-demo-two-controls {
   border-left: 4px solid #6aaaeb;
 }
 
-.demo-three-controls {
+.shell-demo-three-controls {
   border-left: 4px solid #f59e0b;
 }
 
-.control-group {
+.shell-control-group {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -635,20 +638,20 @@ watch(brushColor, (newColor) => {
   flex-wrap: wrap;
 }
 
-.control-group label {
+.shell-control-group label {
   font-weight: 600;
   color: #495057;
   min-width: 80px;
 }
 
-.control-buttons {
+.shell-control-buttons {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.text-input {
+.shell-text-input {
   padding: 8px 12px;
   border: 2px solid #e9ecef;
   border-radius: 6px;
@@ -656,12 +659,12 @@ watch(brushColor, (newColor) => {
   min-width: 200px;
 }
 
-.text-input:focus {
+.shell-text-input:focus {
   outline: none;
   border-color: #0054c9;
 }
 
-.color-input {
+.shell-color-input {
   width: 50px;
   height: 40px;
   border: 2px solid #e9ecef;
@@ -669,13 +672,13 @@ watch(brushColor, (newColor) => {
   cursor: pointer;
 }
 
-.range-input {
+.shell-range-input {
   width: 120px;
   margin: 0 10px;
 }
 
-/* Button Styles */
-.btn {
+/* Shell Button Styles */
+.shell-btn {
   padding: 10px 16px;
   border: none;
   border-radius: 6px;
@@ -685,63 +688,63 @@ watch(brushColor, (newColor) => {
   font-size: 14px;
 }
 
-.btn:hover {
+.shell-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.btn:disabled {
+.shell-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
-.btn-primary {
+.shell-btn-primary {
   background: #0054c9;
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
+.shell-btn-primary:hover:not(:disabled) {
   background: #003d96;
 }
 
-.btn-success {
+.shell-btn-success {
   background: #10b981;
   color: white;
 }
 
-.btn-success:hover:not(:disabled) {
+.shell-btn-success:hover:not(:disabled) {
   background: #059669;
 }
 
-.btn-warning {
+.shell-btn-warning {
   background: #f59e0b;
   color: white;
 }
 
-.btn-warning:hover:not(:disabled) {
+.shell-btn-warning:hover:not(:disabled) {
   background: #d97706;
 }
 
-.btn-danger {
+.shell-btn-danger {
   background: #ef4444;
   color: white;
 }
 
-.btn-danger:hover:not(:disabled) {
+.shell-btn-danger:hover:not(:disabled) {
   background: #dc2626;
 }
 
-.btn-secondary {
+.shell-btn-secondary {
   background: #031f3c;
   color: white;
 }
 
-.btn-secondary:hover:not(:disabled) {
+.shell-btn-secondary:hover:not(:disabled) {
   background: #021529;
 }
 
-.demo-canvas-container {
+.shell-demo-canvas-container {
   text-align: center;
   background: white;
   padding: 20px;
@@ -749,14 +752,14 @@ watch(brushColor, (newColor) => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-canvas {
+.shell-demo-canvas-container canvas {
   border: 2px solid #e9ecef;
   border-radius: 8px;
   max-width: 100%;
   height: auto;
 }
 
-.info {
+.shell-info {
   background: #e3f2fd;
   padding: 20px;
   border-radius: 8px;
@@ -764,62 +767,62 @@ canvas {
   margin-top: 30px;
 }
 
-.info ul {
+.shell-info ul {
   margin: 10px 0 0 20px;
 }
 
-.info li {
+.shell-info li {
   margin: 8px 0;
   line-height: 1.5;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .all-demos-container {
+  .shell-all-demos-container {
     padding: 15px;
   }
 
-  .demo-section {
+  .shell-demo-section {
     padding: 20px;
     margin-bottom: 30px;
   }
 
-  .demos-header h1 {
+  .shell-demos-header h1 {
     font-size: 2em;
   }
 
-  .demo-header h2 {
+  .shell-demo-header h2 {
     font-size: 1.5em;
   }
 
-  .global-buttons {
+  .shell-global-buttons {
     flex-direction: column;
     align-items: center;
   }
 
-  .global-buttons .btn {
+  .shell-global-buttons .shell-btn {
     min-width: 250px;
   }
 
-  .control-group {
+  .shell-control-group {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
 
-  .control-group label {
+  .shell-control-group label {
     min-width: auto;
   }
 
-  .control-buttons {
+  .shell-control-buttons {
     justify-content: flex-start;
   }
 
-  .text-input {
+  .shell-text-input {
     min-width: 100%;
   }
 
-  .range-input {
+  .shell-range-input {
     width: 100%;
     margin: 10px 0;
   }

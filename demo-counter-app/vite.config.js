@@ -6,8 +6,11 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
+  // For development and preview modes, use local URLs
+  const isLocal = mode === 'development' || mode === 'preview'
+
   // Fallback values for production deployment
-  const shellRemoteEntry = env.VITE_SHELL_REMOTE_ENTRY || 'https://shell-app-seven.vercel.app/remoteEntry.js'
+  const shellRemoteEntry = env.VITE_SHELL_REMOTE_ENTRY || (isLocal ? 'http://localhost:3000/remoteEntry.js' : 'https://shell-app-seven.vercel.app/remoteEntry.js')
 
   return {
     base: "/",
@@ -46,12 +49,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: undefined,
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.fileName && assetInfo.fileName.endsWith('.css')) {
-              return 'assets/style.css'
-            }
-            return 'assets/[name].[hash].[ext]'
-          }
+          assetFileNames: 'assets/[name].[ext]'
         },
         external: [],
       },

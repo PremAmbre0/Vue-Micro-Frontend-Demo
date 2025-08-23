@@ -60,7 +60,7 @@ body {
   font-family: var(--font-family);
 }
 
-#app {
+#demo-counter-app {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -117,7 +117,7 @@ main {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  #app {
+  #demo-counter-app {
     padding: 1rem;
   }
 
