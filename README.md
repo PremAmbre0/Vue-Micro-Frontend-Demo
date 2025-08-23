@@ -95,6 +95,21 @@ This will start all five applications simultaneously:
 
 All URLs and ports are now centrally managed through environment variables in `.env.local` for development and `.env.sandbox` for testing with your own URLs.
 
+## 🚀 Seamless Development Experience
+
+**CodeSandbox-style automatic service discovery!** Just run one command and everything works:
+
+```bash
+npm run dev
+```
+
+✨ **What happens automatically:**
+- 🔍 Scans for running micro frontend services
+- 🌐 Generates preview URLs (like CodeSandbox)
+- ⚙️ Auto-configures all environment variables
+- 🔗 Sets up micro frontend connections
+- 🎯 No manual URL configuration needed!
+
 ## 🏗️ Try the Architecture (Sandbox Mode)
 
 Want to test this micro frontend architecture with your own deployment URLs? We've made it super easy!
@@ -129,20 +144,28 @@ npm run preview:sandbox
 - **Demo Three**: Port 3003 (Standalone drawing demo)
 - **Demo Counter**: Port 3004 (Standalone state management demo)
 
-### Build Commands
+### Available Commands
 
 ```bash
-# Development build (uses .env.local)
-npm run build
+# 🚀 Seamless Development (Auto-discovery + Start all services)
+npm run dev
 
-# Sandbox build - all apps (uses .env.sandbox)
-npm run build:sandbox
+# 🔧 Manual Development (Skip auto-discovery)
+npm run dev:manual
 
-# Preview development build
-npm run preview
+# 🔍 Manual Service Discovery (Run discovery only)
+npm run setup:dev
 
-# Preview sandbox build
-npm run preview:sandbox
+# 📦 Build Commands
+npm run build              # Development build (auto-configured)
+npm run build:sandbox      # Sandbox build (uses .env.sandbox)
+
+# 👀 Preview Commands
+npm run preview            # Preview development build
+npm run preview:sandbox    # Preview sandbox build
+
+# 🏗️ Sandbox Setup
+npm run setup:sandbox      # Interactive sandbox URL configuration
 
 # Serve built applications locally for testing
 npm run serve

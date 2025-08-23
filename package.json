@@ -11,12 +11,15 @@
     "demo-counter-app"
   ],
   "scripts": {
+    "predev": "node scripts/auto-discover-dev.js",
     "dev": "dotenv -e .env.local -- turbo run dev --parallel",
+    "dev:manual": "dotenv -e .env.local -- turbo run dev --parallel",
     "build": "dotenv -e .env.local -- turbo run build",
     "build:sandbox": "dotenv -e .env.sandbox -- turbo run build",
     "preview": "dotenv -e .env.local -- turbo run preview --parallel",
     "preview:sandbox": "dotenv -e .env.sandbox -- turbo run preview --parallel",
     "setup:sandbox": "node scripts/setup-sandbox.js",
+    "setup:dev": "node scripts/auto-discover-dev.js",
     "clean": "turbo run clean",
     "install-all": "npm install && turbo run install",
     "install:clean": "npm run clean && rm -rf node_modules package-lock.json && npm install"
