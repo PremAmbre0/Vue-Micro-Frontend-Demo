@@ -16,11 +16,12 @@ export default defineConfig(({ mode }) => {
   const demoCounterRemoteEntry = env.VITE_DEMO_COUNTER_REMOTE_ENTRY || (isLocal ? 'http://localhost:3004/remoteEntry.js' : 'https://demo-counter.vercel.app/remoteEntry.js')
 
   // Define CSS URLs for environment variables
-  // Note: CSS files have hashed names in production, so these URLs need to be set correctly in Vercel
-  process.env.VITE_DEMO_ONE_CSS_URL = env.VITE_DEMO_ONE_CSS_URL || ''
-  process.env.VITE_DEMO_TWO_CSS_URL = env.VITE_DEMO_TWO_CSS_URL || ''
-  process.env.VITE_DEMO_THREE_CSS_URL = env.VITE_DEMO_THREE_CSS_URL || ''
-  process.env.VITE_DEMO_COUNTER_CSS_URL = env.VITE_DEMO_COUNTER_CSS_URL || ''
+  // These will be available as import.meta.env.VITE_* in the client code
+  // If not set in .env files, fallback logic is handled in main.js
+  process.env.VITE_DEMO_ONE_CSS_URL = env.VITE_DEMO_ONE_CSS_URL
+  process.env.VITE_DEMO_TWO_CSS_URL = env.VITE_DEMO_TWO_CSS_URL
+  process.env.VITE_DEMO_THREE_CSS_URL = env.VITE_DEMO_THREE_CSS_URL
+  process.env.VITE_DEMO_COUNTER_CSS_URL = env.VITE_DEMO_COUNTER_CSS_URL
 
   return {
     base: "/",
