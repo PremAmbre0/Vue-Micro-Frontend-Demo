@@ -208,7 +208,7 @@ export default {
 
 .demo-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 2.5rem;
   margin-bottom: 4rem;
   padding: 0 2rem;
