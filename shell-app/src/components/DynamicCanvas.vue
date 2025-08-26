@@ -1,13 +1,13 @@
 <template>
   <div class="dynamic-canvas-container">
     <header class="canvas-header">
-      <h1>🎯 Welcome to Micro Frontend Showcase</h1>
+      <h1><span class="material-icons">palette</span> Welcome to Micro Frontend Showcase</h1>
       <p>Interactive landing page - Load and control federated micro frontend modules dynamically</p>
     </header>
 
     <!-- Dynamic Demo Loading Controls -->
     <div class="demo-loader-controls">
-      <h2>Load Demo Modules</h2>
+      <h2><span class="material-icons">view_module</span> Load Demo Modules</h2>
       <div class="loader-buttons">
         <button
           @click="loadDemoOne"
@@ -15,7 +15,10 @@
           :class="['btn', loadedDemos.demoOne ? 'btn-success' : 'btn-primary']"
         >
           <span v-if="isLoading.demoOne" class="loading-spinner"></span>
-          {{ isLoading.demoOne ? 'Loading...' : loadedDemos.demoOne ? '✅ Demo One Loaded' : 'Load Demo One' }}
+          <span class="material-icons">
+            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoOne ? 'check_circle' : 'play_arrow' }}
+          </span>
+          {{ isLoading.demoOne ? 'Loading...' : loadedDemos.demoOne ? ' Demo One Loaded' : 'Load Demo One' }}
         </button>
 
         <button
@@ -24,7 +27,10 @@
           :class="['btn', loadedDemos.demoTwo ? 'btn-success' : 'btn-info']"
         >
           <span v-if="isLoading.demoTwo" class="loading-spinner"></span>
-          {{ isLoading.demoTwo ? 'Loading...' : loadedDemos.demoTwo ? '✅ Demo Two Loaded' : 'Load Demo Two' }}
+          <span class="material-icons">
+            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoTwo ? 'check_circle' : 'play_arrow' }}
+          </span>
+          {{ isLoading.demoTwo ? 'Loading...' : loadedDemos.demoTwo ? 'Demo Two Loaded' : 'Load Demo Two' }}
         </button>
 
         <button
@@ -33,7 +39,10 @@
           :class="['btn', loadedDemos.demoThree ? 'btn-success' : 'btn-warning']"
         >
           <span v-if="isLoading.demoThree" class="loading-spinner"></span>
-          {{ isLoading.demoThree ? 'Loading...' : loadedDemos.demoThree ? '✅ Demo Three Loaded' : 'Load Demo Three' }}
+          <span class="material-icons">
+            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoThree ? 'check_circle' : 'play_arrow' }}
+          </span>
+          {{ isLoading.demoThree ? 'Loading...' : loadedDemos.demoThree ? 'Demo Three Loaded' : 'Load Demo Three' }}
         </button>
       </div>
     </div>
@@ -45,25 +54,26 @@
 
     <!-- Demo One Controls -->
     <div v-if="loadedDemos.demoOne" class="demo-controls demo-one-controls">
-      <h3>🎨 Demo One Controls - Basic Shapes</h3>
+      <h3><span class="material-icons">category</span> Demo One Controls - Basic Shapes</h3>
       <div class="control-group">
-        <button @click="addRectangle" class="btn btn-primary">Add Rectangle</button>
-        <button @click="addCircle" class="btn btn-primary">Add Circle</button>
-        <button @click="addTriangle" class="btn btn-primary">Add Triangle</button>
+        <button @click="addRectangle" class="btn btn-primary"><span class="material-icons">crop_square</span> Add Rectangle</button>
+        <button @click="addCircle" class="btn btn-primary"><span class="material-icons">circle</span> Add Circle</button>
+        <button @click="addTriangle" class="btn btn-primary"><span class="material-icons">change_history</span> Add Triangle</button>
         <input type="color" v-model="selectedColor" @input="changeColor" class="color-picker" />
-        <button @click="deleteSelected" class="btn btn-danger">Delete Selected</button>
+        <button @click="deleteSelected" class="btn btn-danger"><span class="material-icons">delete</span> Delete Selected</button>
       </div>
     </div>
 
     <!-- Demo Two Controls -->
     <div v-if="loadedDemos.demoTwo" class="demo-controls demo-two-controls">
-      <h3>📝 Demo Two Controls - Text & Images</h3>
+      <h3><span class="material-icons">edit_note</span> Demo Two Controls - Text & Images</h3>
       <div class="control-group">
         <input v-model="textInput" placeholder="Enter text" class="text-input" :disabled="imageLoading" />
-        <button @click="addText" class="btn btn-info" :disabled="imageLoading">Add Text</button>
+        <button @click="addText" class="btn btn-info" :disabled="imageLoading"><span class="material-icons">add</span> Add Text</button>
         <input v-model="imageUrl" placeholder="Image URL" class="text-input" :disabled="imageLoading" />
         <button @click="addImage" class="btn btn-info" :disabled="imageLoading">
           <span v-if="imageLoading" class="loading-spinner"></span>
+          <span class="material-icons" v-if="!imageLoading">image</span>
           {{ imageLoading ? 'Loading...' : 'Add Image' }}
         </button>
       </div>
@@ -71,28 +81,29 @@
 
     <!-- Demo Three Controls -->
     <div v-if="loadedDemos.demoThree" class="demo-controls demo-three-controls">
-      <h3>🖌️ Demo Three Controls - Drawing</h3>
+      <h3><span class="material-icons">draw</span> Demo Three Controls - Drawing</h3>
       <div class="control-group">
         <button @click="toggleDrawing" :class="['btn', drawingMode ? 'btn-danger' : 'btn-warning']">
+          <span class="material-icons" >{{ drawingMode ? 'stop' : 'edit' }}</span>
           {{ drawingMode ? 'Stop Drawing' : 'Start Drawing' }}
         </button>
         <label>Width: {{ brushWidth }}px</label>
         <input type="range" min="1" max="50" v-model="brushWidth" @input="updateBrushWidth" class="brush-slider" />
         <input type="color" v-model="brushColor" @input="updateBrushColor" class="color-picker" />
-        <button @click="undoLast" class="btn btn-warning">Undo Last</button>
+        <button @click="undoLast" class="btn btn-warning"><span class="material-icons" >undo</span> Undo Last</button>
       </div>
     </div>
 
     <!-- Clear All Button -->
     <div v-if="loadedDemos.demoOne || loadedDemos.demoTwo || loadedDemos.demoThree" class="global-controls">
-      <button @click="clearCanvas" class="btn btn-secondary">Clear Canvas</button>
+      <button @click="clearCanvas" class="btn btn-secondary"> <span class="material-icons" >delete</span> Clear Canvas</button>
     </div>
 
     <!-- Navigation to All Demos -->
     <div v-if="!loadedDemos.demoOne && !loadedDemos.demoTwo && !loadedDemos.demoThree" class="quick-nav">
       <h3>Quick Navigation</h3>
       <router-link to="/all-demos" class="btn btn-info">
-        🎨 View All Demos Together
+        <span class="material-icons">bolt</span> View All Demos Together
       </router-link>
     </div>
 
@@ -166,35 +177,28 @@ const initializeShellCanvas = async () => {
   if (canvas) return true; // Already initialized
 
   try {
-    // Try to initialize Fabric.js canvas using shell fabric
+    const canvasElement = document.getElementById('dynamic-canvas');
+    if (!canvasElement) throw new Error('Canvas element not found');
+
+    // Ensure canvas element stretches with CSS
+    canvasElement.style.width = '100%';
+    canvasElement.style.height = '600px';
+
+    // Get container’s computed width in pixels
+    const container = canvasElement.parentElement;
+    const containerWidth = container.offsetWidth - 40 || 800;
+
+    // Init Fabric.js with pixel width + fixed height
     canvas = await initializeFabricCanvas('dynamic-canvas', {
-      width: 800,
+      width: containerWidth,
       height: 600,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
     });
 
     if (canvas) {
-      console.log('Canvas initialized successfully using shell fabric');
-      return true;
-    } else {
-      // Fabric.js not available yet, prepare basic canvas
-      const canvasElement = document.getElementById('dynamic-canvas');
-      if (!canvasElement) {
-        throw new Error('Canvas element not found');
-      }
-
-      canvasElement.width = 800;
-      canvasElement.height = 600;
-
-      // Mark as needing Fabric.js initialization
-      canvas = {
-        element: canvasElement,
-        needsFabricInit: true,
-        width: 800,
-        height: 600,
-      };
-
-      console.log('Canvas element prepared, Fabric.js will be initialized when demo loads');
+      console.log('Canvas initialized successfully with responsive width');
+      // Handle resize
+      window.addEventListener('resize', resizeCanvas);
       return true;
     }
   } catch (error) {
@@ -202,6 +206,18 @@ const initializeShellCanvas = async () => {
     return false;
   }
 };
+
+// Resize handler to keep it responsive
+const resizeCanvas = () => {
+  if (canvas) {
+    const container = document.querySelector('.canvas-container');
+    const newWidth = container.offsetWidth - 40 || 800;
+    canvas.setWidth(newWidth);
+    canvas.setHeight(600); // keep fixed height or make dynamic if needed
+    canvas.renderAll();
+  }
+};
+
 
 // Ensure canvas is Fabric.js canvas (called before demo operations)
 const ensureCanvasInitialized = async () => {
@@ -212,7 +228,7 @@ const ensureCanvasInitialized = async () => {
   if (canvas.needsFabricInit) {
     // Try to initialize Fabric.js canvas now
     const fabricCanvas = await initializeFabricCanvas('dynamic-canvas', {
-      width: 800,
+      width: '100%',
       height: 600,
       backgroundColor: '#ffffff'
     });
@@ -405,7 +421,7 @@ const clearCanvas = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .dynamic-canvas-container {
   padding: 20px;
   max-width: 1200px;
@@ -418,39 +434,67 @@ const clearCanvas = () => {
 }
 
 .canvas-header h1 {
+  font-size: 2.5rem;
   color: #0054C9;
   margin-bottom: 10px;
 }
 
+.canvas-header p {
+  font-size: 1.2rem;
+  color: #495057;
+}
+
+.canvas-header h1 .material-icons{
+  vertical-align: middle;
+  font-size: 2.5rem;
+  padding-bottom: 0.3rem;
+}
+
 .demo-loader-controls {
   background: #f8f9fa;
-  padding: 20px;
+  border: 2px solid #0054c9;
   border-radius: 12px;
-  margin-bottom: 20px;
-  border: 2px solid #e9ecef;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .demo-loader-controls h2 {
-  margin: 0 0 15px 0;
-  color: #495057;
+  color: #0054c9;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.4em;
+}
+
+.demo-loader-controls h2 .material-icons{
+  font-size: 1.5rem;
+  vertical-align: middle;
+  padding-bottom: 5px;
 }
 
 .loader-buttons {
   display: flex;
+  justify-content: center;
   gap: 15px;
   flex-wrap: wrap;
 }
 
 .btn {
-  padding: 12px 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.btn .material-icons{
+  font-size: 1.1rem;
+  vertical-align: middle;
 }
 
 .btn-primary {
@@ -516,6 +560,7 @@ const clearCanvas = () => {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #0054c9;
 }
 
 #dynamic-canvas {
@@ -546,6 +591,12 @@ const clearCanvas = () => {
 .demo-controls h3 {
   margin: 0 0 15px 0;
   color: #495057;
+}
+
+.demo-controls h3 .material-icons{
+  font-size: 1.25rem;
+  vertical-align: middle;
+  padding-bottom: 4px;
 }
 
 .control-group {
@@ -601,6 +652,10 @@ const clearCanvas = () => {
 .quick-nav .btn {
   font-size: 1.1em;
   padding: 12px 24px;
+}
+
+.quick-nav a{
+  text-decoration: none;
 }
 
 .info {

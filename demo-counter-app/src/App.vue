@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header>
-      <h1>🔢 Demo Counter App</h1>
+    <header class="demo-header">
+      <h1><span class="material-icons">calculate</span> Demo Counter App</h1>
       <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
     <main>
@@ -57,7 +57,7 @@ export default {
 body {
   margin: 0;
   padding: 0;
-  background: var(--background-secondary);
+  /* background: var(--background-secondary); */
   font-family: var(--font-family);
 }
 
@@ -67,11 +67,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
+  /* background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%); */
   padding: 2rem;
 }
 
-header {
+.demo-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.demo-header h1 {
+  color: #0054c9;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.demo-header h1 .material-icons{
+  font-size: 3rem;
+  vertical-align: middle;
+  padding-bottom: 8px;
+}
+
+.demo-header p {
+  color: #495057;
+  font-size: 1.2em;
+}
+
+/* header {
   text-align: center;
   margin-bottom: 3rem;
   padding: 2rem;
@@ -98,10 +121,10 @@ h1 {
   margin-bottom: 1rem;
   font-size: 2rem;
   font-weight: 700;
-  /* background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%); */
-  /* -webkit-background-clip: text;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text; */
+  background-clip: text;
 }
 
 p {
@@ -109,7 +132,7 @@ p {
   font-size: 1.1rem;
   font-weight: 400;
   margin: 0;
-}
+} */
 
 main {
   max-width: 800px;

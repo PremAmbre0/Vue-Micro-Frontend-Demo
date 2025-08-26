@@ -1,18 +1,21 @@
 <template>
   <div class="demo-three-container">
-    <h2>🎯 Demo Three: Drawing Canvas</h2>
+    <div class="demo-three-canvas-container">
+    <h2><span class="material-icons">draw</span> Demo Three: Drawing Canvas</h2>
     <p>Free drawing with brush controls using Fabric.js</p>
 
     <div class="controls">
       <div class="drawing-controls">
         <h3>Drawing Mode</h3>
-        <button @click="toggleDrawing" :class="['btn', drawingMode ? 'btn-danger' : 'btn-primary']">
+        <button @click="toggleDrawing" :class="['btn', drawingMode ? 'btn-danger' : 'btn-success']">
+          <span class="material-icons" >{{ drawingMode ? 'stop' : 'edit' }}</span>
           {{ drawingMode ? 'Stop Drawing' : 'Start Drawing' }}
         </button>
       </div>
 
       <div class="brush-controls">
         <h3>Brush Settings</h3>
+        <div class="brush-settings-container">
         <div class="brush-setting">
           <label for="brushWidth">Width: {{ brushWidth }}px</label>
           <input
@@ -35,17 +38,21 @@
             class="color-picker"
           />
         </div>
+        </div>
       </div>
 
       <div class="action-controls">
         <h3>Actions</h3>
-        <button @click="undoLast" class="btn btn-warning">Undo Last</button>
-        <button @click="clearCanvas" class="btn btn-secondary">Clear Canvas</button>
+        <div>
+        <button @click="undoLast" class="btn btn-warning"><span class="material-icons" >undo</span> Undo Last</button>
+        <button @click="clearCanvas" class="btn btn-secondary"><span class="material-icons" >delete</span> Clear Canvas</button>
+        </div>
       </div>
     </div>
     
     <div class="canvas-container">
       <canvas id="demo-three-canvas"></canvas>
+    </div>
     </div>
     
     <div class="info">
@@ -81,7 +88,30 @@ let canvas = null
 
 onMounted(() => {
   // Initialize the canvas
-  canvas = initDemoThreeCanvas('demo-three-canvas')
+  const el = document.getElementById("demo-three-canvas");
+  if (!el) throw new Error("Canvas element for Demo Three not found");
+  const container = el.parentElement;
+
+  canvas = initDemoThreeCanvas("demo-three-canvas");
+
+  if (!canvas) {
+    console.error('Failed to initialize Demo One canvas');
+    return;
+  }
+
+  // Responsive sizing
+  const resize = () => {
+    if (!canvas || !container) return;
+    canvas.setDimensions({
+      width: (container.clientWidth || 0) - 40,
+      height: 600,
+    });
+    canvas.renderAll();
+  };
+
+  // Ensure correct size on first paint, then keep it responsive
+  setTimeout(resize,0);
+  window.addEventListener("resize", () => resize());
 
   // Set initial brush settings
   setBrushWidth(canvas, brushWidth.value)
@@ -128,22 +158,51 @@ const clearCanvas = () => {
 }
 </script>
 
-<style >
+<style scoped>
 .demo-three-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.demo-three-container h2 {
-  color: #f59e0b;
+.demo-three-canvas-container{
+  border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+    background: #f8f9fa;
+    padding: 30px;
+    text-align: center;
+}
+
+.demo-three-canvas-container h2 {
+  color: var(--primary-color);
   margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.demo-three-canvas-container h2 .material-icons{
+  font-size: 2.5rem;
+  vertical-align: middle;
+  padding-bottom: 5px;
 }
 
 .controls {
   display: flex;
   gap: 30px;
+  align-items: center;
   margin: 20px 0;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+.brush-settings-container{
+  display: flex;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -154,6 +213,13 @@ const clearCanvas = () => {
   padding: 15px;
   border-radius: 8px;
   border: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.drawing-controls,.action-controls{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .drawing-controls h3,
@@ -165,7 +231,7 @@ const clearCanvas = () => {
 }
 
 .brush-setting {
-  margin: 10px 0;
+  margin: 2px 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -224,6 +290,13 @@ const clearCanvas = () => {
   font-weight: 500;
   margin: 0 5px 5px 0;
   transition: all 0.2s ease;
+}
+
+.btn .material-icons{
+  font-size: 1rem;
+  vertical-align: middle;
+  position: relative;
+  bottom: 2px;
 }
 
 .btn-primary {
@@ -287,6 +360,7 @@ const clearCanvas = () => {
   border-radius: 8px;
   padding: 20px;
   background: white;
+  box-shadow: var(--shadow-md);
 }
 
 #demo-three-canvas {

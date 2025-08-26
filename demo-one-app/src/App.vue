@@ -4,12 +4,11 @@ import DemoOneCanvas from './components/DemoOneCanvas.vue'
 
 <template>
   <div id="app">
-    <header>
-      <h1>🎨 Demo One App - Basic Shapes & Drawings</h1>
+    <header class="demo-header">
+      <h1><span class="material-icons">category</span> Demo One App - Basic Shapes & Drawings</h1>
       <p>Standalone Fabric.js demo for basic shape creation and manipulation</p>
     </header>
     <main>
-      
       <DemoOneCanvas />
     </main>
   </div>
@@ -47,29 +46,41 @@ import DemoOneCanvas from './components/DemoOneCanvas.vue'
 body {
   margin: 0;
   padding: 0;
-  background: var(--background-secondary);
+  background: var(--background-primary);
   font-family: var(--font-family);
 }
 
 #app {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
+  /* background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%); */
   font-family: var(--font-family);
   color: var(--text-primary);
 }
 
-header {
+.demo-header {
   text-align: center;
-  padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
-  color: white;
-  margin-bottom: 0;
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 40px;
 }
 
-header::before {
+.demo-header h1 {
+  color: #0054c9;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.demo-header h1 .material-icons{
+  font-size: 2.5rem;
+  vertical-align: middle;
+  padding-bottom: 8px;
+}
+
+.demo-header p {
+  color: #495057;
+  font-size: 1.2em;
+}
+
+/* header::before {
   content: '';
   position: absolute;
   top: 0;
@@ -96,7 +107,7 @@ header p {
   font-weight: 400;
   position: relative;
   z-index: 1;
-}
+} */
 
 main {
   padding: 2rem;

@@ -2,22 +2,22 @@
   <div class="shell-app">
     <div class="shell-all-demos-container">
       <header class="shell-demos-header">
-        <h1>🎨 All Demos Showcase</h1>
+        <h1><span class="material-icons">bolt</span> All Demos Showcase</h1>
         <p>Experience all three micro frontend demos in one unified view</p>
       </header>
 
       <!-- Global Controls -->
       <div class="shell-global-controls">
-        <h3>🌐 Global Controls</h3>
+        <h3><span class="material-icons">public</span> Global Controls</h3>
         <div class="shell-global-buttons">
           <button @click="clearAllCanvases" class="shell-btn shell-btn-warning">
-            🗑️ Clear All Canvases
+              <span class="material-icons">clear_all</span> Clear All Canvases
           </button>
           <button @click="deleteSelectedFromAll" class="shell-btn shell-btn-danger">
-            ❌ Delete Selected from All
+            <span class="material-icons">delete_sweep</span> Delete Selected from All
           </button>
           <button @click="resetAllDemos" class="shell-btn shell-btn-secondary">
-            🔄 Reset All Demos
+            <span class="material-icons">restart_alt</span> Reset All Demos
           </button>
         </div>
       </div>
@@ -25,7 +25,7 @@
       <!-- Demo One Section -->
       <section class="shell-demo-section shell-demo-one-section">
         <div class="shell-demo-header">
-          <h2>🎨 Demo One - Basic Shapes</h2>
+          <h2><span class="material-icons">category</span> Shapes Demo One - Basic Shapes</h2>
           <p>Interactive shape creation and manipulation</p>
         </div>
 
@@ -37,16 +37,16 @@
           </div>
           <div class="shell-control-buttons">
             <button @click="addRectangleToOne" class="shell-btn shell-btn-primary">
-              ➕ Rectangle
+              <span class="material-icons">crop_square</span> Rectangle
             </button>
             <button @click="addCircleToOne" class="shell-btn shell-btn-primary">
-              ⭕ Circle
+              <span class="material-icons">circle</span> Circle
             </button>
             <button @click="addTriangleToOne" class="shell-btn shell-btn-primary">
-              🔺 Triangle
+              <span class="material-icons">change_history</span> Triangle
             </button>
             <button @click="clearDemoOne" class="shell-btn shell-btn-secondary">
-              🗑️ Clear
+               <span class="material-icons">delete</span> Clear
             </button>
           </div>
         </div>
@@ -59,7 +59,7 @@
       <!-- Demo Two Section -->
       <section class="shell-demo-section shell-demo-two-section">
         <div class="shell-demo-header">
-          <h2>📝 Demo Two - Text & Images</h2>
+          <h2><span class="material-icons">edit_note</span> Demo Two - Text & Images</h2>
           <p>Dynamic text and image editing capabilities</p>
         </div>
 
@@ -74,7 +74,7 @@
               class="shell-text-input"
             />
             <button @click="addTextToTwo" class="shell-btn shell-btn-primary">
-              ➕ Add Text
+              <span class="material-icons">add</span> Add Text
             </button>
           </div>
           <div class="shell-control-group">
@@ -90,12 +90,13 @@
               class="shell-btn shell-btn-success"
               :disabled="isLoadingImage"
             >
-              {{ isLoadingImage ? "⏳ Loading..." : "🖼️ Add Image" }}
+            <span class="material-icons" v-if="!isLoadingImage">image</span>
+              {{ isLoadingImage ? "⏳ Loading..." : "Add Image" }}
             </button>
           </div>
           <div class="shell-control-buttons">
             <button @click="clearDemoTwo" class="shell-btn shell-btn-secondary">
-              🗑️ Clear
+              <span class="material-icons">delete</span> Clear
             </button>
           </div>
         </div>
@@ -108,7 +109,7 @@
       <!-- Demo Three Section -->
       <section class="shell-demo-section shell-demo-three-section">
         <div class="shell-demo-header">
-          <h2>🖌️ Demo Three - Drawing</h2>
+          <h2><span class="material-icons">draw</span> Demo Three - Drawing</h2>
           <p>Free-hand drawing and artistic creation</p>
         </div>
 
@@ -120,7 +121,8 @@
               @click="toggleDrawingMode"
               :class="['shell-btn', isDrawingMode ? 'shell-btn-danger' : 'shell-btn-success']"
             >
-              {{ isDrawingMode ? "🛑 Stop Drawing" : "✏️ Start Drawing" }}
+            <span class="material-icons" >{{ isDrawingMode ? 'stop' : 'edit' }}</span>
+              {{ isDrawingMode ? "Stop Drawing" : "Start Drawing" }}
             </button>
           </div>
           <div class="shell-control-group">
@@ -140,7 +142,7 @@
           </div>
           <div class="shell-control-buttons">
             <button @click="clearDemoThree" class="shell-btn shell-btn-secondary">
-              🗑️ Clear
+              <span class="material-icons">delete</span> Clear
             </button>
           </div>
         </div>
@@ -165,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 
 // Reactive state for controls
 const demoOneColor = ref("#0054C9");
@@ -214,28 +216,36 @@ const initializeDemoOne = async () => {
     // Import demo one module
     demoOneModule = await import("demoOneApp/demoOneLogic");
 
-    // Initialize canvas
-    demoOneCanvas = demoOneModule.initDemoOneCanvas("demo-one-canvas");
+    const el = document.getElementById("demo-one-canvas");
+    if (!el) throw new Error("Canvas element for Demo One not found");
 
-    // Add some sample content
+    const container = el.parentElement;
+    // const width = container.clientWidth - 40;
+    // const height = 600;
+
+    // demoOneCanvas = demoOneModule.initDemoOneCanvas("demo-one-canvas", { width, height });
     setTimeout(() => {
-      if (demoOneCanvas && demoOneModule) {
-        // Add sample shapes
-        demoOneModule.addRectangle(demoOneCanvas, {
-          left: 50,
-          top: 50,
-          fill: "#0054C9",
-        });
-        demoOneModule.addCircle(demoOneCanvas, {
-          left: 200,
-          top: 100,
-          fill: "#6AAAEB",
-        });
-        demoOneModule.addTriangle(demoOneCanvas, {
-          left: 350,
-          top: 80,
-          fill: "#031F3C",
-        });
+      const width = container.clientWidth - 40;
+      const height = 600;
+
+      demoOneCanvas = demoOneModule.initDemoOneCanvas("demo-one-canvas", { width, height });
+      resize();
+    }, 0);
+
+    const resize = () => {
+      demoOneCanvas.setDimensions({
+        width: container.clientWidth - 40,
+        height: 600,
+      });
+      demoOneCanvas.renderAll();
+    };
+    window.addEventListener("resize", () => requestAnimationFrame(resize));
+
+    setTimeout(() => {
+      if (demoOneCanvas) {
+        demoOneModule.addRectangle(demoOneCanvas, { left: 50, top: 50, fill: "#0054C9" });
+        demoOneModule.addCircle(demoOneCanvas, { left: 200, top: 100, fill: "#6AAAEB" });
+        demoOneModule.addTriangle(demoOneCanvas, { left: 350, top: 80, fill: "#031F3C" });
       }
     }, 500);
 
@@ -251,8 +261,27 @@ const initializeDemoTwo = async () => {
     // Import demo two module
     demoTwoModule = await import("demoTwoApp/demoTwoLogic");
 
-    // Initialize canvas
-    demoTwoCanvas = demoTwoModule.initDemoTwoCanvas("demo-two-canvas");
+    const el = document.getElementById("demo-two-canvas");
+    if (!el) throw new Error("Canvas element for Demo One not found");
+
+    const container = el.parentElement;
+
+    setTimeout(() => {
+      const width = container.clientWidth - 40;
+      const height = 600;
+
+      demoTwoCanvas = demoTwoModule.initDemoTwoCanvas("demo-two-canvas", { width, height });
+      resize();
+    }, 0);
+
+    const resize = () => {
+      demoTwoCanvas.setDimensions({
+        width: container.clientWidth - 40,
+        height: 600,
+      });
+      demoTwoCanvas.renderAll();
+    };
+    window.addEventListener("resize", () => requestAnimationFrame(resize));
 
     // Add some sample content
     setTimeout(() => {
@@ -288,8 +317,27 @@ const initializeDemoThree = async () => {
     // Import demo three module
     demoThreeModule = await import("demoThreeApp/demoThreeLogic");
 
-    // Initialize canvas
-    demoThreeCanvas = demoThreeModule.initDemoThreeCanvas("demo-three-canvas");
+   const el = document.getElementById("demo-three-canvas");
+    if (!el) throw new Error("Canvas element for Demo One not found");
+
+    const container = el.parentElement;
+
+    setTimeout(() => {
+      const width = container.clientWidth - 40;
+      const height = 600;
+
+      demoThreeCanvas = demoThreeModule.initDemoThreeCanvas("demo-three-canvas", { width, height });
+      resize();
+    }, 0);
+
+    const resize = () => {
+      demoThreeCanvas.setDimensions({
+        width: container.clientWidth - 40,
+        height: 600,
+      });
+      demoThreeCanvas.renderAll();
+    };
+    window.addEventListener("resize", () => requestAnimationFrame(resize));
 
     // Add some sample content
     setTimeout(() => {
@@ -527,6 +575,12 @@ watch(brushColor, (newColor) => {
   font-size: 2.5em;
 }
 
+.shell-demos-header h1 .material-icons{
+  font-size: 2.5rem;
+  vertical-align: middle;
+  padding-bottom: 8px;
+}
+
 .shell-demos-header p {
   color: #495057;
   font-size: 1.2em;
@@ -544,8 +598,15 @@ watch(brushColor, (newColor) => {
 
 .shell-global-controls h3 {
   color: #0054c9;
+  margin-top: 0;
   margin-bottom: 15px;
   font-size: 1.4em;
+}
+
+.shell-global-controls h3 .material-icons{
+  font-size: 1.5rem;
+  vertical-align: middle;
+  padding-bottom: 5px;
 }
 
 .shell-global-buttons {
@@ -556,9 +617,14 @@ watch(brushColor, (newColor) => {
 }
 
 .shell-global-buttons .shell-btn {
-  font-size: 1.1em;
+  font-size: 1rem;
   padding: 12px 20px;
   min-width: 180px;
+}
+
+.shell-global-buttons .shell-btn .material-icons{
+  font-size: 1.1rem;
+  vertical-align: middle;
 }
 
 .shell-demo-section {
@@ -570,15 +636,15 @@ watch(brushColor, (newColor) => {
 }
 
 .shell-demo-one-section {
-  border-left: 6px solid #0054c9;
+  border-left: 4px solid #0054c9;
 }
 
 .shell-demo-two-section {
-  border-left: 6px solid #6aaaeb;
+  border-left: 4px solid #6aaaeb;
 }
 
 .shell-demo-three-section {
-  border-left: 6px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
 }
 
 .shell-demo-header {
@@ -588,7 +654,13 @@ watch(brushColor, (newColor) => {
 
 .shell-demo-header h2 {
   margin: 0 0 10px 0;
-  font-size: 1.8em;
+  font-size: 1.8rem;
+}
+
+.shell-demo-header h2 .material-icons{
+  font-size: 2rem;
+  vertical-align: middle;
+  padding-bottom: 6px;
 }
 
 .shell-demo-one-section .shell-demo-header h2 {
@@ -679,17 +751,25 @@ watch(brushColor, (newColor) => {
 
 /* Shell Button Styles */
 .shell-btn {
-  padding: 10px 16px;
+  padding: 10px 20px;
+  font-size: 1rem;
   border: none;
-  border-radius: 6px;
-  font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 400;
   transition: all 0.3s ease;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.shell-btn:hover {
-  transform: translateY(-1px);
+.shell-btn .material-icons{
+  font-size: 1.25rem;
+  vertical-align: middle;
+}
+
+.shell-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -752,11 +832,9 @@ watch(brushColor, (newColor) => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.shell-demo-canvas-container canvas {
+#demo-one-canvas,#demo-two-canvas,#demo-three-canvas {
   border: 2px solid #e9ecef;
   border-radius: 8px;
-  max-width: 100%;
-  height: auto;
 }
 
 .shell-info {

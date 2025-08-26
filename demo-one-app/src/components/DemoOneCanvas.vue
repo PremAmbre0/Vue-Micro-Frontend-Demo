@@ -1,18 +1,20 @@
 <template>
   <div class="demo-one-container">
-    <h2>🎨 Demo One: Basic Shapes & Drawing</h2>
+    <div class="demo-one-canvas-container">
+    <h2><span class="material-icons">category</span> Demo One: Basic Shapes & Drawing</h2>
     <p>Create and manipulate basic shapes with Fabric.js</p>
 
     <div class="controls">
       <div class="shape-controls">
         <h3>Add Shapes</h3>
-        <button @click="addRect" class="btn btn-primary">Add Rectangle</button>
-        <button @click="addCirc" class="btn btn-success">Add Circle</button>
-        <button @click="addTri" class="btn btn-danger">Add Triangle</button>
+        <button @click="addRect" class="btn btn-primary"><span class="material-icons">crop_square</span> Add Rectangle</button>
+        <button @click="addCirc" class="btn btn-success"> <span class="material-icons">circle</span> Add Circle</button>
+        <button @click="addTri" class="btn btn-danger"><span class="material-icons">change_history</span> Add Triangle</button>
       </div>
 
       <div class="color-controls">
         <h3>Colors</h3>
+        <div class="color-controls-content">
         <label for="colorPicker">Change Selected Color:</label>
         <input
           id="colorPicker"
@@ -21,15 +23,16 @@
           @input="changeColor"
           class="color-picker"
         />
+        </div>
       </div>
 
       <div class="action-controls">
         <h3>Actions</h3>
         <button @click="deleteSelected" class="btn btn-warning">
-          Delete Selected
+          <span class="material-icons">delete_sweep</span> Delete Selected
         </button>
         <button @click="clearCanvas" class="btn btn-secondary">
-          Clear Canvas
+         <span class="material-icons">clear_all</span> Clear Canvas
         </button>
       </div>
     </div>
@@ -37,6 +40,7 @@
     <div class="canvas-container">
       <canvas id="demo-one-canvas"></canvas>
     </div>
+  </div>
 
     <div class="info">
       <p><strong>Instructions:</strong></p>
@@ -67,26 +71,44 @@ const selectedColor = ref("#0054C9");
 let canvas = null;
 
 onMounted(() => {
-  // Initialize the canvas with error handling
-  try {
-    canvas = initDemoOneCanvas("demo-one-canvas");
+// Initialize the canvas with error handling + responsive sizing
+try {
+  const el = document.getElementById("demo-one-canvas");
+  if (!el) throw new Error("Canvas element for Demo One not found");
+  const container = el.parentElement;
 
-    if (!canvas) {
-      console.error('Failed to initialize Demo One canvas');
-      return;
-    }
+  canvas = initDemoOneCanvas("demo-one-canvas");
 
-    // Add some default shapes for demonstration
-    setTimeout(() => {
-      if (canvas) {
-        addRectangle(canvas, { left: 50, top: 50, fill: "#42b883" });
-        addCircle(canvas, { left: 200, top: 100, fill: "#3b82f6" });
-        addTriangle(canvas, { left: 350, top: 80, fill: "#ef4444" });
-      }
-    }, 100);
-  } catch (error) {
-    console.error('Error in Demo One canvas initialization:', error);
+  if (!canvas) {
+    console.error('Failed to initialize Demo One canvas');
+    return;
   }
+
+  // Responsive sizing
+  const resize = () => {
+    if (!canvas || !container) return;
+    canvas.setDimensions({
+      width: (container.clientWidth || 0) - 40,
+      height: 600,
+    });
+    canvas.renderAll();
+  };
+
+  // Ensure correct size on first paint, then keep it responsive
+  setTimeout(resize,0);
+  window.addEventListener("resize", () => resize());
+
+  // Add some default shapes for demonstration
+  setTimeout(() => {
+    if (canvas) {
+      addRectangle(canvas, { left: 50, top: 50, fill: "#42b883" });
+      addCircle(canvas,   { left: 200, top: 100, fill: "#3b82f6" });
+      addTriangle(canvas, { left: 350, top: 80,  fill: "#ef4444" });
+    }
+  }, 100);
+} catch (error) {
+  console.error('Error in Demo One canvas initialization:', error);
+}
 });
 
 onUnmounted(() => {
@@ -174,23 +196,46 @@ const clearCanvas = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .demo-one-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.demo-one-container h2 {
+.demo-one-canvas-container{
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+    background: #f8f9fa;
+    padding: 30px;
+    text-align: center;
+}
+
+.demo-one-canvas-container h2 {
   color: #0054C9;
   margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.demo-one-canvas-container h2 .material-icons{
+  font-size: 2.5rem;
+  vertical-align: middle;
+  padding-bottom: 5px;
 }
 
 .controls {
   display: flex;
   gap: 30px;
+  align-items: center;
   margin: 20px 0;
   flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--primary-color);
 }
 
 .shape-controls,
@@ -203,6 +248,12 @@ const clearCanvas = () => {
   border: 1px solid #e9ecef;
 }
 
+.color-controls-content{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .shape-controls h3,
 .color-controls h3,
 .action-controls h3 {
@@ -212,13 +263,25 @@ const clearCanvas = () => {
 }
 
 .btn {
-  padding: 8px 16px;
+  padding: 8px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
   margin: 0 5px 5px 0;
   transition: all 0.2s ease;
+}
+
+.btn .material-icons{
+  font-size: 1rem;
+  vertical-align: middle;
+  position: relative;
+  bottom: 1px;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
@@ -272,7 +335,6 @@ const clearCanvas = () => {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 10px;
 }
 
 .canvas-container {
@@ -282,6 +344,7 @@ const clearCanvas = () => {
   border-radius: 8px;
   padding: 20px;
   background: white;
+  box-shadow: var(--shadow-md);
 }
 
 #demo-one-canvas {
@@ -296,6 +359,7 @@ const clearCanvas = () => {
   border-radius: 8px;
   border-left: 4px solid #2196f3;
   margin-top: 20px;
+  box-shadow: var(--shadow-lg);
 }
 
 .info ul {

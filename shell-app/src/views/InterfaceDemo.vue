@@ -1,14 +1,14 @@
 <template>
   <div class="interface-demo">
     <header class="demo-header">
-      <h1>🔗 Micro Frontend Interface Communication Demo</h1>
+      <h1><span class="material-icons">dynamic_feed</span> Micro Frontend Interface Communication Demo</h1>
       <p>This page demonstrates how micro frontends can share state through exposed interfaces</p>
     </header>
 
     <div class="demo-grid">
       <!-- Shell App Counter -->
       <div class="demo-section shell-section">
-        <h2>🏠 Shell App Counter</h2>
+        <h2> Shell App Counter</h2>
         <p>This counter is managed by the Shell App's Pinia store</p>
         
         <div class="counter-display">
@@ -155,17 +155,40 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .interface-demo {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0;
   font-family: var(--font-family);
-  background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%);
+  /* background: linear-gradient(135deg, var(--light-color) 0%, #FFFFFF 100%); */
   min-height: calc(100vh - 120px);
 }
 
 .demo-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.demo-header h1 {
+  color: #0054c9;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.demo-header h1 .material-icons{
+  font-size: 3rem;
+  vertical-align: middle;
+  padding-bottom: 8px;
+}
+
+.demo-header p {
+  color: #495057;
+  font-size: 1.2em;
+}
+
+/* .demo-header {
   text-align: center;
   margin-bottom: 3rem;
   padding: 3rem 2rem;
@@ -175,9 +198,9 @@ export default {
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
-}
+} */
 
-.demo-header::before {
+/* .demo-header::before {
   content: '';
   position: absolute;
   top: 0;
@@ -186,9 +209,9 @@ export default {
   height: 100%;
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
   opacity: 0.3;
-}
+} */
 
-.demo-header h1 {
+/* .demo-header h1 {
   margin: 0 0 1rem 0;
   font-size: 3rem;
   font-weight: 700;
@@ -204,7 +227,7 @@ export default {
   font-weight: 400;
   position: relative;
   z-index: 1;
-}
+} */
 
 .demo-grid {
   display: grid;
@@ -218,16 +241,17 @@ export default {
   padding: 2.5rem;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
+  /* border: 1px solid var(--border-light); */
   position: relative;
   overflow: hidden;
+  border-left: 4px solid var(--primary-color);
 }
 
 .shell-section {
   background: var(--background-primary);
   color: var(--text-primary);
 }
-
+/* 
 .shell-section::before {
   content: '';
   position: absolute;
@@ -236,7 +260,7 @@ export default {
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
-}
+} */
 
 .remote-section {
   background: var(--background-primary);
@@ -458,13 +482,14 @@ export default {
   padding: 2rem;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
+  /* border: 1px solid var(--border-light); */
+  border: 2px solid var(--primary-color);
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.explanation-card::before {
+/* .explanation-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -472,7 +497,7 @@ export default {
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
-}
+} */
 
 .explanation-card:hover {
   transform: translateY(-4px);
@@ -518,7 +543,8 @@ export default {
   border-radius: var(--radius-xl);
   margin: 0 2rem 2rem;
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
+  /* border: 1px solid var(--border-light); */
+  border-left: 4px solid var(--primary-color);
 }
 
 .code-section h2 {

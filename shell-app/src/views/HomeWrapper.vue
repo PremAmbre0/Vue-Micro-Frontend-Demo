@@ -68,7 +68,7 @@ const testDemoOne = () => {
 
 <template>
   <div class="home-page-wrapper">
-    <h1>🎨 Micro Frontend Fabric.js Demos</h1>
+    <h1> Micro Frontend Fabric.js Demos</h1>
     <p>Explore Fabric.js integration across micro frontends</p>
 
     <div class="demo-grid">
@@ -140,7 +140,7 @@ const testDemoOne = () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .home-page-wrapper {
   padding: 0;
   max-width: 1400px;

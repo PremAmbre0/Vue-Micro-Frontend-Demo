@@ -3,6 +3,7 @@
     <div class="status-section">
       <h2>Connection Status</h2>
       <div class="status-indicator" :class="{ connected: isConnected, disconnected: !isConnected }">
+        <span class="material-icons">{{ isConnected ? 'link' : 'link_off' }}</span>
         {{ isConnected ? 'Connected to Shell App' : 'Disconnected from Shell App' }}
       </div>
     </div>
@@ -282,7 +283,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .counter-demo {
   max-width: 700px;
   margin: 0 auto;
@@ -303,6 +304,13 @@ export default {
   transition: all 0.3s ease;
 }
 
+.status-indicator .material-icons{
+  font-size: 1.5rem;
+  vertical-align: middle;
+  position: relative;
+  bottom: 1.5px;
+}
+
 .status-indicator.connected {
   background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
   color: #065F46;
@@ -321,12 +329,13 @@ export default {
   border-radius: var(--radius-xl);
   margin-bottom: 2rem;
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
+  /* border: 1px solid var(--border-light); */
   position: relative;
   overflow: hidden;
+  border-left: 4px solid var(--primary-color);
 }
 
-.counter-section::before {
+/* .counter-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -334,7 +343,7 @@ export default {
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
-}
+} */
 
 .counter-display {
   text-align: center;
@@ -525,7 +534,8 @@ export default {
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--primary-color);
 }
 
 .log-container::-webkit-scrollbar {

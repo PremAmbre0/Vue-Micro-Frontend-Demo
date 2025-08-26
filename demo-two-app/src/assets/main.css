@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import './base.css';
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import "./base.css";
 
 #demo-two-app {
   max-width: 1280px;
@@ -22,7 +22,7 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   body {
     display: flex;
     place-items: center;
@@ -34,13 +34,13 @@ a,
     padding: 0 2rem;
   }
 
-  header{
+  header {
     grid-column: 1 / -1;
   }
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1024px) {
   body header {
-  display: none;
-}
-}
+    display: none;
+  }
+} */

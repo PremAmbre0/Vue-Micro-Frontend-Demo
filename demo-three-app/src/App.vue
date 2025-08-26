@@ -4,8 +4,8 @@ import DemoThreeCanvas from './components/DemoThreeCanvas.vue'
 
 <template>
   <div id="app">
-    <header>
-      <h1>🎯 Demo Three App - Interactive Canvas</h1>
+    <header class="demo-header">
+      <h1><span class="material-icons">draw</span> Demo Three App - Interactive Canvas</h1>
       <p>Standalone Fabric.js demo for advanced interactions and object manipulation</p>
     </header>
     <main>
@@ -57,14 +57,37 @@ body {
   color: var(--text-primary);
 }
 
-header {
+.demo-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.demo-header h1 {
+  color: #0054c9;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.demo-header h1 .material-icons{
+  font-size: 3rem;
+  vertical-align: middle;
+  padding-bottom: 8px;
+}
+
+.demo-header p {
+  color: #495057;
+  font-size: 1.2em;
+}
+
+/* header {
   text-align: center;
   margin: 3rem 0;
   padding: 2rem;
   background: var(--background-primary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  /* border: 1px solid var(--border-light); */
+  border: 1px solid var(--border-light);
   border-top: 4px solid var(--primary-color);
   position: relative;
   overflow: hidden;
@@ -98,7 +121,7 @@ header p {
   font-weight: 400;
   position: relative;
   z-index: 1;
-}
+} */
 
 main {
   padding: 2rem;
