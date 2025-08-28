@@ -25,37 +25,37 @@
       </div>
       
       <div class="nav-links">
-        <router-link to="/" class="nav-link" :title="isNavExpanded ? '' : 'Home'" @click="closeMobileNav">
+        <router-link to="/" class="nav-link" :title="isNavExpanded ? '' : 'Home'" @click="handleNavClick">
           <span class="material-icons">home</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Home</span>
         </router-link>
         
-        <router-link to="/all-demos" class="nav-link" :title="isNavExpanded ? '' : 'All Demos'" @click="closeMobileNav">
+        <router-link to="/all-demos" class="nav-link" :title="isNavExpanded ? '' : 'All Demos'" @click="handleNavClick">
           <span class="material-icons">bolt</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">All Demos</span>
         </router-link>
         
-        <router-link to="/demo-one" class="nav-link" :title="isNavExpanded ? '' : 'Demo One'" @click="closeMobileNav">
+        <router-link to="/demo-one" class="nav-link" :title="isNavExpanded ? '' : 'Demo One'" @click="handleNavClick">
           <span class="material-icons">category</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo One</span>
         </router-link>
         
-        <router-link to="/demo-two" class="nav-link" :title="isNavExpanded ? '' : 'Demo Two'" @click="closeMobileNav">
+        <router-link to="/demo-two" class="nav-link" :title="isNavExpanded ? '' : 'Demo Two'" @click="handleNavClick">
           <span class="material-icons">edit_note</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Two</span>
         </router-link>
         
-        <router-link to="/demo-three" class="nav-link" :title="isNavExpanded ? '' : 'Demo Three'" @click="closeMobileNav">
+        <router-link to="/demo-three" class="nav-link" :title="isNavExpanded ? '' : 'Demo Three'" @click="handleNavClick">
           <span class="material-icons">draw</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Three</span>
         </router-link>
         
-        <router-link to="/demo-counter" class="nav-link" :title="isNavExpanded ? '' : 'Demo Counter'" @click="closeMobileNav">
+        <router-link to="/demo-counter" class="nav-link" :title="isNavExpanded ? '' : 'Demo Counter'" @click="handleNavClick">
           <span class="material-icons">calculate</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Counter</span>
         </router-link>
         
-        <router-link to="/interface-demo" class="nav-link" :title="isNavExpanded ? '' : 'Interface Demo'" @click="closeMobileNav">
+        <router-link to="/interface-demo" class="nav-link" :title="isNavExpanded ? '' : 'Interface Demo'" @click="handleNavClick">
           <span class="material-icons">dynamic_feed</span>
           <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Interface Demo</span>
         </router-link>
@@ -101,7 +101,18 @@ const toggleMobileNav = () => {
 
 const closeMobileNav = () => {
   isMobileNavOpen.value = false;
-  isNavExpanded.value = false;
+  // Only collapse nav text on mobile screens
+  if (window.innerWidth < 1200) {
+    isNavExpanded.value = false;
+  }
+};
+
+const handleNavClick = () => {
+  // Only close mobile nav when we're actually in mobile mode
+  if (window.innerWidth < 1200) {
+    closeMobileNav();
+  }
+  // On desktop, do nothing - let the normal hover behavior handle text visibility
 };
 
 // Handle window resize
