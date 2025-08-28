@@ -24,32 +24,62 @@
       </div>
 
       <div class="controls">
-        <div class="basic-controls">
-          <button @click="increment" class="btn btn-primary">+1</button>
-          <button @click="decrement" class="btn btn-secondary">-1</button>
-          <button @click="reset" class="btn btn-warning">Reset</button>
+        <!-- Basic Operations -->
+        <div class="control-section">
+          <h4 class="control-title">Basic Operations</h4>
+          <div class="basic-controls">
+            <button @click="increment" class="btn btn-primary">
+              <!-- <span class="material-icons">add</span> -->
+              +1
+            </button>
+            <button @click="decrement" class="btn btn-secondary">
+              <!-- <span class="material-icons">remove</span> -->
+              -1
+            </button>
+            <button @click="reset" class="btn btn-warning">
+              <span class="material-icons">refresh</span>
+              Reset
+            </button>
+          </div>
         </div>
 
-        <div class="advanced-controls">
-          <div class="input-group">
+        <!-- Custom Amount Operations -->
+        <div class="control-section">
+          <h4 class="control-title">Custom Amount</h4>
+          <div class="input-group custom-amount-group">
             <input 
               v-model.number="customAmount" 
               type="number" 
-              placeholder="Amount"
+              placeholder="Enter amount"
               class="input-field"
             >
-            <button @click="incrementByAmount" class="btn btn-success">+</button>
-            <button @click="decrementByAmount" class="btn btn-danger">-</button>
+            <div class="button-pair">
+              <button @click="incrementByAmount" class="btn btn-success">
+                <span class="material-icons">add</span>
+                Add
+              </button>
+              <button @click="decrementByAmount" class="btn btn-danger">
+                <span class="material-icons">remove</span>
+                Subtract
+              </button>
+            </div>
           </div>
+        </div>
 
-          <div class="input-group">
+        <!-- Set Value Operation -->
+        <div class="control-section">
+          <h4 class="control-title">Set Value</h4>
+          <div class="input-group set-value-group">
             <input 
               v-model.number="setValue" 
               type="number" 
-              placeholder="Set value"
+              placeholder="Enter new value"
               class="input-field"
             >
-            <button @click="setCounterValue" class="btn btn-info">Set</button>
+            <button @click="setCounterValue" class="btn btn-info">
+              <span class="material-icons">edit</span>
+              Set Value
+            </button>
           </div>
         </div>
       </div>
@@ -285,7 +315,9 @@ export default {
 
 <style scoped>
 .counter-demo {
-  max-width: 700px;
+  /* max-width: 700px; */
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0;
 }
@@ -347,7 +379,7 @@ export default {
 
 .counter-display {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .counter-value {
@@ -408,8 +440,53 @@ export default {
 
 .controls {
   display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.control-section {
+  background: var(--background-tertiary);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 280px;
+  display: flex;
   flex-direction: column;
-  gap: 2rem;
+  align-items: center;
+  text-align: center;
+}
+
+.control-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.control-title {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.control-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
+  border-radius: 1px;
 }
 
 .basic-controls {
@@ -417,12 +494,7 @@ export default {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-.advanced-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  width: 100%;
 }
 
 .input-group {
@@ -431,6 +503,28 @@ export default {
   gap: 1rem;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.custom-amount-group {
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.set-value-group {
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.button-pair {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .btn {
@@ -445,6 +539,15 @@ export default {
   position: relative;
   overflow: hidden;
   min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn .material-icons {
+  font-size: 1.1rem;
+  vertical-align: middle;
 }
 
 .btn::before {
@@ -633,6 +736,37 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .control-section {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .control-section {
+    padding: 1.75rem;
+    min-width: 220px;
+  }
+
+  .btn {
+    min-width: 120px;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .controls {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .control-section {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .counter-demo {
     padding: 0;
@@ -651,24 +785,49 @@ export default {
     gap: 0.75rem;
   }
 
+  .control-section {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  .controls {
+    gap: 2rem;
+    flex-direction: column;
+  }
+
   .basic-controls {
     flex-direction: column;
     align-items: center;
+    gap: 0.75rem;
+  }
+
+  .button-pair {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
   }
 
   .input-group {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .set-value-group {
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .btn {
     width: 100%;
     max-width: 280px;
+    min-width: unset;
   }
 
   .input-field {
     width: 100%;
-    max-width: 200px;
+    max-width: 250px;
   }
 }
 
@@ -679,6 +838,35 @@ export default {
 
   .counter-value {
     font-size: 3rem;
+  }
+
+  .control-section {
+    padding: 1.25rem;
+    width: 100%;
+  }
+
+  .controls {
+    gap: 1.5rem;
+  }
+
+  .control-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    max-width: none;
+  }
+
+  .btn .material-icons {
+    font-size: 1rem;
+  }
+
+  .input-field {
+    max-width: none;
+    padding: 0.875rem 1.25rem;
   }
 
   .error-section {

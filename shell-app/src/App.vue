@@ -13,12 +13,16 @@
     <nav class="shell-nav" :class="{ 'mobile-nav-open': isMobileNavOpen }" @mouseenter="expandNav" @mouseleave="collapseNav">
       <div class="nav-header">
         <span class="nav-logo" :class="{ 'nav-logo-collapsed': !isNavExpanded, 'nav-logo-expanded': isNavExpanded }">
-          <span v-if="!isNavExpanded" class="nav-logo-short">MFD</span>
+          <span v-if="!isNavExpanded" class="nav-logo-short"><img src="./assets/images/altersquare-icon.png" style="height: 30px;" /></span>
           <span v-else class="nav-logo-full">
-            Micro Frontend Demo
-            <!-- Close button for mobile - integrated within the header text -->
+            <div class="nav-content-container">
+              <img src="./assets/images/altersquare-logo.png" alt="AlterSquare Logo"
+                      style="height: 28px; object-fit: contain;">
+              <span>Micro Frontend Demo</span>
+            </div>
+            <!-- Close button for mobile - positioned to the side -->
             <button v-if="isMobileNavOpen" class="nav-close-btn-inline" @click="closeMobileNav">
-              <span class="material-icons">close</span>
+              <span class="material-icons">chevron_left</span>
             </button>
           </span>
         </span>
@@ -213,6 +217,7 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   min-height: 80px;
 }
@@ -238,16 +243,32 @@ body {
   font-weight: 700;
   font-size: 1.2rem;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .nav-logo-full {
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: white;
   white-space: nowrap;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
+  gap: 2.5rem;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.nav-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
 }
 
 /* Inline close button within the header text */
@@ -264,7 +285,7 @@ body {
   transition: all 0.3s ease;
   min-width: 28px;
   height: 28px;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .nav-close-btn-inline:hover {

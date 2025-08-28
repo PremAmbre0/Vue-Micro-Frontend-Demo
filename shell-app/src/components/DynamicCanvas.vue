@@ -1,7 +1,10 @@
 <template>
   <div class="dynamic-canvas-container">
     <header class="canvas-header">
-      <h1><span class="material-icons">palette</span> Welcome to Micro Frontend Showcase</h1>
+      <h1>
+        <!-- <span class="material-icons">palette</span>  -->
+        Welcome to Micro Frontend Showcase
+      </h1>
       <p>Interactive landing page - Load and control federated micro frontend modules dynamically</p>
     </header>
 

@@ -21,16 +21,44 @@
         </div>
 
         <div class="controls">
-          <button @click="commonStore.increment()" class="btn btn-primary">+1</button>
-          <button @click="commonStore.decrement()" class="btn btn-secondary">-1</button>
-          <button @click="commonStore.reset()" class="btn btn-warning">Reset</button>
-        </div>
+          <!-- Basic Operations -->
+          <div class="control-section">
+            <h4 class="control-title">Basic Operations</h4>
+            <div class="basic-controls">
+              <button @click="commonStore.increment()" class="btn btn-primary">
+                <!-- <span class="material-icons">add</span> -->
+                +1
+              </button>
+              <button @click="commonStore.decrement()" class="btn btn-secondary">
+                <!-- <span class="material-icons">remove</span> -->
+                -1
+              </button>
+              <button @click="commonStore.reset()" class="btn btn-warning">
+                <span class="material-icons">refresh</span>
+                Reset
+              </button>
+            </div>
+          </div>
 
-        <div class="advanced-controls">
-          <div class="input-group">
-            <input v-model.number="shellAmount" type="number" placeholder="Amount" class="input-field">
-            <button @click="commonStore.incrementBy(shellAmount)" class="btn btn-success">+</button>
-            <button @click="commonStore.decrementBy(shellAmount)" class="btn btn-danger">-</button>
+          <!-- Custom Amount Operations -->
+          <div class="control-section">
+            <h4 class="control-title">Custom Amount</h4>
+            <div class="input-group custom-amount-group">
+              <input 
+                v-model.number="shellAmount" 
+                type="number" 
+                placeholder="Enter amount"
+                class="input-field"
+              >
+              <button @click="commonStore.incrementBy(shellAmount)" class="btn btn-success">
+                <span class="material-icons">add</span>
+                Add
+              </button>
+              <button @click="commonStore.decrementBy(shellAmount)" class="btn btn-danger">
+                <span class="material-icons">remove</span>
+                Subtract
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -158,6 +186,7 @@ export default {
 <style scoped>
 .interface-demo {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0;
   font-family: var(--font-family);
@@ -345,15 +374,62 @@ export default {
 
 .controls {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  flex-direction: row;
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
+  justify-content: space-between;
+  align-items: stretch;
   flex-wrap: wrap;
 }
 
-.advanced-controls {
+.control-section {
+  background: var(--background-tertiary);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  flex: 1;
+  width: calc(50% - 0.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.control-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.control-title {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.control-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--dark-color) 100%);
+  border-radius: 1px;
+}
+
+.basic-controls {
   display: flex;
   justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .input-group {
@@ -361,7 +437,20 @@ export default {
   gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
+
+.custom-amount-group {
+  flex-direction: row;
+  gap: 0.75rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
 
 .btn {
   padding: 0.875rem 1.5rem;
@@ -375,6 +464,15 @@ export default {
   position: relative;
   overflow: hidden;
   min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn .material-icons {
+  font-size: 1rem;
+  vertical-align: middle;
 }
 
 .btn::before {
@@ -473,7 +571,7 @@ export default {
 
 .explanation-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 2rem;
 }
 
@@ -596,6 +694,23 @@ export default {
     margin: 0 1.5rem 2rem;
     padding: 2.5rem 1.5rem;
   }
+
+  .control-section {
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 900px) {
+  .controls {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .control-section {
+    width: 100%;
+    min-width: unset;
+    max-width: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -639,13 +754,42 @@ export default {
     padding: 2rem 1.5rem;
   }
 
+  .control-section {
+    padding: 1.25rem;
+    width: 100%;
+  }
+
   .controls {
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  .basic-controls {
     flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
   }
 
   .input-group {
     justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .custom-amount-group {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 200px;
+    min-width: unset;
+  }
+
+  .input-field {
+    width: 100%;
+    max-width: 180px;
   }
 }
 
@@ -668,6 +812,35 @@ export default {
 
   .code-section {
     padding: 1.5rem 1rem;
+  }
+
+  .control-section {
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .control-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .controls {
+    gap: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    max-width: none;
+  }
+
+  .btn .material-icons {
+    font-size: 0.9rem;
+  }
+
+  .input-field {
+    max-width: none;
+    padding: 0.75rem 1rem;
   }
 }
 </style>
