@@ -10,7 +10,67 @@
     <!-- Mobile Overlay -->
     <div class="mobile-overlay" :class="{ 'active': isMobileNavOpen }" @click="closeMobileNav"></div>
 
-    <nav class="shell-nav" :class="{ 'mobile-nav-open': isMobileNavOpen }" @mouseenter="expandNav" @mouseleave="collapseNav">
+    <!-- Navigation with conditional rendering and animation -->
+    <nav v-if="!isMobile" class="shell-nav" @mouseenter="expandNav" @mouseleave="collapseNav">
+      <!-- Navigation header with fade-in animation -->
+      <Transition name="nav-header-fade" appear>
+        <div class="nav-header">
+          <span class="nav-logo" :class="{ 'nav-logo-collapsed': !isNavExpanded, 'nav-logo-expanded': isNavExpanded }">
+            <span v-if="!isNavExpanded" class="nav-logo-short"><img src="./assets/images/altersquare-icon.png" style="height: 30px;" /></span>
+            <span v-else class="nav-logo-full">
+              <div class="nav-content-container">
+                <img src="./assets/images/altersquare-logo.png" alt="AlterSquare Logo"
+                        style="height: 28px; object-fit: contain;">
+                <span>Micro Frontend Demo</span>
+              </div>
+            </span>
+          </span>
+        </div>
+      </Transition>
+      
+      <!-- Navigation links with staggered fade-in animation -->
+      <Transition name="nav-links-fade" appear>
+        <div class="nav-links">
+          <router-link to="/" class="nav-link nav-link-1" :title="isNavExpanded ? '' : 'Home'" @click="handleNavClick">
+            <span class="material-icons">home</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Home</span>
+          </router-link>
+          
+          <router-link to="/all-demos" class="nav-link nav-link-2" :title="isNavExpanded ? '' : 'All Demos'" @click="handleNavClick">
+            <span class="material-icons">bolt</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">All Demos</span>
+          </router-link>
+          
+          <router-link to="/demo-one" class="nav-link nav-link-3" :title="isNavExpanded ? '' : 'Demo One'" @click="handleNavClick">
+            <span class="material-icons">category</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo One</span>
+          </router-link>
+          
+          <router-link to="/demo-two" class="nav-link nav-link-4" :title="isNavExpanded ? '' : 'Demo Two'" @click="handleNavClick">
+            <span class="material-icons">edit_note</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Two</span>
+          </router-link>
+          
+          <router-link to="/demo-three" class="nav-link nav-link-5" :title="isNavExpanded ? '' : 'Demo Three'" @click="handleNavClick">
+            <span class="material-icons">draw</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Three</span>
+          </router-link>
+          
+          <router-link to="/demo-counter" class="nav-link nav-link-6" :title="isNavExpanded ? '' : 'Demo Counter'" @click="handleNavClick">
+            <span class="material-icons">calculate</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Counter</span>
+          </router-link>
+          
+          <router-link to="/interface-demo" class="nav-link nav-link-7" :title="isNavExpanded ? '' : 'Interface Demo'" @click="handleNavClick">
+            <span class="material-icons">dynamic_feed</span>
+            <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Interface Demo</span>
+          </router-link>
+        </div>
+      </Transition>
+    </nav>
+
+    <!-- Mobile Navigation - Only rendered on mobile -->
+    <nav v-else class="shell-nav" :class="{ 'mobile-nav-open': isMobileNavOpen }" @mouseenter="expandNav" @mouseleave="collapseNav">
       <div class="nav-header">
         <span class="nav-logo" :class="{ 'nav-logo-collapsed': !isNavExpanded, 'nav-logo-expanded': isNavExpanded }">
           <span v-if="!isNavExpanded" class="nav-logo-short"><img src="./assets/images/altersquare-icon.png" style="height: 30px;" /></span>
@@ -78,6 +138,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const isNavExpanded = ref(false);
 const isMobileNavOpen = ref(false);
+const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth < 1200 : false);
 
 const expandNav = () => {
   // Only expand on hover for desktop (screens >= 1200px)
@@ -119,8 +180,14 @@ const handleNavClick = () => {
   // On desktop, do nothing - let the normal hover behavior handle text visibility
 };
 
+// Check if device is mobile
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 1200;
+};
+
 // Handle window resize
 const handleResize = () => {
+  checkMobile();
   if (window.innerWidth >= 1200) {
     // Desktop mode - close mobile nav if open
     isMobileNavOpen.value = false;
@@ -129,6 +196,7 @@ const handleResize = () => {
 };
 
 onMounted(() => {
+  checkMobile(); // Check initial screen size
   window.addEventListener('resize', handleResize);
 });
 
@@ -664,6 +732,191 @@ body {
     width: 2rem;
     height: 2rem;
     padding: 0.375rem;
+  }
+}
+
+/* Navigation Animation Styles - Desktop Only (>= 1200px) */
+@media (min-width: 1200px) {
+  /* Navigation slide-in animation */
+  .nav-slide-in-enter-active {
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-slide-in-enter-from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  .nav-slide-in-enter-to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* Navigation header fade-in animation */
+  .nav-header-fade-enter-active {
+    transition: all 0.6s ease-out;
+    transition-delay: 0.3s;
+  }
+
+  .nav-header-fade-enter-from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  .nav-header-fade-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Navigation links fade-in animation */
+  .nav-links-fade-enter-active {
+    transition: all 0.8s ease-out;
+    transition-delay: 0.5s;
+  }
+
+  .nav-links-fade-enter-from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .nav-links-fade-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered animation for individual navigation links */
+  .nav-link-1 { animation: navLinkSlideIn 0.6s ease-out 0.7s both; }
+  .nav-link-2 { animation: navLinkSlideIn 0.6s ease-out 0.8s both; }
+  .nav-link-3 { animation: navLinkSlideIn 0.6s ease-out 0.9s both; }
+  .nav-link-4 { animation: navLinkSlideIn 0.6s ease-out 1.0s both; }
+  .nav-link-5 { animation: navLinkSlideIn 0.6s ease-out 1.1s both; }
+  .nav-link-6 { animation: navLinkSlideIn 0.6s ease-out 1.2s both; }
+  .nav-link-7 { animation: navLinkSlideIn 0.6s ease-out 1.3s both; }
+
+  /* Enhanced navigation logo animation */
+  .nav-logo {
+    animation: navLogoFadeIn 0.8s ease-out 0.4s both;
+  }
+}
+
+/* Mobile Navigation Animations (< 1200px) - Only for hamburger menu */
+@media (max-width: 1199px) {
+  /* Disable navigation slide-in animation on mobile */
+  .nav-slide-in-enter-active {
+    transition: none;
+  }
+
+  .nav-slide-in-enter-from,
+  .nav-slide-in-enter-to {
+    transform: none;
+    opacity: 1;
+  }
+
+  /* Disable navigation header fade-in animation on mobile */
+  .nav-header-fade-enter-active {
+    transition: none;
+  }
+
+  .nav-header-fade-enter-from,
+  .nav-header-fade-enter-to {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Disable navigation links fade-in animation on mobile */
+  .nav-links-fade-enter-active {
+    transition: none;
+  }
+
+  .nav-links-fade-enter-from,
+  .nav-links-fade-enter-to {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Disable staggered animations for nav links on mobile */
+  .nav-link-1,
+  .nav-link-2,
+  .nav-link-3,
+  .nav-link-4,
+  .nav-link-5,
+  .nav-link-6,
+  .nav-link-7 {
+    animation: none;
+  }
+
+  /* Disable logo animation on mobile */
+  .nav-logo {
+    animation: none;
+  }
+}
+
+/* Keyframes - Available for desktop only */
+@media (min-width: 1200px) {
+  @keyframes navLinkSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px) scale(0.9);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateX(-10px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes navLogoFadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.8) rotate(-5deg);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(0.9) rotate(2deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+}
+
+/* Enhanced hamburger menu animation - All screen sizes */
+.hamburger-menu {
+  animation: hamburgerFadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes hamburgerFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(45deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.8) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Main content fade-in animation - All screen sizes */
+.shell-main {
+  animation: mainContentFadeIn 0.8s ease-out 0.6s both;
+}
+
+@keyframes mainContentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

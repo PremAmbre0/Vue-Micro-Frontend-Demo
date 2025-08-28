@@ -1,119 +1,130 @@
 <template>
   <div class="interface-demo">
-    <header class="demo-header">
-      <h1><span class="material-icons">dynamic_feed</span> Micro Frontend Interface Communication Demo</h1>
-      <p>This page demonstrates how micro frontends can share state through exposed interfaces</p>
-    </header>
+    <!-- Header with fade-in animation -->
+    <Transition name="fade-in" appear>
+      <header class="demo-header">
+        <h1><span class="material-icons">dynamic_feed</span> Micro Frontend Interface Communication Demo</h1>
+        <p>This page demonstrates how micro frontends can share state through exposed interfaces</p>
+      </header>
+    </Transition>
 
-    <div class="demo-grid">
-      <!-- Shell App Counter -->
-      <div class="demo-section shell-section">
-        <h2> Shell App Counter</h2>
-        <p>This counter is managed by the Shell App's Pinia store</p>
+    <!-- Demo Grid with delayed fade-in -->
+    <Transition name="fade-in-delayed" appear>
+      <div class="demo-grid">
+        <!-- Shell App Counter -->
+        <div class="demo-section shell-section">
+          <h2> Shell App Counter</h2>
+          <p>This counter is managed by the Shell App's Pinia store</p>
+          
+          <div class="counter-display">
+            <div class="counter-value">{{ commonStore.num }}</div>
+            <div class="counter-info">
+              <span class="info-item">Double: {{ commonStore.doubleNum }}</span>
+              <span class="info-item">Absolute: {{ commonStore.absoluteNum }}</span>
+              <span class="info-item status" :class="statusClass">{{ statusText }}</span>
+            </div>
+          </div>
+
+          <div class="controls">
+            <!-- Basic Operations -->
+            <div class="control-section">
+              <h4 class="control-title">Basic Operations</h4>
+              <div class="basic-controls">
+                <button @click="commonStore.increment()" class="btn btn-primary">
+                  <!-- <span class="material-icons">add</span> -->
+                  +1
+                </button>
+                <button @click="commonStore.decrement()" class="btn btn-secondary">
+                  <!-- <span class="material-icons">remove</span> -->
+                  -1
+                </button>
+                <button @click="commonStore.reset()" class="btn btn-warning">
+                  <span class="material-icons">refresh</span>
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Amount Operations -->
+            <div class="control-section">
+              <h4 class="control-title">Custom Amount</h4>
+              <div class="input-group custom-amount-group">
+                <input 
+                  v-model.number="shellAmount" 
+                  type="number" 
+                  placeholder="Enter amount"
+                  class="input-field"
+                >
+                <button @click="commonStore.incrementBy(shellAmount)" class="btn btn-success">
+                  <span class="material-icons">add</span>
+                  Add
+                </button>
+                <button @click="commonStore.decrementBy(shellAmount)" class="btn btn-danger">
+                  <span class="material-icons">remove</span>
+                  Subtract
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Explanation Section with slide-up animation -->
+    <Transition name="slide-up" appear>
+      <div class="explanation-section">
+        <h2>📚 How It Works</h2>
+        <div class="explanation-grid">
+          <div class="explanation-card">
+            <h3>1. Interface Creation</h3>
+            <p>Shell App exposes its Pinia store through a clean interface in <code>src/interfaces/</code></p>
+            <ul>
+              <li><code>counter.js</code> - Wraps the common store</li>
+              <li><code>index.js</code> - Exports all interfaces</li>
+            </ul>
+          </div>
+
+          <div class="explanation-card">
+            <h3>2. Module Federation</h3>
+            <p>The interfaces are exposed via Vite's Module Federation plugin</p>
+            <ul>
+              <li>Shell App exposes: <code>"./interfaces"</code></li>
+              <li>Remote apps import: <code>shellApp/interfaces</code></li>
+            </ul>
+          </div>
+
+          <div class="explanation-card">
+            <h3>3. Real-time Sync</h3>
+            <p>Changes in one app are immediately reflected in the other</p>
+            <ul>
+              <li>Pinia's reactivity system</li>
+              <li>Subscription-based updates</li>
+              <li>Shared singleton store</li>
+            </ul>
+          </div>
+
+          <div class="explanation-card">
+            <h3>4. Benefits</h3>
+            <p>This architecture provides several advantages</p>
+            <ul>
+              <li>Loose coupling between apps</li>
+              <li>Type-safe interfaces</li>
+              <li>Independent deployment</li>
+              <li>Shared state management</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Code Section with extra delayed fade-in -->
+    <Transition name="fade-in-extra-delayed" appear>
+      <div class="code-section">
+        <h2>💻 Key Code Snippets</h2>
         
-        <div class="counter-display">
-          <div class="counter-value">{{ commonStore.num }}</div>
-          <div class="counter-info">
-            <span class="info-item">Double: {{ commonStore.doubleNum }}</span>
-            <span class="info-item">Absolute: {{ commonStore.absoluteNum }}</span>
-            <span class="info-item status" :class="statusClass">{{ statusText }}</span>
-          </div>
-        </div>
-
-        <div class="controls">
-          <!-- Basic Operations -->
-          <div class="control-section">
-            <h4 class="control-title">Basic Operations</h4>
-            <div class="basic-controls">
-              <button @click="commonStore.increment()" class="btn btn-primary">
-                <!-- <span class="material-icons">add</span> -->
-                +1
-              </button>
-              <button @click="commonStore.decrement()" class="btn btn-secondary">
-                <!-- <span class="material-icons">remove</span> -->
-                -1
-              </button>
-              <button @click="commonStore.reset()" class="btn btn-warning">
-                <span class="material-icons">refresh</span>
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <!-- Custom Amount Operations -->
-          <div class="control-section">
-            <h4 class="control-title">Custom Amount</h4>
-            <div class="input-group custom-amount-group">
-              <input 
-                v-model.number="shellAmount" 
-                type="number" 
-                placeholder="Enter amount"
-                class="input-field"
-              >
-              <button @click="commonStore.incrementBy(shellAmount)" class="btn btn-success">
-                <span class="material-icons">add</span>
-                Add
-              </button>
-              <button @click="commonStore.decrementBy(shellAmount)" class="btn btn-danger">
-                <span class="material-icons">remove</span>
-                Subtract
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="explanation-section">
-      <h2>📚 How It Works</h2>
-      <div class="explanation-grid">
-        <div class="explanation-card">
-          <h3>1. Interface Creation</h3>
-          <p>Shell App exposes its Pinia store through a clean interface in <code>src/interfaces/</code></p>
-          <ul>
-            <li><code>counter.js</code> - Wraps the common store</li>
-            <li><code>index.js</code> - Exports all interfaces</li>
-          </ul>
-        </div>
-
-        <div class="explanation-card">
-          <h3>2. Module Federation</h3>
-          <p>The interfaces are exposed via Vite's Module Federation plugin</p>
-          <ul>
-            <li>Shell App exposes: <code>"./interfaces"</code></li>
-            <li>Remote apps import: <code>shellApp/interfaces</code></li>
-          </ul>
-        </div>
-
-        <div class="explanation-card">
-          <h3>3. Real-time Sync</h3>
-          <p>Changes in one app are immediately reflected in the other</p>
-          <ul>
-            <li>Pinia's reactivity system</li>
-            <li>Subscription-based updates</li>
-            <li>Shared singleton store</li>
-          </ul>
-        </div>
-
-        <div class="explanation-card">
-          <h3>4. Benefits</h3>
-          <p>This architecture provides several advantages</p>
-          <ul>
-            <li>Loose coupling between apps</li>
-            <li>Type-safe interfaces</li>
-            <li>Independent deployment</li>
-            <li>Shared state management</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="code-section">
-      <h2>💻 Key Code Snippets</h2>
-      
-      <div class="code-example">
-        <h3>Interface Definition (Shell App)</h3>
-        <pre><code>// shell-app/src/interfaces/counter.js
+        <div class="code-example">
+          <h3>Interface Definition (Shell App)</h3>
+          <pre><code>// shell-app/src/interfaces/counter.js
 export const counterInterface = {
   getValue() {
     const store = useCommonStore()
@@ -128,11 +139,11 @@ export const counterInterface = {
     return store.$subscribe(callback)
   }
 }</code></pre>
-      </div>
+        </div>
 
-      <div class="code-example">
-        <h3>Remote App Usage</h3>
-        <pre><code>// demo-counter-app/src/components/CounterDemo.vue
+        <div class="code-example">
+          <h3>Remote App Usage</h3>
+          <pre><code>// demo-counter-app/src/components/CounterDemo.vue
 import { counterInterface } from 'shellApp/interfaces'
 
 // Use the interface
@@ -143,8 +154,9 @@ const value = counterInterface.getValue()
 const unsubscribe = counterInterface.subscribe((newValue) => {
   console.log('Counter changed:', newValue)
 })</code></pre>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -841,6 +853,359 @@ export default {
   .input-field {
     max-width: none;
     padding: 0.75rem 1rem;
+  }
+}
+
+/* Animation Transitions */
+
+/* Basic fade-in animation */
+.fade-in-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delayed fade-in animation */
+.fade-in-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.4s;
+}
+
+.fade-in-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Extra delayed fade-in animation */
+.fade-in-extra-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.8s;
+}
+
+.fade-in-extra-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-extra-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide-up animation */
+.slide-up-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.6s;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+}
+
+.slide-up-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Enhanced header animations */
+.demo-header h1 {
+  animation: titleFadeIn 1s ease-out;
+}
+
+.demo-header p {
+  animation: subtitleFadeIn 1s ease-out 0.3s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Counter display animations */
+.counter-value {
+  animation: counterValueFadeIn 1.2s ease-out 0.6s both;
+}
+
+.counter-info {
+  animation: counterInfoFadeIn 0.8s ease-out 0.8s both;
+}
+
+@keyframes counterValueFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes counterInfoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Info item staggered animations */
+.info-item {
+  animation: infoItemFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.info-item:nth-child(1) { animation-delay: 0.1s; }
+.info-item:nth-child(2) { animation-delay: 0.2s; }
+.info-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes infoItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Control section animations */
+.control-section {
+  animation: controlSectionFadeIn 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.control-section:nth-child(1) { animation-delay: 1.0s; }
+.control-section:nth-child(2) { animation-delay: 1.2s; }
+
+@keyframes controlSectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Button staggered animations */
+.btn {
+  animation: buttonFadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.basic-controls .btn:nth-child(1) { animation-delay: 0.1s; }
+.basic-controls .btn:nth-child(2) { animation-delay: 0.15s; }
+.basic-controls .btn:nth-child(3) { animation-delay: 0.2s; }
+
+.custom-amount-group .btn:nth-child(2) { animation-delay: 0.25s; }
+.custom-amount-group .btn:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Input field animation */
+.input-field {
+  animation: inputFadeIn 0.5s ease-out 0.2s both;
+}
+
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Explanation cards staggered animations */
+.explanation-card {
+  animation: cardSlideIn 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.explanation-card:nth-child(1) { animation-delay: 0.1s; }
+.explanation-card:nth-child(2) { animation-delay: 0.2s; }
+.explanation-card:nth-child(3) { animation-delay: 0.3s; }
+.explanation-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Code example animations */
+.code-example {
+  animation: codeExampleFadeIn 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.code-example:nth-child(2) { animation-delay: 0.2s; }
+.code-example:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes codeExampleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Section header animations */
+.explanation-section h2 {
+  animation: sectionHeaderFadeIn 0.8s ease-out 0.2s both;
+}
+
+.code-section h2 {
+  animation: sectionHeaderFadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes sectionHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* List item staggered animations */
+.explanation-card ul li {
+  animation: listItemSlideIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.explanation-card ul li:nth-child(1) { animation-delay: 0.1s; }
+.explanation-card ul li:nth-child(2) { animation-delay: 0.2s; }
+.explanation-card ul li:nth-child(3) { animation-delay: 0.3s; }
+.explanation-card ul li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes listItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced hover effects */
+.btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.explanation-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.info-item:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+/* Control title animation */
+.control-title {
+  animation: controlTitleFadeIn 0.6s ease-out 0.3s both;
+}
+
+@keyframes controlTitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Demo section header animations */
+.demo-section h2 {
+  animation: demoSectionHeaderFadeIn 0.8s ease-out 0.4s both;
+}
+
+.demo-section p {
+  animation: demoSectionSubtitleFadeIn 0.8s ease-out 0.6s both;
+}
+
+@keyframes demoSectionHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes demoSectionSubtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 </style>

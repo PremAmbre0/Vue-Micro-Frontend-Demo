@@ -1,75 +1,90 @@
 <template>
   <div class="demo-two-container">
-    <div class="demo-two-canvas-container">
-    <h2><span class="material-icons">edit_note</span> Demo Two: Text & Image Editor</h2>
-    <p>Add and edit text with image manipulation using Fabric.js</p>
+    <!-- Header Section with fade-in animation -->
+    <Transition name="fade-in" appear>
+      <div class="demo-two-canvas-container">
+        <h2><span class="material-icons">edit_note</span> Demo Two: Text & Image Editor</h2>
+        <p>Add and edit text with image manipulation using Fabric.js</p>
 
-    <div class="controls">
-      <div class="text-controls">
-        <h3> Add Text</h3>
-        <input
-          v-model="textInput"
-          placeholder="Enter text"
-          class="text-input"
-          :disabled="isLoading"
-        />
-        <button
-          @click="addTextToCanvas"
-          class="btn btn-primary"
-          :disabled="isLoading"
-        >
-        <span class="material-icons">add</span>
-          Add Text
-        </button>
+        <!-- Controls with delayed fade-in -->
+        <Transition name="fade-in-delayed" appear>
+          <div class="controls">
+            <div class="text-controls">
+              <h3> Add Text</h3>
+              <input
+                v-model="textInput"
+                placeholder="Enter text"
+                class="text-input"
+                :disabled="isLoading"
+              />
+              <button
+                @click="addTextToCanvas"
+                class="btn btn-primary"
+                :class="{ mounted: isMounted }"
+                :disabled="isLoading"
+              >
+              <span class="material-icons">add</span>
+                Add Text
+              </button>
+            </div>
+
+            <div class="image-controls">
+              <h3>Add Image</h3>
+              <input
+                v-model="imageUrl"
+                placeholder="Image URL"
+                class="text-input"
+                :disabled="isLoading"
+              />
+              <button
+                @click="addImageToCanvas"
+                class="btn btn-success"
+                :class="{ mounted: isMounted }"
+                :disabled="isLoading"
+              >
+                <span v-if="isLoading" class="loading-spinner"></span>
+                <span class="material-icons" v-if="!isLoading">image</span>
+                {{ isLoading ? "Loading..." : "Add Image" }}
+              </button>
+            </div>
+
+            <div class="action-controls">
+              <h3>Actions</h3>
+              <button
+                @click="clearCanvas"
+                class="btn btn-secondary"
+                :class="{ mounted: isMounted }"
+                :disabled="isLoading"
+              >
+              <span class="material-icons">delete</span>
+                Clear Canvas
+              </button>
+            </div>
+          </div>
+        </Transition>
+
+        <!-- Canvas Container with slide-up animation -->
+        <Transition name="slide-up" appear>
+          <div class="canvas-container">
+            <canvas id="demo-two-canvas"></canvas>
+          </div>
+        </Transition>
       </div>
+    </Transition>
 
-      <div class="image-controls">
-        <h3>Add Image</h3>
-        <input
-          v-model="imageUrl"
-          placeholder="Image URL"
-          class="text-input"
-          :disabled="isLoading"
-        />
-        <button
-          @click="addImageToCanvas"
-          class="btn btn-success"
-          :disabled="isLoading"
-        >
-          <span v-if="isLoading" class="loading-spinner"></span>
-          <span class="material-icons" v-if="!isLoading">image</span>
-          {{ isLoading ? "Loading..." : "Add Image" }}
-        </button>
+    <!-- Info Section with extra delayed fade-in -->
+    <Transition name="fade-in-extra-delayed" appear>
+      <div class="info">
+        <p><strong>Instructions:</strong></p>
+        <ul>
+          <li>Enter text and click "Add Text" to add text objects</li>
+          <li>Enter an image URL and click "Add Image" to add images</li>
+          <li>Click and drag objects to move them</li>
+          <li>Double-click text to edit it directly</li>
+          <li>Use Clear Canvas to remove all objects</li>
+        </ul>
       </div>
-
-      <div class="action-controls">
-        <h3>Actions</h3>
-        <button
-          @click="clearCanvas"
-          class="btn btn-secondary"
-          :disabled="isLoading"
-        >
-        <span class="material-icons">delete</span>
-          Clear Canvas
-        </button>
-      </div>
-    </div>
-
-    <div class="canvas-container">
-      <canvas id="demo-two-canvas"></canvas>
-    </div>
-    </div>
-
-    <div class="info">
-      <p><strong>Instructions:</strong></p>
-      <ul>
-        <li>Enter text and click "Add Text" to add text objects</li>
-        <li>Enter an image URL and click "Add Image" to add images</li>
-        <li>Click and drag objects to move them</li>
-        <li>Double-click text to edit it directly</li>
-        <li>Use Clear Canvas to remove all objects</li>
-      </ul>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -85,6 +100,7 @@ import {
 const textInput = ref("Hello World!");
 const imageUrl = ref("https://picsum.photos/200/300");
 const isLoading = ref(false);
+const isMounted = ref(false);
 let canvas = null;
 
 onMounted(() => {
@@ -130,6 +146,11 @@ onMounted(() => {
       scaleY: 0.8,
     });
   }, 100);
+
+  // Mark as mounted after animations complete
+  setTimeout(() => {
+    isMounted.value = true;
+  }, 1500); // After all animations should be complete
 });
 
 onUnmounted(() => {
@@ -352,5 +373,307 @@ const clearCanvas = () => {
 
 .info li {
   margin: 5px 0;
+}
+
+/* Animation Transitions */
+
+/* Basic fade-in animation */
+.fade-in-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delayed fade-in animation */
+.fade-in-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.3s;
+}
+
+.fade-in-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Extra delayed fade-in animation */
+.fade-in-extra-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.9s;
+}
+
+.fade-in-extra-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-extra-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide-up animation */
+.slide-up-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.6s;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+}
+
+.slide-up-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Enhanced header animations */
+.demo-two-canvas-container h2 {
+  animation: titleFadeIn 1s ease-out;
+}
+
+.demo-two-canvas-container p {
+  animation: subtitleFadeIn 1s ease-out 0.3s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Control section animations */
+.text-controls,
+.image-controls,
+.action-controls {
+  animation: controlSectionFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.text-controls { animation-delay: 0.1s; }
+.image-controls { animation-delay: 0.2s; }
+.action-controls { animation-delay: 0.3s; }
+
+@keyframes controlSectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Control section header animations */
+.text-controls h3,
+.image-controls h3,
+.action-controls h3 {
+  animation: controlHeaderFadeIn 0.5s ease-out 0.2s both;
+}
+
+@keyframes controlHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input field animations */
+.text-input {
+  animation: inputFadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.text-controls .text-input { animation-delay: 0.25s; }
+.image-controls .text-input { animation-delay: 0.35s; }
+
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Button staggered animations - only on initial mount */
+.btn {
+  animation: buttonFadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+  animation-play-state: running;
+}
+
+.text-controls .btn { animation-delay: 0.3s; }
+.image-controls .btn { animation-delay: 0.4s; }
+.action-controls .btn { animation-delay: 0.45s; }
+
+/* Prevent button re-animation after initial mount */
+.btn.mounted {
+  animation: none;
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Loading spinner enhanced animation */
+.loading-spinner {
+  animation: spin 1s ease-in-out infinite, spinnerFadeIn 0.3s ease-out;
+}
+
+@keyframes spinnerFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Canvas animation */
+#demo-two-canvas {
+  animation: canvasFadeIn 0.8s ease-out 0.3s both;
+}
+
+@keyframes canvasFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Info section list animations */
+.info ul li {
+  animation: listItemSlideIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.info ul li:nth-child(1) { animation-delay: 0.1s; }
+.info ul li:nth-child(2) { animation-delay: 0.15s; }
+.info ul li:nth-child(3) { animation-delay: 0.2s; }
+.info ul li:nth-child(4) { animation-delay: 0.25s; }
+.info ul li:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes listItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Info section header animation */
+.info p {
+  animation: infoHeaderFadeIn 0.6s ease-out 0.1s both;
+}
+
+@keyframes infoHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced hover effects */
+.btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.text-input:focus {
+  animation: inputFocus 0.3s ease-out;
+}
+
+@keyframes inputFocus {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+/* Container animation */
+.demo-two-container {
+  animation: containerFadeIn 0.6s ease-out;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Enhanced disabled state animation */
+.btn:disabled {
+  animation: disabledPulse 2s infinite;
+}
+
+@keyframes disabledPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 </style>

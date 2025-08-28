@@ -1,126 +1,145 @@
 <template>
   <div class="dynamic-canvas-container">
-    <header class="canvas-header">
-      <h1>
-        <!-- <span class="material-icons">palette</span>  -->
-        Welcome to Micro Frontend Showcase
-      </h1>
-      <p>Interactive landing page - Load and control federated micro frontend modules dynamically</p>
-    </header>
+    <!-- Header with fade-in animation -->
+    <Transition name="fade-in" appear>
+      <header class="canvas-header">
+        <h1>
+          <!-- <span class="material-icons">palette</span>  -->
+          Welcome to Micro Frontend Showcase
+        </h1>
+        <p>Interactive landing page - Load and control federated micro frontend modules dynamically</p>
+      </header>
+    </Transition>
 
-    <!-- Dynamic Demo Loading Controls -->
-    <div class="demo-loader-controls">
-      <h2><span class="material-icons">view_module</span> Load Demo Modules</h2>
-      <div class="loader-buttons">
-        <button
-          @click="loadDemoOne"
-          :disabled="isLoading.demoOne"
-          :class="['btn', loadedDemos.demoOne ? 'btn-success' : 'btn-primary']"
-        >
-          <span v-if="isLoading.demoOne" class="loading-spinner"></span>
-          <span class="material-icons">
-            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoOne ? 'check_circle' : 'play_arrow' }}
-          </span>
-          {{ isLoading.demoOne ? 'Loading...' : loadedDemos.demoOne ? ' Demo One Loaded' : 'Load Demo One' }}
-        </button>
+    <!-- Dynamic Demo Loading Controls with delayed fade-in -->
+    <Transition name="fade-in-delayed" appear>
+      <div class="demo-loader-controls">
+        <h2><span class="material-icons">view_module</span> Load Demo Modules</h2>
+        <div class="loader-buttons">
+          <button
+            @click="loadDemoOne"
+            :disabled="isLoading.demoOne"
+            :class="['btn', loadedDemos.demoOne ? 'btn-success' : 'btn-primary']"
+          >
+            <span v-if="isLoading.demoOne" class="loading-spinner"></span>
+            <span class="material-icons">
+              {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoOne ? 'check_circle' : 'play_arrow' }}
+            </span>
+            {{ isLoading.demoOne ? 'Loading...' : loadedDemos.demoOne ? ' Demo One Loaded' : 'Load Demo One' }}
+          </button>
 
-        <button
-          @click="loadDemoTwo"
-          :disabled="isLoading.demoTwo"
-          :class="['btn', loadedDemos.demoTwo ? 'btn-success' : 'btn-info']"
-        >
-          <span v-if="isLoading.demoTwo" class="loading-spinner"></span>
-          <span class="material-icons">
-            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoTwo ? 'check_circle' : 'play_arrow' }}
-          </span>
-          {{ isLoading.demoTwo ? 'Loading...' : loadedDemos.demoTwo ? 'Demo Two Loaded' : 'Load Demo Two' }}
-        </button>
+          <button
+            @click="loadDemoTwo"
+            :disabled="isLoading.demoTwo"
+            :class="['btn', loadedDemos.demoTwo ? 'btn-success' : 'btn-info']"
+          >
+            <span v-if="isLoading.demoTwo" class="loading-spinner"></span>
+            <span class="material-icons">
+              {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoTwo ? 'check_circle' : 'play_arrow' }}
+            </span>
+            {{ isLoading.demoTwo ? 'Loading...' : loadedDemos.demoTwo ? 'Demo Two Loaded' : 'Load Demo Two' }}
+          </button>
 
-        <button
-          @click="loadDemoThree"
-          :disabled="isLoading.demoThree"
-          :class="['btn', loadedDemos.demoThree ? 'btn-success' : 'btn-warning']"
-        >
-          <span v-if="isLoading.demoThree" class="loading-spinner"></span>
-          <span class="material-icons">
-            {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoThree ? 'check_circle' : 'play_arrow' }}
-          </span>
-          {{ isLoading.demoThree ? 'Loading...' : loadedDemos.demoThree ? 'Demo Three Loaded' : 'Load Demo Three' }}
-        </button>
+          <button
+            @click="loadDemoThree"
+            :disabled="isLoading.demoThree"
+            :class="['btn', loadedDemos.demoThree ? 'btn-success' : 'btn-warning']"
+          >
+            <span v-if="isLoading.demoThree" class="loading-spinner"></span>
+            <span class="material-icons">
+              {{ isLoading.demoOne ? 'autorenew' : loadedDemos.demoThree ? 'check_circle' : 'play_arrow' }}
+            </span>
+            {{ isLoading.demoThree ? 'Loading...' : loadedDemos.demoThree ? 'Demo Three Loaded' : 'Load Demo Three' }}
+          </button>
+        </div>
       </div>
-    </div>
+    </Transition>
 
-    <!-- Canvas Container -->
-    <div class="canvas-container">
-      <canvas id="dynamic-canvas"></canvas>
-    </div>
-
-    <!-- Demo One Controls -->
-    <div v-if="loadedDemos.demoOne" class="demo-controls demo-one-controls">
-      <h3><span class="material-icons">category</span> Demo One Controls - Basic Shapes</h3>
-      <div class="control-group">
-        <button @click="addRectangle" class="btn btn-primary"><span class="material-icons">crop_square</span> Add Rectangle</button>
-        <button @click="addCircle" class="btn btn-primary"><span class="material-icons">circle</span> Add Circle</button>
-        <button @click="addTriangle" class="btn btn-primary"><span class="material-icons">change_history</span> Add Triangle</button>
-        <input type="color" v-model="selectedColor" @input="changeColor" class="color-picker" />
-        <button @click="deleteSelected" class="btn btn-danger"><span class="material-icons">delete</span> Delete Selected</button>
+    <!-- Canvas Container with slide-up animation -->
+    <Transition name="slide-up" appear>
+      <div class="canvas-container">
+        <canvas id="dynamic-canvas"></canvas>
       </div>
-    </div>
+    </Transition>
 
-    <!-- Demo Two Controls -->
-    <div v-if="loadedDemos.demoTwo" class="demo-controls demo-two-controls">
-      <h3><span class="material-icons">edit_note</span> Demo Two Controls - Text & Images</h3>
-      <div class="control-group">
-        <input v-model="textInput" placeholder="Enter text" class="text-input" :disabled="imageLoading" />
-        <button @click="addText" class="btn btn-info" :disabled="imageLoading"><span class="material-icons">add</span> Add Text</button>
-        <input v-model="imageUrl" placeholder="Image URL" class="text-input" :disabled="imageLoading" />
-        <button @click="addImage" class="btn btn-info" :disabled="imageLoading">
-          <span v-if="imageLoading" class="loading-spinner"></span>
-          <span class="material-icons" v-if="!imageLoading">image</span>
-          {{ imageLoading ? 'Loading...' : 'Add Image' }}
-        </button>
+    <!-- Demo One Controls with fade-in animation -->
+    <Transition name="fade-in-up" mode="out-in">
+      <div v-if="loadedDemos.demoOne" class="demo-controls demo-one-controls">
+        <h3><span class="material-icons">category</span> Demo One Controls - Basic Shapes</h3>
+        <div class="control-group">
+          <button @click="addRectangle" class="btn btn-primary"><span class="material-icons">crop_square</span> Add Rectangle</button>
+          <button @click="addCircle" class="btn btn-primary"><span class="material-icons">circle</span> Add Circle</button>
+          <button @click="addTriangle" class="btn btn-primary"><span class="material-icons">change_history</span> Add Triangle</button>
+          <input type="color" v-model="selectedColor" @input="changeColor" class="color-picker" />
+          <button @click="deleteSelected" class="btn btn-danger"><span class="material-icons">delete</span> Delete Selected</button>
+        </div>
       </div>
-    </div>
+    </Transition>
 
-    <!-- Demo Three Controls -->
-    <div v-if="loadedDemos.demoThree" class="demo-controls demo-three-controls">
-      <h3><span class="material-icons">draw</span> Demo Three Controls - Drawing</h3>
-      <div class="control-group">
-        <button @click="toggleDrawing" :class="['btn', drawingMode ? 'btn-danger' : 'btn-warning']">
-          <span class="material-icons" >{{ drawingMode ? 'stop' : 'edit' }}</span>
-          {{ drawingMode ? 'Stop Drawing' : 'Start Drawing' }}
-        </button>
-        <label>Width: {{ brushWidth }}px</label>
-        <input type="range" min="1" max="50" v-model="brushWidth" @input="updateBrushWidth" class="brush-slider" />
-        <input type="color" v-model="brushColor" @input="updateBrushColor" class="color-picker" />
-        <button @click="undoLast" class="btn btn-warning"><span class="material-icons" >undo</span> Undo Last</button>
+    <!-- Demo Two Controls with fade-in animation -->
+    <Transition name="fade-in-up" mode="out-in">
+      <div v-if="loadedDemos.demoTwo" class="demo-controls demo-two-controls">
+        <h3><span class="material-icons">edit_note</span> Demo Two Controls - Text & Images</h3>
+        <div class="control-group">
+          <input v-model="textInput" placeholder="Enter text" class="text-input" :disabled="imageLoading" />
+          <button @click="addText" class="btn btn-info" :disabled="imageLoading"><span class="material-icons">add</span> Add Text</button>
+          <input v-model="imageUrl" placeholder="Image URL" class="text-input" :disabled="imageLoading" />
+          <button @click="addImage" class="btn btn-info" :disabled="imageLoading">
+            <span v-if="imageLoading" class="loading-spinner"></span>
+            <span class="material-icons" v-if="!imageLoading">image</span>
+            {{ imageLoading ? 'Loading...' : 'Add Image' }}
+          </button>
+        </div>
       </div>
-    </div>
+    </Transition>
 
-    <!-- Clear All Button -->
-    <div v-if="loadedDemos.demoOne || loadedDemos.demoTwo || loadedDemos.demoThree" class="global-controls">
-      <button @click="clearCanvas" class="btn btn-secondary"> <span class="material-icons" >delete</span> Clear Canvas</button>
-    </div>
+    <!-- Demo Three Controls with fade-in animation -->
+    <Transition name="fade-in-up" mode="out-in">
+      <div v-if="loadedDemos.demoThree" class="demo-controls demo-three-controls">
+        <h3><span class="material-icons">draw</span> Demo Three Controls - Drawing</h3>
+        <div class="control-group">
+          <button @click="toggleDrawing" :class="['btn', drawingMode ? 'btn-danger' : 'btn-warning']">
+            <span class="material-icons" >{{ drawingMode ? 'stop' : 'edit' }}</span>
+            {{ drawingMode ? 'Stop Drawing' : 'Start Drawing' }}
+          </button>
+          <label>Width: {{ brushWidth }}px</label>
+          <input type="range" min="1" max="50" v-model="brushWidth" @input="updateBrushWidth" class="brush-slider" />
+          <input type="color" v-model="brushColor" @input="updateBrushColor" class="color-picker" />
+          <button @click="undoLast" class="btn btn-warning"><span class="material-icons" >undo</span> Undo Last</button>
+        </div>
+      </div>
+    </Transition>
 
-    <!-- Navigation to All Demos -->
-    <div v-if="!loadedDemos.demoOne && !loadedDemos.demoTwo && !loadedDemos.demoThree" class="quick-nav">
-      <h3>Quick Navigation</h3>
-      <router-link to="/all-demos" class="btn btn-info">
-        <span class="material-icons">bolt</span> View All Demos Together
-      </router-link>
-    </div>
+    <!-- Clear All Button with fade-in animation -->
+    <Transition name="fade-in-up" mode="out-in">
+      <div v-if="loadedDemos.demoOne || loadedDemos.demoTwo || loadedDemos.demoThree" class="global-controls">
+        <button @click="clearCanvas" class="btn btn-secondary"> <span class="material-icons" >delete</span> Clear Canvas</button>
+      </div>
+    </Transition>
 
-    <!-- Info Section -->
-    <div class="info">
-      <p><strong>Dynamic Module Loading Demo:</strong></p>
-      <ul>
-        <li>Click "Load Demo X" buttons to dynamically import federated modules</li>
-        <li>Each module loads its own Fabric.js logic and controls</li>
-        <li>All demos share the same canvas but maintain separate functionality</li>
-        <li>This demonstrates on-demand loading of micro frontend bundles</li>
-        <li><strong>Visit <router-link to="/all-demos">All Demos</router-link> to see all three demos running together</strong></li>
-      </ul>
-    </div>
+    <!-- Navigation to All Demos with fade-in animation -->
+    <Transition name="fade-in-up" mode="out-in">
+      <div v-if="!loadedDemos.demoOne && !loadedDemos.demoTwo && !loadedDemos.demoThree" class="quick-nav">
+        <h3>Quick Navigation</h3>
+        <router-link to="/all-demos" class="btn btn-info">
+          <span class="material-icons">bolt</span> View All Demos Together
+        </router-link>
+      </div>
+    </Transition>
+
+    <!-- Info Section with delayed fade-in -->
+    <Transition name="fade-in-extra-delayed" appear>
+      <div class="info">
+        <p><strong>Dynamic Module Loading Demo:</strong></p>
+        <ul>
+          <li>Click "Load Demo X" buttons to dynamically import federated modules</li>
+          <li>Each module loads its own Fabric.js logic and controls</li>
+          <li>All demos share the same canvas but maintain separate functionality</li>
+          <li>This demonstrates on-demand loading of micro frontend bundles</li>
+          <li><strong>Visit <router-link to="/all-demos">All Demos</router-link> to see all three demos running together</strong></li>
+        </ul>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -675,5 +694,210 @@ const clearCanvas = () => {
 
 .info li {
   margin: 5px 0;
+}
+
+/* Animation Transitions */
+
+/* Basic fade-in animation */
+.fade-in-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delayed fade-in animation */
+.fade-in-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.3s;
+}
+
+.fade-in-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Extra delayed fade-in animation */
+.fade-in-extra-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.6s;
+}
+
+.fade-in-extra-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-extra-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide-up animation */
+.slide-up-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.4s;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+}
+
+.slide-up-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Fade-in-up animation for dynamic content */
+.fade-in-up-enter-active,
+.fade-in-up-leave-active {
+  transition: all 0.5s ease-out;
+}
+
+.fade-in-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+}
+
+.fade-in-up-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.fade-in-up-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.fade-in-up-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+/* Enhanced button animations */
+.btn {
+  animation: buttonFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.loader-buttons .btn:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.loader-buttons .btn:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loader-buttons .btn:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Enhanced loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Smooth hover animations for better UX */
+.canvas-header h1 {
+  animation: titleFadeIn 1s ease-out;
+}
+
+.canvas-header p {
+  animation: subtitleFadeIn 1s ease-out 0.3s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered list item animations */
+.info ul li {
+  animation: listItemFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.info ul li:nth-child(1) { animation-delay: 0.1s; }
+.info ul li:nth-child(2) { animation-delay: 0.2s; }
+.info ul li:nth-child(3) { animation-delay: 0.3s; }
+.info ul li:nth-child(4) { animation-delay: 0.4s; }
+.info ul li:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes listItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Control group animations */
+.control-group > * {
+  animation: controlFadeIn 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.control-group > *:nth-child(1) { animation-delay: 0.1s; }
+.control-group > *:nth-child(2) { animation-delay: 0.15s; }
+.control-group > *:nth-child(3) { animation-delay: 0.2s; }
+.control-group > *:nth-child(4) { animation-delay: 0.25s; }
+.control-group > *:nth-child(5) { animation-delay: 0.3s; }
+.control-group > *:nth-child(6) { animation-delay: 0.35s; }
+
+@keyframes controlFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

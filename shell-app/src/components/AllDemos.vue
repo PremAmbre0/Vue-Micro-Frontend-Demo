@@ -1,167 +1,180 @@
 <template>
   <div class="shell-app">
     <div class="shell-all-demos-container shell-responsive-container">
-      <header class="shell-demos-header">
-        <h1><span class="material-icons">bolt</span> All Demos Showcase</h1>
-        <p>Experience all three micro frontend demos in one unified view</p>
-      </header>
+      <!-- Header with fade-in animation -->
+      <Transition name="fade-in" appear>
+        <header class="shell-demos-header">
+          <h1><span class="material-icons">bolt</span> All Demos Showcase</h1>
+          <p>Experience all three micro frontend demos in one unified view</p>
+        </header>
+      </Transition>
 
-      <!-- Global Controls -->
-      <div class="shell-global-controls">
-        <h3><span class="material-icons">public</span> Global Controls</h3>
-        <div class="shell-global-buttons">
-          <button @click="clearAllCanvases" class="shell-btn shell-btn-warning">
-              <span class="material-icons">clear_all</span> Clear All Canvases
-          </button>
-          <button @click="deleteSelectedFromAll" class="shell-btn shell-btn-danger">
-            <span class="material-icons">delete_sweep</span> Delete Selected from All
-          </button>
-          <button @click="resetAllDemos" class="shell-btn shell-btn-secondary">
-            <span class="material-icons">restart_alt</span> Reset All Demos
-          </button>
-        </div>
-      </div>
-
-      <!-- Demo One Section -->
-      <section class="shell-demo-section shell-demo-one-section">
-        <div class="shell-demo-header">
-          <h2><span class="material-icons">category</span> Shapes Demo One - Basic Shapes</h2>
-          <p>Interactive shape creation and manipulation</p>
-        </div>
-
-        <!-- Demo One Controls -->
-        <div class="shell-demo-controls shell-demo-one-controls">
-          <div class="shell-control-group">
-            <label>Color:</label>
-            <input v-model="demoOneColor" type="color" class="shell-color-input" />
-          </div>
-          <div class="shell-control-buttons">
-            <button @click="addRectangleToOne" class="shell-btn shell-btn-primary">
-              <span class="material-icons">crop_square</span> Rectangle
+      <!-- Global Controls with delayed fade-in -->
+      <Transition name="fade-in-delayed" appear>
+        <div class="shell-global-controls">
+          <h3><span class="material-icons">public</span> Global Controls</h3>
+          <div class="shell-global-buttons">
+            <button @click="clearAllCanvases" class="shell-btn shell-btn-warning">
+                <span class="material-icons">clear_all</span> Clear All Canvases
             </button>
-            <button @click="addCircleToOne" class="shell-btn shell-btn-primary">
-              <span class="material-icons">circle</span> Circle
+            <button @click="deleteSelectedFromAll" class="shell-btn shell-btn-danger">
+              <span class="material-icons">delete_sweep</span> Delete Selected from All
             </button>
-            <button @click="addTriangleToOne" class="shell-btn shell-btn-primary">
-              <span class="material-icons">change_history</span> Triangle
-            </button>
-            <button @click="clearDemoOne" class="shell-btn shell-btn-secondary">
-               <span class="material-icons">delete</span> Clear
+            <button @click="resetAllDemos" class="shell-btn shell-btn-secondary">
+              <span class="material-icons">restart_alt</span> Reset All Demos
             </button>
           </div>
         </div>
+      </Transition>
 
-        <div class="shell-demo-canvas-container">
-          <canvas id="demo-one-canvas"></canvas>
-        </div>
-      </section>
-
-      <!-- Demo Two Section -->
-      <section class="shell-demo-section shell-demo-two-section">
-        <div class="shell-demo-header">
-          <h2><span class="material-icons">edit_note</span> Demo Two - Text & Images</h2>
-          <p>Dynamic text and image editing capabilities</p>
-        </div>
-
-        <!-- Demo Two Controls -->
-        <div class="shell-demo-controls shell-demo-two-controls">
-          <div class="shell-control-group">
-            <label>Text:</label>
-            <input
-              v-model="demoTwoText"
-              type="text"
-              placeholder="Enter text"
-              class="shell-text-input"
-            />
-            <button @click="addTextToTwo" class="shell-btn shell-btn-primary">
-              <span class="material-icons">add</span> Add Text
-            </button>
+      <!-- Demo One Section with staggered animation -->
+      <Transition name="slide-up-demo-one" appear>
+        <section class="shell-demo-section shell-demo-one-section">
+          <div class="shell-demo-header">
+            <h2><span class="material-icons">category</span> Shapes Demo One - Basic Shapes</h2>
+            <p>Interactive shape creation and manipulation</p>
           </div>
-          <div class="shell-control-group">
-            <label>Image URL:</label>
-            <input
-              v-model="demoTwoImageUrl"
-              type="text"
-              placeholder="Image URL"
-              class="shell-text-input"
-            />
-            <button
-              @click="addImageToTwo"
-              class="shell-btn shell-btn-success"
-              :disabled="isLoadingImage"
-            >
-            <span class="material-icons" v-if="!isLoadingImage">image</span>
-              {{ isLoadingImage ? "⏳ Loading..." : "Add Image" }}
-            </button>
-          </div>
-          <div class="shell-control-buttons">
-            <button @click="clearDemoTwo" class="shell-btn shell-btn-secondary">
-              <span class="material-icons">delete</span> Clear
-            </button>
-          </div>
-        </div>
 
-        <div class="shell-demo-canvas-container">
-          <canvas id="demo-two-canvas"></canvas>
-        </div>
-      </section>
-
-      <!-- Demo Three Section -->
-      <section class="shell-demo-section shell-demo-three-section">
-        <div class="shell-demo-header">
-          <h2><span class="material-icons">draw</span> Demo Three - Drawing</h2>
-          <p>Free-hand drawing and artistic creation</p>
-        </div>
-
-        <!-- Demo Three Controls -->
-        <div class="shell-demo-controls shell-demo-three-controls">
-          <div class="shell-control-group">
-            <label>Drawing Mode:</label>
-            <button
-              @click="toggleDrawingMode"
-              :class="['shell-btn', isDrawingMode ? 'shell-btn-danger' : 'shell-btn-success']"
-            >
-            <span class="material-icons" >{{ isDrawingMode ? 'stop' : 'edit' }}</span>
-              {{ isDrawingMode ? "Stop Drawing" : "Start Drawing" }}
-            </button>
+          <!-- Demo One Controls -->
+          <div class="shell-demo-controls shell-demo-one-controls">
+            <div class="shell-control-group">
+              <label>Color:</label>
+              <input v-model="demoOneColor" type="color" class="shell-color-input" />
+            </div>
+            <div class="shell-control-buttons">
+              <button @click="addRectangleToOne" class="shell-btn shell-btn-primary">
+                <span class="material-icons">crop_square</span> Rectangle
+              </button>
+              <button @click="addCircleToOne" class="shell-btn shell-btn-primary">
+                <span class="material-icons">circle</span> Circle
+              </button>
+              <button @click="addTriangleToOne" class="shell-btn shell-btn-primary">
+                <span class="material-icons">change_history</span> Triangle
+              </button>
+              <button @click="clearDemoOne" class="shell-btn shell-btn-secondary">
+                 <span class="material-icons">delete</span> Clear
+              </button>
+            </div>
           </div>
-          <div class="shell-control-group">
-            <label>Brush Width:</label>
-            <input
-              v-model="brushWidth"
-              type="range"
-              min="1"
-              max="20"
-              class="shell-range-input"
-            />
-            <span>{{ brushWidth }}px</span>
-          </div>
-          <div class="shell-control-group">
-            <label>Brush Color:</label>
-            <input v-model="brushColor" type="color" class="shell-color-input" />
-          </div>
-          <div class="shell-control-buttons">
-            <button @click="clearDemoThree" class="shell-btn shell-btn-secondary">
-              <span class="material-icons">delete</span> Clear
-            </button>
-          </div>
-        </div>
 
-        <div class="shell-demo-canvas-container">
-          <canvas id="demo-three-canvas"></canvas>
-        </div>
-      </section>
+          <div class="shell-demo-canvas-container">
+            <canvas id="demo-one-canvas"></canvas>
+          </div>
+        </section>
+      </Transition>
 
-      <!-- Info Section -->
-      <div class="shell-info">
-        <p><strong>Micro Frontend Architecture Demo:</strong></p>
-        <ul>
-          <li>Each demo runs independently with its own Fabric.js canvas</li>
-          <li>Demonstrates isolated micro frontend functionality</li>
-          <li>All demos load automatically and showcase their core features</li>
-          <li>Perfect for demonstrating the full capabilities of the system</li>
-        </ul>
-      </div>
+      <!-- Demo Two Section with staggered animation -->
+      <Transition name="slide-up-demo-two" appear>
+        <section class="shell-demo-section shell-demo-two-section">
+          <div class="shell-demo-header">
+            <h2><span class="material-icons">edit_note</span> Demo Two - Text & Images</h2>
+            <p>Dynamic text and image editing capabilities</p>
+          </div>
+
+          <!-- Demo Two Controls -->
+          <div class="shell-demo-controls shell-demo-two-controls">
+            <div class="shell-control-group">
+              <label>Text:</label>
+              <input
+                v-model="demoTwoText"
+                type="text"
+                placeholder="Enter text"
+                class="shell-text-input"
+              />
+              <button @click="addTextToTwo" class="shell-btn shell-btn-primary">
+                <span class="material-icons">add</span> Add Text
+              </button>
+            </div>
+            <div class="shell-control-group">
+              <label>Image URL:</label>
+              <input
+                v-model="demoTwoImageUrl"
+                type="text"
+                placeholder="Image URL"
+                class="shell-text-input"
+              />
+              <button
+                @click="addImageToTwo"
+                class="shell-btn shell-btn-success"
+                :disabled="isLoadingImage"
+              >
+              <span class="material-icons" v-if="!isLoadingImage">image</span>
+                {{ isLoadingImage ? "⏳ Loading..." : "Add Image" }}
+              </button>
+            </div>
+            <div class="shell-control-buttons">
+              <button @click="clearDemoTwo" class="shell-btn shell-btn-secondary">
+                <span class="material-icons">delete</span> Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="shell-demo-canvas-container">
+            <canvas id="demo-two-canvas"></canvas>
+          </div>
+        </section>
+      </Transition>
+
+      <!-- Demo Three Section with staggered animation -->
+      <Transition name="slide-up-demo-three" appear>
+        <section class="shell-demo-section shell-demo-three-section">
+          <div class="shell-demo-header">
+            <h2><span class="material-icons">draw</span> Demo Three - Drawing</h2>
+            <p>Free-hand drawing and artistic creation</p>
+          </div>
+
+          <!-- Demo Three Controls -->
+          <div class="shell-demo-controls shell-demo-three-controls">
+            <div class="shell-control-group">
+              <label>Drawing Mode:</label>
+              <button
+                @click="toggleDrawingMode"
+                :class="['shell-btn', isDrawingMode ? 'shell-btn-danger' : 'shell-btn-success']"
+              >
+              <span class="material-icons" >{{ isDrawingMode ? 'stop' : 'edit' }}</span>
+                {{ isDrawingMode ? "Stop Drawing" : "Start Drawing" }}
+              </button>
+            </div>
+            <div class="shell-control-group">
+              <label>Brush Width:</label>
+              <input
+                v-model="brushWidth"
+                type="range"
+                min="1"
+                max="20"
+                class="shell-range-input"
+              />
+              <span>{{ brushWidth }}px</span>
+            </div>
+            <div class="shell-control-group">
+              <label>Brush Color:</label>
+              <input v-model="brushColor" type="color" class="shell-color-input" />
+            </div>
+            <div class="shell-control-buttons">
+              <button @click="clearDemoThree" class="shell-btn shell-btn-secondary">
+                <span class="material-icons">delete</span> Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="shell-demo-canvas-container">
+            <canvas id="demo-three-canvas"></canvas>
+          </div>
+        </section>
+      </Transition>
+
+      <!-- Info Section with extra delayed fade-in -->
+      <Transition name="fade-in-extra-delayed" appear>
+        <div class="shell-info">
+          <p><strong>Micro Frontend Architecture Demo:</strong></p>
+          <ul>
+            <li>Each demo runs independently with its own Fabric.js canvas</li>
+            <li>Demonstrates isolated micro frontend functionality</li>
+            <li>All demos load automatically and showcase their core features</li>
+            <li>Perfect for demonstrating the full capabilities of the system</li>
+          </ul>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
@@ -1027,6 +1040,329 @@ watch(brushColor, (newColor) => {
   .shell-global-buttons .shell-btn {
     padding: 15px 20px;
     font-size: 1rem;
+  }
+}
+
+/* Animation Transitions */
+
+/* Basic fade-in animation */
+.fade-in-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delayed fade-in animation */
+.fade-in-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 0.3s;
+}
+
+.fade-in-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Extra delayed fade-in animation */
+.fade-in-extra-delayed-enter-active {
+  transition: all 0.8s ease-out;
+  transition-delay: 1.2s;
+}
+
+.fade-in-extra-delayed-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-in-extra-delayed-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered slide-up animations for demo sections */
+.slide-up-demo-one-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.5s;
+}
+
+.slide-up-demo-one-enter-from {
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+}
+
+.slide-up-demo-one-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.slide-up-demo-two-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.7s;
+}
+
+.slide-up-demo-two-enter-from {
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+}
+
+.slide-up-demo-two-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.slide-up-demo-three-enter-active {
+  transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.9s;
+}
+
+.slide-up-demo-three-enter-from {
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+}
+
+.slide-up-demo-three-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Enhanced header animations */
+.shell-demos-header h1 {
+  animation: titleFadeIn 1s ease-out;
+}
+
+.shell-demos-header p {
+  animation: subtitleFadeIn 1s ease-out 0.3s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered button animations */
+.shell-btn {
+  animation: buttonFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.shell-global-buttons .shell-btn:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.shell-global-buttons .shell-btn:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.shell-global-buttons .shell-btn:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Demo section header animations */
+.shell-demo-header h2 {
+  animation: demoHeaderFadeIn 0.8s ease-out 0.2s both;
+}
+
+.shell-demo-header p {
+  animation: demoSubtitleFadeIn 0.8s ease-out 0.4s both;
+}
+
+@keyframes demoHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes demoSubtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Control group animations */
+.shell-control-group {
+  animation: controlGroupFadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.shell-demo-one-controls .shell-control-group {
+  animation-delay: 0.6s;
+}
+
+.shell-demo-two-controls .shell-control-group {
+  animation-delay: 0.8s;
+}
+
+.shell-demo-three-controls .shell-control-group {
+  animation-delay: 1.0s;
+}
+
+@keyframes controlGroupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Control buttons staggered animations */
+.shell-control-buttons .shell-btn:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.shell-control-buttons .shell-btn:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.shell-control-buttons .shell-btn:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.shell-control-buttons .shell-btn:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+/* Canvas container animations */
+.shell-demo-canvas-container {
+  animation: canvasFadeIn 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.shell-demo-one-section .shell-demo-canvas-container {
+  animation-delay: 0.8s;
+}
+
+.shell-demo-two-section .shell-demo-canvas-container {
+  animation-delay: 1.0s;
+}
+
+.shell-demo-three-section .shell-demo-canvas-container {
+  animation-delay: 1.2s;
+}
+
+@keyframes canvasFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Info section list animations */
+.shell-info ul li {
+  animation: listItemSlideIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.shell-info ul li:nth-child(1) { animation-delay: 0.1s; }
+.shell-info ul li:nth-child(2) { animation-delay: 0.2s; }
+.shell-info ul li:nth-child(3) { animation-delay: 0.3s; }
+.shell-info ul li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes listItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Input field animations */
+.shell-text-input,
+.shell-color-input,
+.shell-range-input {
+  animation: inputFadeIn 0.4s ease-out;
+  animation-fill-mode: both;
+  animation-delay: 0.2s;
+}
+
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced hover effects */
+.shell-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading state animation enhancement */
+.shell-btn:disabled {
+  animation: pulseDisabled 2s infinite;
+}
+
+@keyframes pulseDisabled {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.4;
   }
 }
 </style>
