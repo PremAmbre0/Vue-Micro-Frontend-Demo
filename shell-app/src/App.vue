@@ -1,37 +1,68 @@
 <template>
   <div id="app" class="shell-app">
-    <nav class="shell-nav">
-      <router-link to="/">
-        <span class="material-icons">palette</span>
-        Dynamic Canvas
-      </router-link>
-      <router-link to="/all-demos">
-        <span class="material-icons">bolt</span>
-         All Demos
-      </router-link>
-      <router-link to="/demo-one">
-        <span class="material-icons">category</span>
-        Demo One
-      </router-link>
-      <router-link to="/demo-two">
-        <span class="material-icons">edit_note</span>
-        Demo Two
-      </router-link>
-      <router-link to="/demo-three">
-       <span class="material-icons">draw</span>
-        Demo Three
-      </router-link>
-      <router-link to="/demo-counter">
-        <span class="material-icons">calculate</span>
-         Demo Counter
+    <!-- Hamburger Menu Button for Mobile -->
+    <button class="hamburger-menu" @click="toggleMobileNav" :class="{ 'active': isMobileNavOpen, 'hidden': isMobileNavOpen }">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" :class="{ 'active': isMobileNavOpen }" @click="closeMobileNav"></div>
+
+    <nav class="shell-nav" :class="{ 'mobile-nav-open': isMobileNavOpen }" @mouseenter="expandNav" @mouseleave="collapseNav">
+      <div class="nav-header">
+        <span class="nav-logo" :class="{ 'nav-logo-collapsed': !isNavExpanded, 'nav-logo-expanded': isNavExpanded }">
+          <span v-if="!isNavExpanded" class="nav-logo-short">MFD</span>
+          <span v-else class="nav-logo-full">
+            Micro Frontend Demo
+            <!-- Close button for mobile - integrated within the header text -->
+            <button v-if="isMobileNavOpen" class="nav-close-btn-inline" @click="closeMobileNav">
+              <span class="material-icons">close</span>
+            </button>
+          </span>
+        </span>
+      </div>
+      
+      <div class="nav-links">
+        <router-link to="/" class="nav-link" :title="isNavExpanded ? '' : 'Home'" @click="closeMobileNav">
+          <span class="material-icons">home</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Home</span>
         </router-link>
-      <router-link to="/interface-demo">
-        <span class="material-icons">dynamic_feed</span>
-         Interface Demo
+        
+        <router-link to="/all-demos" class="nav-link" :title="isNavExpanded ? '' : 'All Demos'" @click="closeMobileNav">
+          <span class="material-icons">bolt</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">All Demos</span>
         </router-link>
+        
+        <router-link to="/demo-one" class="nav-link" :title="isNavExpanded ? '' : 'Demo One'" @click="closeMobileNav">
+          <span class="material-icons">category</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo One</span>
+        </router-link>
+        
+        <router-link to="/demo-two" class="nav-link" :title="isNavExpanded ? '' : 'Demo Two'" @click="closeMobileNav">
+          <span class="material-icons">edit_note</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Two</span>
+        </router-link>
+        
+        <router-link to="/demo-three" class="nav-link" :title="isNavExpanded ? '' : 'Demo Three'" @click="closeMobileNav">
+          <span class="material-icons">draw</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Three</span>
+        </router-link>
+        
+        <router-link to="/demo-counter" class="nav-link" :title="isNavExpanded ? '' : 'Demo Counter'" @click="closeMobileNav">
+          <span class="material-icons">calculate</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Demo Counter</span>
+        </router-link>
+        
+        <router-link to="/interface-demo" class="nav-link" :title="isNavExpanded ? '' : 'Interface Demo'" @click="closeMobileNav">
+          <span class="material-icons">dynamic_feed</span>
+          <span class="nav-text" :class="{ 'nav-text-visible': isNavExpanded }">Interface Demo</span>
+        </router-link>
+      </div>
     </nav>
 
-    <main class="shell-main">
+    <main class="shell-main" :class="{ 'shell-main-expanded': isNavExpanded }">
       <RouterView :key="$route.fullPath" />
     </main>
   </div>
@@ -39,6 +70,56 @@
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+import { ref, onMounted, onUnmounted } from "vue";
+
+const isNavExpanded = ref(false);
+const isMobileNavOpen = ref(false);
+
+const expandNav = () => {
+  // Only expand on hover for desktop (screens >= 1200px)
+  if (window.innerWidth >= 1200) {
+    isNavExpanded.value = true;
+  }
+};
+
+const collapseNav = () => {
+  // Only collapse on mouse leave for desktop (screens >= 1200px)
+  if (window.innerWidth >= 1200) {
+    isNavExpanded.value = false;
+  }
+};
+
+const toggleMobileNav = () => {
+  isMobileNavOpen.value = !isMobileNavOpen.value;
+  // When mobile nav opens, also expand the nav text
+  if (isMobileNavOpen.value) {
+    isNavExpanded.value = true;
+  } else {
+    isNavExpanded.value = false;
+  }
+};
+
+const closeMobileNav = () => {
+  isMobileNavOpen.value = false;
+  isNavExpanded.value = false;
+};
+
+// Handle window resize
+const handleResize = () => {
+  if (window.innerWidth >= 1200) {
+    // Desktop mode - close mobile nav if open
+    isMobileNavOpen.value = false;
+    isNavExpanded.value = false;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style>
@@ -65,6 +146,9 @@ import { RouterLink, RouterView } from "vue-router";
   --radius-xl: 16px;
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+  --nav-width-collapsed: 70px;
+  --nav-width-expanded: 250px;
+  --nav-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -80,50 +164,151 @@ body {
   line-height: 1.6;
 }
 
-.shell-app #shell-app {
+.shell-app {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
   min-height: 100vh;
   background: linear-gradient(135deg, var(--light-color) 0%, #ffffff 100%);
+  display: flex;
 }
 
+/* Left Sidebar Navigation */
 .shell-nav {
-  background: linear-gradient(135deg,
+  background: linear-gradient(180deg,
       var(--primary-color) 0%,
       var(--dark-color) 100%);
-  padding: 1.5rem 2rem;
-  margin-bottom: 0;
-  box-shadow: var(--shadow-lg);
-  position: sticky;
+  width: var(--nav-width-collapsed);
+  height: 100vh;
+  position: fixed;
+  left: 0;
   top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
+  z-index: 1000;
+  box-shadow: var(--shadow-lg);
+  transition: var(--nav-transition);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.shell-nav a {
-  margin-right: 1rem;
-  padding: 0.875rem 1.75rem;
-  text-decoration: none;
-  color: white;
-  border-radius: var(--radius-lg);
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-flex;
+.shell-nav:hover {
+  width: var(--nav-width-expanded);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.nav-header {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
   align-items: center;
   gap: 1rem;
+  min-height: 80px;
+}
+
+.nav-logo {
+  color: white;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--nav-transition);
+}
+
+.nav-logo-collapsed {
+  font-size: 1.5rem;
+}
+
+.nav-logo-expanded {
+  font-size: 2rem;
+}
+
+.nav-logo-short {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.nav-logo-full {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Inline close button within the header text */
+.nav-close-btn-inline {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 28px;
+  height: 28px;
+  margin-left: auto;
+}
+
+.nav-close-btn-inline:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.nav-close-btn-inline .material-icons {
+  font-size: 1.2rem;
+}
+
+
+
+.nav-links {
+  flex: 1;
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-md);
+  margin: 0 0.5rem;
+  transition: var(--nav-transition);
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
 }
 
-.shell-nav a .material-icons{
-  font-size: 1.2rem;
-  vertical-align: middle;
+.nav-link .material-icons {
+  font-size: 1.5rem;
+  min-width: 24px;
+  text-align: center;
 }
 
-.shell-nav a::before {
+.nav-text {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: var(--nav-transition);
+  font-weight: 500;
+}
+
+.nav-text-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-link::before {
   content: "";
   position: absolute;
   top: 0;
@@ -132,32 +317,43 @@ body {
   height: 100%;
   background: linear-gradient(90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.1),
       transparent);
   transition: left 0.5s;
 }
 
-.shell-nav a:hover::before {
+.nav-link:hover::before {
   left: 100%;
 }
 
-.shell-nav a:hover {
+.nav-link:hover {
   background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  color: white;
+  transform: translateX(5px);
 }
 
-.shell-nav a.router-link-active {
+.nav-link.router-link-active {
   background: rgba(255, 255, 255, 0.25);
+  color: white;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
 }
 
+/* Main Content Area - Uses overlay navigation approach */
+/* Content maintains fixed width and position, navigation slides over it */
 .shell-main {
+  margin-left: var(--nav-width-collapsed);
   padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  min-height: calc(100vh - 120px);
+  width: calc(100vw - var(--nav-width-collapsed));
+  min-height: 100vh;
+  transition: var(--nav-transition);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.shell-main-expanded {
+  margin-left: var(--nav-width-collapsed);
+  width: calc(100vw - var(--nav-width-collapsed));
 }
 
 /* Global Component Styles */
@@ -219,7 +415,6 @@ body {
   justify-content: center;
   padding: 0.65rem 1.25rem;
   font-size: 0.75rem;
-  /* font-weight: 600; */
   line-height: 1;
   border: none;
   border-radius: var(--radius-md);
@@ -285,54 +480,158 @@ body {
   box-shadow: var(--shadow-xl);
 }
 
+/* Hamburger Menu Button */
+.hamburger-menu {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--primary-color);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: white;
+  border-radius: 2px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.3s ease-in-out;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+  top: 9px;
+  transform: rotate(135deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
+  left: -60px;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+  top: 9px;
+  transform: rotate(-135deg);
+}
+
+.hamburger-menu:hover {
+  background: var(--dark-color);
+  transform: scale(1.05);
+}
+
+.hamburger-menu.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Mobile Overlay */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Shell App Responsive Design */
-@media (max-width: 1024px) {
-  .shell-main {
-    padding: 1.5rem;
+@media (max-width: 1199px) {
+  /* Show hamburger menu for screens smaller than 1200px */
+  .hamburger-menu {
+    display: flex;
   }
 
+  /* Hide navigation by default on mobile */
   .shell-nav {
-    padding: 1.25rem 1.5rem;
+    transform: translateX(-100%);
+    width: 280px;
+    transition: transform 0.3s ease;
+  }
+
+  /* Show navigation when mobile nav is open */
+  .shell-nav.mobile-nav-open {
+    transform: translateX(0);
+  }
+
+  /* Always show expanded nav text on mobile when open */
+  .shell-nav.mobile-nav-open .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Remove hover effects on mobile */
+  .shell-nav:hover {
+    width: 280px;
+    transform: translateX(-100%);
+  }
+
+  .shell-nav.mobile-nav-open:hover {
+    transform: translateX(0);
+  }
+
+  /* Adjust main content for mobile */
+  .shell-main {
+    margin-left: 0;
+    width: 100vw;
+    padding: 5rem 1.5rem 1.5rem;
+  }
+
+  .shell-main-expanded {
+    margin-left: 0;
+    width: 100vw;
+  }
+}
+@media (max-width: 1024px) {
+  .shell-main {
+    padding: 5rem 1.5rem 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
   .shell-main {
-    padding: 1rem;
+    padding: 5rem 1rem 1rem;
   }
-
-  .shell-nav {
-    padding: 1rem;
-  }
-
-  .shell-nav a {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.9rem;
-  }
-
-  .shell-info {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .shell-controls button {
-    margin: 0.5rem;
-    padding: 0.75rem 1.5rem;
+  
+  .hamburger-menu {
+    top: 1rem;
+    left: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .shell-nav a {
-    display: block;
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-
   .shell-main {
-    padding: 0.75rem;
+    padding: 5rem 0.75rem 0.75rem;
+  }
+  
+  .hamburger-menu {
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
   }
 }
 </style>
