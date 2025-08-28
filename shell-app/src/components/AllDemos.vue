@@ -1,6 +1,6 @@
 <template>
   <div class="shell-app">
-    <div class="shell-all-demos-container">
+    <div class="shell-all-demos-container shell-responsive-container">
       <header class="shell-demos-header">
         <h1><span class="material-icons">bolt</span> All Demos Showcase</h1>
         <p>Experience all three micro frontend demos in one unified view</p>
@@ -188,6 +188,11 @@ let demoOneModule = null;
 let demoTwoModule = null;
 let demoThreeModule = null;
 
+// Resize handlers
+let demoOneResizeHandler = null;
+let demoTwoResizeHandler = null;
+let demoThreeResizeHandler = null;
+
 onMounted(async () => {
   console.log("All Demos page mounted, initializing all demos...");
 
@@ -198,6 +203,17 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  // Clean up resize handlers
+  if (demoOneResizeHandler) {
+    window.removeEventListener("resize", demoOneResizeHandler);
+  }
+  if (demoTwoResizeHandler) {
+    window.removeEventListener("resize", demoTwoResizeHandler);
+  }
+  if (demoThreeResizeHandler) {
+    window.removeEventListener("resize", demoThreeResizeHandler);
+  }
+
   // Clean up all canvases
   if (demoOneCanvas && demoOneCanvas.dispose) {
     demoOneCanvas.dispose();
@@ -225,7 +241,7 @@ const initializeDemoOne = async () => {
 
     // demoOneCanvas = demoOneModule.initDemoOneCanvas("demo-one-canvas", { width, height });
     setTimeout(() => {
-      const width = container.clientWidth - 40;
+      const width = container.clientWidth - 40 || 800;
       const height = 600;
 
       demoOneCanvas = demoOneModule.initDemoOneCanvas("demo-one-canvas", { width, height });
@@ -233,13 +249,17 @@ const initializeDemoOne = async () => {
     }, 0);
 
     const resize = () => {
-      demoOneCanvas.setDimensions({
-        width: container.clientWidth - 40,
-        height: 600,
-      });
-      demoOneCanvas.renderAll();
+      if (demoOneCanvas) {
+        const newWidth = container.clientWidth - 40 || 800;
+        demoOneCanvas.setDimensions({
+          width: newWidth,
+          height: 600,
+        });
+        demoOneCanvas.renderAll();
+      }
     };
-    window.addEventListener("resize", () => requestAnimationFrame(resize));
+    demoOneResizeHandler = () => requestAnimationFrame(resize);
+    window.addEventListener("resize", demoOneResizeHandler);
 
     setTimeout(() => {
       if (demoOneCanvas) {
@@ -267,7 +287,7 @@ const initializeDemoTwo = async () => {
     const container = el.parentElement;
 
     setTimeout(() => {
-      const width = container.clientWidth - 40;
+      const width = container.clientWidth - 40 || 800;
       const height = 600;
 
       demoTwoCanvas = demoTwoModule.initDemoTwoCanvas("demo-two-canvas", { width, height });
@@ -275,13 +295,17 @@ const initializeDemoTwo = async () => {
     }, 0);
 
     const resize = () => {
-      demoTwoCanvas.setDimensions({
-        width: container.clientWidth - 40,
-        height: 600,
-      });
-      demoTwoCanvas.renderAll();
+      if (demoTwoCanvas) {
+        const newWidth = container.clientWidth - 40 || 800;
+        demoTwoCanvas.setDimensions({
+          width: newWidth,
+          height: 600,
+        });
+        demoTwoCanvas.renderAll();
+      }
     };
-    window.addEventListener("resize", () => requestAnimationFrame(resize));
+    demoTwoResizeHandler = () => requestAnimationFrame(resize);
+    window.addEventListener("resize", demoTwoResizeHandler);
 
     // Add some sample content
     setTimeout(() => {
@@ -323,7 +347,7 @@ const initializeDemoThree = async () => {
     const container = el.parentElement;
 
     setTimeout(() => {
-      const width = container.clientWidth - 40;
+      const width = container.clientWidth - 40 || 800;
       const height = 600;
 
       demoThreeCanvas = demoThreeModule.initDemoThreeCanvas("demo-three-canvas", { width, height });
@@ -331,13 +355,17 @@ const initializeDemoThree = async () => {
     }, 0);
 
     const resize = () => {
-      demoThreeCanvas.setDimensions({
-        width: container.clientWidth - 40,
-        height: 600,
-      });
-      demoThreeCanvas.renderAll();
+      if (demoThreeCanvas) {
+        const newWidth = container.clientWidth - 40 || 800;
+        demoThreeCanvas.setDimensions({
+          width: newWidth,
+          height: 600,
+        });
+        demoThreeCanvas.renderAll();
+      }
     };
-    window.addEventListener("resize", () => requestAnimationFrame(resize));
+    demoThreeResizeHandler = () => requestAnimationFrame(resize);
+    window.addEventListener("resize", demoThreeResizeHandler);
 
     // Add some sample content
     setTimeout(() => {
@@ -558,10 +586,18 @@ watch(brushColor, (newColor) => {
 
 <style scoped>
 /* Shell App Scoped Styles - Prevents conflicts with micro frontend CSS */
+.shell-responsive-container {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
 .shell-all-demos-container {
   padding: 20px;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .shell-demos-header {
@@ -830,11 +866,15 @@ watch(brushColor, (newColor) => {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  overflow-x: auto;
 }
 
 #demo-one-canvas,#demo-two-canvas,#demo-three-canvas {
   border: 2px solid #e9ecef;
   border-radius: 8px;
+  max-width: 100%;
+  height: auto;
 }
 
 .shell-info {
@@ -855,9 +895,27 @@ watch(brushColor, (newColor) => {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .shell-all-demos-container {
     padding: 15px;
+  }
+
+  .shell-demo-section {
+    padding: 25px;
+  }
+
+  .shell-global-buttons {
+    gap: 10px;
+  }
+
+  .shell-control-buttons {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shell-all-demos-container {
+    padding: 10px;
   }
 
   .shell-demo-section {
@@ -879,13 +937,15 @@ watch(brushColor, (newColor) => {
   }
 
   .shell-global-buttons .shell-btn {
-    min-width: 250px;
+    min-width: 100%;
+    max-width: 300px;
   }
 
   .shell-control-group {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+    width: 100%;
   }
 
   .shell-control-group label {
@@ -893,16 +953,80 @@ watch(brushColor, (newColor) => {
   }
 
   .shell-control-buttons {
-    justify-content: flex-start;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .shell-control-buttons .shell-btn {
+    flex: 1;
+    min-width: 120px;
+    max-width: 150px;
   }
 
   .shell-text-input {
-    min-width: 100%;
+    width: 100%;
+    min-width: unset;
   }
 
   .shell-range-input {
     width: 100%;
     margin: 10px 0;
+  }
+
+  .shell-demo-canvas-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shell-all-demos-container {
+    padding: 5px;
+  }
+
+  .shell-demo-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .shell-demos-header {
+    margin-bottom: 30px;
+  }
+
+  .shell-demos-header h1 {
+    font-size: 1.8em;
+  }
+
+  .shell-demo-header h2 {
+    font-size: 1.3em;
+  }
+
+  .shell-global-controls,
+  .shell-demo-controls {
+    padding: 15px;
+  }
+
+  .shell-control-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .shell-control-buttons .shell-btn {
+    min-width: 100%;
+    max-width: none;
+  }
+
+  .shell-demo-canvas-container {
+    padding: 10px;
+  }
+
+  .shell-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .shell-global-buttons .shell-btn {
+    padding: 15px 20px;
+    font-size: 1rem;
   }
 }
 </style>
