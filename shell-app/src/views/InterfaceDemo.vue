@@ -30,15 +30,15 @@
             <div class="control-section">
               <h4 class="control-title">Basic Operations</h4>
               <div class="basic-controls">
-                <button @click="commonStore.increment()" class="btn btn-primary">
-                  <!-- <span class="material-icons">add</span> -->
-                  +1
+                <button @click="commonStore.increment()" class="btn btn-success">
+                  <span class="material-icons">add</span>
+                  1
                 </button>
-                <button @click="commonStore.decrement()" class="btn btn-secondary">
-                  <!-- <span class="material-icons">remove</span> -->
-                  -1
+                <button @click="commonStore.decrement()" class="btn btn-danger">
+                  <span class="material-icons">remove</span>
+                  1
                 </button>
-                <button @click="commonStore.reset()" class="btn btn-warning">
+                <button @click="commonStore.reset()" class="btn btn-neutral">
                   <span class="material-icons">refresh</span>
                   Reset
                 </button>
@@ -55,6 +55,7 @@
                   placeholder="Enter amount"
                   class="input-field"
                 >
+                <div class="button-pair">
                 <button @click="commonStore.incrementBy(shellAmount)" class="btn btn-success">
                   <span class="material-icons">add</span>
                   Add
@@ -62,6 +63,24 @@
                 <button @click="commonStore.decrementBy(shellAmount)" class="btn btn-danger">
                   <span class="material-icons">remove</span>
                   Subtract
+                </button>
+              </div>
+              </div>
+            </div>
+
+            <!-- Set Value Operation -->
+            <div class="control-section">
+              <h4 class="control-title">Set Value</h4>
+              <div class="input-group set-value-group">
+                <input 
+                  v-model.number="shellSetValue" 
+                  type="number" 
+                  placeholder="Enter new value"
+                  class="input-field"
+                >
+                <button @click="commonStore.setNum(shellSetValue)" class="btn btn-primary">
+                  <span class="material-icons">edit</span>
+                  Set Value
                 </button>
               </div>
             </div>
@@ -172,6 +191,7 @@ export default {
   setup() {
     const commonStore = useCommonStore()
     const shellAmount = ref(5)
+    const shellSetValue = ref(0)
 
     const statusClass = computed(() => {
       if (commonStore.isZero) return 'zero'
@@ -188,6 +208,7 @@ export default {
     return {
       commonStore,
       shellAmount,
+      shellSetValue,
       statusClass,
       statusText
     }
@@ -446,6 +467,7 @@ export default {
 
 .input-group {
   display: flex;
+  flex-direction: column;
   gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
@@ -454,7 +476,7 @@ export default {
 }
 
 .custom-amount-group {
-  flex-direction: row;
+  flex-direction: column;
   gap: 0.75rem;
   width: 100%;
   align-items: center;
@@ -462,10 +484,24 @@ export default {
   flex-wrap: wrap;
 }
 
+.custom-amount-group .button-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.set-value-group {
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 
 
 .btn {
-  padding: 0.875rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
   border-radius: var(--radius-lg);
   cursor: pointer;
@@ -475,15 +511,15 @@ export default {
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
-  min-width: 100px;
+  min-width: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .btn .material-icons {
-  font-size: 1rem;
+  font-size: 1.1rem;
   vertical-align: middle;
 }
 
@@ -527,17 +563,25 @@ export default {
   background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   color: white;
 }
+.btn-info {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  color: white;
+}
+.btn-neutral {
+  background: linear-gradient(135deg, #64748B 0%, #475569 100%);
+  color: white;
+}
 
 .input-field {
-  padding: 0.875rem 1rem;
+  padding: 1rem 1.5rem;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
-  width: 100px;
+  width: 140px;
   text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
   background: var(--background-primary);
   color: var(--text-primary);
-  font-size: 0.95rem;
-  font-weight: 500;
   transition: all 0.3s ease;
 }
 
@@ -793,15 +837,20 @@ export default {
     gap: 0.75rem;
   }
 
+  .set-value-group {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .btn {
     width: 100%;
-    max-width: 200px;
+    max-width: 280px;
     min-width: unset;
   }
 
   .input-field {
     width: 100%;
-    max-width: 180px;
+    max-width: 250px;
   }
 }
 
@@ -841,18 +890,18 @@ export default {
   }
 
   .btn {
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.5rem;
     font-size: 0.9rem;
     max-width: none;
   }
 
   .btn .material-icons {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .input-field {
     max-width: none;
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1.25rem;
   }
 }
 
@@ -1012,6 +1061,7 @@ export default {
 
 .control-section:nth-child(1) { animation-delay: 1.0s; }
 .control-section:nth-child(2) { animation-delay: 1.2s; }
+.control-section:nth-child(3) { animation-delay: 1.4s; }
 
 @keyframes controlSectionFadeIn {
   from {
@@ -1037,6 +1087,8 @@ export default {
 .custom-amount-group .btn:nth-child(2) { animation-delay: 0.25s; }
 .custom-amount-group .btn:nth-child(3) { animation-delay: 0.3s; }
 
+.set-value-group .btn { animation-delay: 0.35s; }
+
 @keyframes buttonFadeIn {
   from {
     opacity: 0;
@@ -1052,6 +1104,9 @@ export default {
 .input-field {
   animation: inputFadeIn 0.5s ease-out 0.2s both;
 }
+
+.custom-amount-group .input-field { animation-delay: 0.2s; }
+.set-value-group .input-field { animation-delay: 0.3s; }
 
 @keyframes inputFadeIn {
   from {

@@ -35,15 +35,15 @@
             <div class="control-section">
               <h4 class="control-title">Basic Operations</h4>
               <div class="basic-controls">
-                <button @click="increment" class="btn btn-primary">
-                  <!-- <span class="material-icons">add</span> -->
-                  +1
+                <button @click="increment" class="btn btn-success">
+                  <span class="material-icons">add</span>
+                  1
                 </button>
-                <button @click="decrement" class="btn btn-secondary">
-                  <!-- <span class="material-icons">remove</span> -->
-                  -1
+                <button @click="decrement" class="btn btn-danger">
+                  <span class="material-icons">remove</span>
+                  1
                 </button>
-                <button @click="reset" class="btn btn-warning">
+                <button @click="reset" class="btn btn-neutral">
                   <span class="material-icons">refresh</span>
                   Reset
                 </button>
@@ -83,7 +83,7 @@
                   placeholder="Enter new value"
                   class="input-field"
                 >
-                <button @click="setCounterValue" class="btn btn-info">
+                <button @click="setCounterValue" class="btn btn-primary">
                   <span class="material-icons">edit</span>
                   Set Value
                 </button>
@@ -121,7 +121,7 @@
         </div>
         <div v-else>
           <p>Make sure the Shell App is running and accessible.</p>
-          <button @click="tryReconnect" class="btn btn-primary">Try Reconnect</button>
+          <button @click="tryReconnect" class="btn btn-info">Try Reconnect</button>
         </div>
       </div>
     </Transition>
@@ -611,6 +611,10 @@ export default {
 }
 .btn-info {
   background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  color: white;
+}
+.btn-neutral {
+  background: linear-gradient(135deg, #64748B 0%, #475569 100%);
   color: white;
 }
 
@@ -1241,9 +1245,9 @@ export default {
 }
 
 /* Status indicator special animations */
-.status-indicator.disconnected {
+/* .status-indicator.disconnected {
   animation: disconnectedPulse 2s infinite;
-}
+} */
 
 @keyframes disconnectedPulse {
   0%, 100% {

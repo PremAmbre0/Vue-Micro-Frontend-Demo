@@ -16,7 +16,10 @@
       <Transition name="nav-header-fade" appear>
         <div class="nav-header">
           <span class="nav-logo" :class="{ 'nav-logo-collapsed': !isNavExpanded, 'nav-logo-expanded': isNavExpanded }">
-            <span v-if="!isNavExpanded" class="nav-logo-short"><img src="./assets/images/altersquare-icon.png" style="height: 30px;" /></span>
+            <span v-if="!isNavExpanded" class="nav-logo-short">
+              <img src="./assets/images/altersquare-icon.png" style="height: 30px;" />
+              <span>MFD</span>
+            </span>
             <span v-else class="nav-logo-full">
               <div class="nav-content-container">
                 <img src="./assets/images/altersquare-logo.png" alt="AlterSquare Logo"
@@ -309,11 +312,13 @@ body {
 
 .nav-logo-short {
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: white;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   width: 100%;
 }
 
@@ -633,9 +638,10 @@ body {
 }
 
 .hamburger-menu.hidden {
-  opacity: 0;
+  opacity: 0 !important;
   visibility: hidden;
   pointer-events: none;
+  transition: none;
 }
 
 /* Mobile Overlay */
