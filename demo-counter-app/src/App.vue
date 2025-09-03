@@ -5,7 +5,6 @@
       <p>Micro Frontend demonstrating shared state with Shell App</p>
     </header>
     <main>
-      
       <CounterDemo />
     </main>
   </div>
@@ -134,10 +133,10 @@ p {
   margin: 0;
 } */
 
-main {
+/* main {
   max-width: 800px;
   margin: 0 auto;
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {

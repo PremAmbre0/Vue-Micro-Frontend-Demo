@@ -124,12 +124,12 @@ header p {
   position: relative;
   z-index: 1;
 } */
-
+/* 
 main {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -144,11 +144,11 @@ main {
   header p {
     font-size: 1.1rem;
   }
-
+/* 
   main {
     padding: 1.5rem 1rem;
   }
-}
+} */
 
 @media (max-width: 480px) {
   header {
@@ -162,9 +162,9 @@ main {
   header p {
     font-size: 1rem;
   }
-
+/* 
   main {
     padding: 1rem;
-  }
+  } */
 }
 </style>
