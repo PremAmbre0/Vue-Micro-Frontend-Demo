@@ -3850,6 +3850,10 @@ exposes: {
     </div>
 
     <script>
+        //<![CDATA[
+        // Add class to body immediately
+        document.body.classList.add('altersquare-micro-frontend-demo');
+        
         // Sidebar functionality
         function toggleSidebar(event) {
             if (event) {
@@ -3879,8 +3883,10 @@ exposes: {
             let currentSection = '';
             sections.forEach(section => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    currentSection = section.id;
+                if (rect.top <= 100) {
+                    if (rect.bottom >= 100) {
+                        currentSection = section.id;
+                    }
                 }
             });
             sidebarLinks.forEach(link => {
@@ -3894,9 +3900,6 @@ exposes: {
         window.addEventListener('scroll', updateActiveLink);
         // Set initial active link and prevent unwanted hash jump to code section
         document.addEventListener('DOMContentLoaded', () => {
-            // Add class to body
-            document.body.classList.add('altersquare-micro-frontend-demo');
-            
             // if (window.location.hash === '#code') {
             //     history.replaceState(null, '', window.location.pathname + window.location.search);
             //     window.scrollTo(0, 0);
@@ -3913,10 +3916,12 @@ exposes: {
         document.addEventListener('click', (e) => {
             const sidebar = document.getElementById('sidebar');
             const mobileToggle = document.querySelector('.mobile-menu-toggle');
-            if (window.innerWidth <= 820 &&
-                !sidebar.contains(e.target) &&
-                !mobileToggle.contains(e.target)) {
-                sidebar.classList.remove('open');
+            if (window.innerWidth <= 820) {
+                if (!sidebar.contains(e.target)) {
+                    if (!mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('open');
+                    }
+                }
             }
         });
         // Smooth scroll to section function
@@ -3929,6 +3934,7 @@ exposes: {
                 });
             }
         }
+        //]]>
     </script>
 </body>
 
