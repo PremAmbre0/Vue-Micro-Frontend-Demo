@@ -1809,6 +1809,25 @@
                 gap: 0.5rem;
             }
         }
+
+        /* AlterSquare micro-frontend demo styles */
+        .altersquare-micro-frontend-demo #qodef-page-inner {
+            width: auto;
+            padding-top: 0;
+        }
+
+        .altersquare-micro-frontend-demo #qodef-page-footer {
+            display: none;
+        }
+
+        .altersquare-micro-frontend-demo #qodef-page-mobile-header {
+            display: none;
+        }
+
+        .altersquare-micro-frontend-demo .qodef-header-logo-link {
+            visibility: hidden;
+        }
+        
     </style>
 </head>
 
@@ -3875,6 +3894,9 @@ exposes: {
         window.addEventListener('scroll', updateActiveLink);
         // Set initial active link and prevent unwanted hash jump to code section
         document.addEventListener('DOMContentLoaded', () => {
+            // Add class to body
+            document.body.classList.add('altersquare-micro-frontend-demo');
+            
             // if (window.location.hash === '#code') {
             //     history.replaceState(null, '', window.location.pathname + window.location.search);
             //     window.scrollTo(0, 0);
