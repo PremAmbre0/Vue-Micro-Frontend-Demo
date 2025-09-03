@@ -123,11 +123,11 @@ header p {
   z-index: 1;
 } */
 
-main {
+/* main {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 820px) {
@@ -143,9 +143,9 @@ main {
     font-size: 1.1rem;
   }
 
-  main {
+  /* main {
     padding: 1.5rem 1rem;
-  }
+  } */
 }
 
 @media (max-width: 480px) {
@@ -161,8 +161,8 @@ main {
     font-size: 1rem;
   }
 
-  main {
+  /* main {
     padding: 1rem;
-  }
+  } */
 }
 </style>
