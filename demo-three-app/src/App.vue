@@ -130,7 +130,7 @@ main {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   header {
     padding: 2rem 1rem;
   }

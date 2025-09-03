@@ -716,7 +716,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .shell-main {
     padding: 5rem 1rem 1rem;
   }

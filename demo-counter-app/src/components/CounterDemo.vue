@@ -786,7 +786,7 @@ export default {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .counter-demo {
     padding: 0;
   }

@@ -769,7 +769,7 @@ export default {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .demo-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;

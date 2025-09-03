@@ -140,7 +140,7 @@ main {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   #demo-counter-app {
     padding: 1rem;
   }

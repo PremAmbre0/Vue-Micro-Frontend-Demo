@@ -926,7 +926,7 @@ watch(brushColor, (newColor) => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .shell-all-demos-container {
     padding: 10px;
   }
